@@ -4,3 +4,5 @@ coverage
 utils/.env.local
 utils/Digital Safari data UPDATED.xlsx
 utils/dist/index.js
+*.d.ts
+*.js
