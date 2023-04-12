@@ -43,6 +43,12 @@ npm install
 
 cd ../..
 
+cd utils
+
+npm install
+
+cd ..
+
 npm run build
 
 cd ../cdk

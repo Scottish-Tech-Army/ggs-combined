@@ -19,6 +19,7 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.284.0",
     "@aws-sdk/util-dynamodb": "^3.284.0",
+    "@types/jest": "^29.5.0",
     "es6-promise": "^4.2.8",
     "isomorphic-fetch": "^3.0.0"
   }
