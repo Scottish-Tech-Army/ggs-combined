@@ -1,0 +1,212 @@
+// COLOUR OVERRIDES
+$teal: #009cac;
+$pink: #c40063;
+$mutedPink: #ce74a1;
+// theme colours
+$primary: $teal;
+$secondary: $pink;
+$muted-secondary: $mutedPink;
+
+// scss-docs-start gray-color-variables
+$white: #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black: #000;
+// scss-docs-end gray-color-variables
+
+// BOOTSTRAP 5 BSPREFIXES START
+// Buttons
+.btn-branding {
+  background-color: $secondary;
+  color: $white;
+  border-radius: 5px;
+  border-style: none;
+  padding: 0.4rem;
+  font-weight: bold;
+}
+
+.btn-branding-enabled {
+  background-color: $secondary;
+}
+
+.btn-branding-disabled {
+  background-color: $muted-secondary;
+}
+
+.btn-leaderboard {
+  position: relative;
+  top: 85%;
+  left: 26%;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 0.2rem;
+  border-color: $secondary;
+  background-color: $white;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  color: $secondary;
+  font-weight: bold;
+  @media screen and (min-width: 360px) {
+    top: 93%;
+    left: 31%;
+  }
+  @media screen and (min-width: 393px) {
+    top: 94%;
+    left: 31%;
+  }
+  @media screen and (min-width: 480px) {
+    top: 95%;
+    left: 40%;
+  }
+  @media screen and (min-width: 1080px) {
+    top: 93%;
+    left: 41%;
+  }
+  @media screen and (min-width: 1280px) {
+    top: 93%;
+    left: 45%;
+  }
+  @media screen and (min-width: 1440px) {
+    top: 94%;
+    left: 45%;
+  }
+}
+.btn-leaderboard:active {
+  background-color: $secondary;
+  color: $white;
+  border-color: $white;
+}
+
+// FEEDBACK FORMATTING
+.feedback-branding {
+  color: $secondary;
+}
+
+// BOOTSTRAP 5 BSPREFIXES END
+
+// BOOTSTRAP 5 CUSTOMISATIONS
+// Contains overrides for Bootstrap classes, and custom classes that use Bootstrap variables
+
+// Containers
+.container-fluid {
+  padding: 0;
+  margin: 0;
+}
+
+// Modals
+.closer-color {
+  color: $primary;
+  border-radius: 5px;
+  border-width: 2px;
+  border-color: $primary;
+}
+
+.btn-outline-primary {
+  border-width: revert !important;
+}
+
+.custom-modal {
+  margin-top: 1.2rem;
+  margin-left: 0.5rem;
+  max-height: 95vh;
+  max-width: 90vw;
+  @media screen and (min-width: 241px) {
+    overflow-x: visible !important; // This allows close buttons to position and display beyond the modal border
+    overflow-y: visible !important; // This allows close buttons to position and display beyond the modal border
+    margin-top: 3rem;
+  }
+}
+
+.location-modal {
+  @media screen and (min-width: 480px) {
+    max-width: 95vw;
+  }
+}
+
+.leaderboard-modal {
+  max-width: 90vw;
+  h1 {
+    color: $primary;
+    font-weight: bold;
+    font-size: x-large;
+    text-align: center;
+  }
+}
+
+.login-modal {
+  h1 {
+    color: $primary;
+    font-weight: bold;
+  }
+  .switch-mode {
+    color: $primary;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+
+.error-text {
+  color: $secondary;
+}
+
+.place-name {
+  color: $primary;
+  font-weight: bold;
+  font-size: x-large;
+  text-align: center;
+  margin-bottom: 0.1rem;
+}
+
+.city-name {
+  color: $primary;
+  font-weight: bold;
+  font-size: large;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.modal-body .scroll-container {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 333px);
+}
+
+.modal-body .scroll {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.description {
+  margin: 1rem 0;
+}
+
+.challenge {
+  border: 4px $primary solid;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.challenge h2 {
+  color: $primary;
+  font-weight: bold;
+  font-size: x-large;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.challenge .content {
+  text-align: center;
+}
+
+$enable-negative-margins: true;
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
