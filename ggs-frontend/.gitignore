@@ -7,9 +7,8 @@
 # testing
 /coverage
 
-# production
+# Website content to be copied to S3 bucket on deployment
 /build
-!/build/.gitignore
 
 # misc
 .DS_Store
@@ -25,6 +24,5 @@ yarn-error.log*
 src/ggs.code-workspace
 **.css.map
 
-cdk.out
 .env.ggs.test.local
 .env.ggs.live.local
