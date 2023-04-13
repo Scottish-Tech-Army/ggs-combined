@@ -1,6 +1,7 @@
 import config from "../config.json";
 
 export function login(email) {
+  // TODO: Need to fix the backend name below with the correct environment...
   const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
 
   return fetch(BASE_URL + "unit/login", {
@@ -18,6 +19,7 @@ export function login(email) {
 }
 
 export function register(email, name) {
+  // TODO: Need to fix the backend name below with the correct environment...
   const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
 
   return fetch(BASE_URL + "unit/register", {
