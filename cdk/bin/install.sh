@@ -22,6 +22,9 @@ if test "$?" != "0"; then
     exit 1
 fi
 
+# exit script on error
+set -o errexit
+
 env="$1"
 starting_dir=$(pwd)
 backend_name="GGS-backend-${env}"
@@ -63,7 +66,8 @@ npm install
 
 npm run build
 
-npm test
+# Run unit tests in non-interactive mode
+npm test -- --watchAll=false
 
 cd ../cdk
 
