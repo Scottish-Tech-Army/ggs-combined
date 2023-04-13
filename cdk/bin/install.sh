@@ -63,6 +63,8 @@ npm install
 
 npm run build
 
+npm test
+
 cd ../cdk
 
 cdk deploy ${frontend_name} --require-approval never --context env=${env}
