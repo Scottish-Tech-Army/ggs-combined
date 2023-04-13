@@ -1,4 +1,4 @@
-import fetchMock from "jest-fetch-mock";
+import fetchMock from "jest-fetch-mock/types";
 
 // eslint-disable-next-line no-global-assign
 console = {

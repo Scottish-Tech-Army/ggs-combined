@@ -43,17 +43,17 @@ npm install
 
 cd ../..
 
-cd utils
+#cd utils
 
-npm install
+#npm install
 
-cd ..
+#cd ..
 
 npm run build
 
 cd ../cdk
 
-cdk bootstrap
+cdk bootstrap --context env=${env}
 
 cdk deploy ${backend_name} --require-approval never --context env=${env} --outputs-file ../ggs-frontend/src/config.json
 
