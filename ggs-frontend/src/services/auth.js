@@ -1,6 +1,8 @@
-const BASE_URL = process.env.REACT_APP_AWS_CLIENT_API_ENDPOINT;
+import config from "../config.json";
 
 export function login(email) {
+  const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
+
   return fetch(BASE_URL + "unit/login", {
     method: "POST",
     headers: {
@@ -16,6 +18,8 @@ export function login(email) {
 }
 
 export function register(email, name) {
+  const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
+
   return fetch(BASE_URL + "unit/register", {
     method: "POST",
     headers: {
