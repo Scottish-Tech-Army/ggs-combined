@@ -54,7 +54,12 @@ cd ../..
 
 npm run build
 
-cd ../cdk
+cd resources/ggsLambda
+
+# Run backend unit tests in non-interactive mode
+npm test -- --watchAll=false
+
+cd ../../../cdk
 
 cdk bootstrap --context env=${env}
 
@@ -66,7 +71,7 @@ npm install
 
 npm run build
 
-# Run unit tests in non-interactive mode
+# Run frontend unit tests in non-interactive mode
 npm test -- --watchAll=false
 
 cd ../cdk
