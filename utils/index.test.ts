@@ -13,7 +13,7 @@ import {
   processSpreadsheet,
 } from "./index";
 var XLSX = require("xlsx");
-import fetchMock from "jest-fetch-mock/types";
+import fetchMock from "jest-fetch-mock";
 
 jest.mock("./aws");
 

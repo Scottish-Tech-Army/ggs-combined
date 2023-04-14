@@ -1,6 +1,7 @@
 import { PutItemCommand, PutItemOutput } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
-var XLSX = require("xlsx");
+import fs from 'fs';
+import csv from 'csv-parser';
 require("dotenv").config({ path: ".env.local" });
 import { dynamodbClient } from "./aws";
 import { PHOTO_LINKS } from "./photoLinks";
@@ -34,23 +35,18 @@ type WikimediaPhoto = {
   copyright: string;
 };
 
-const COLUMN_COUNTY = "County";
-const COLUMN_CITY = "City/town";
-const COLUMN_NAME = "Name of location";
-const COLUMN_LATITUDE = "Latitude";
-const COLUMN_LONGITUDE = "Longitude";
-const COLUMN_DESCRIPTION = "Description of map point";
-const COLUMN_CHALLENGE = "Challenge";
+const COLUMN_COUNTY: string = "County";
+const COLUMN_DISTRICT: string = "District";
+const COLUMN_CITY: string = "City";
+const COLUMN_NAME: string = "Name";
+const COLUMN_LATITUDE: string = "Latitude";
+const COLUMN_LONGITUDE: string = "Longitude";
+const COLUMN_DESCRIPTION: string = "Description";
+const COLUMN_CHALLENGE: string = "Challenge";
 
 const ROWS_TO_SKIP = 0;
 
 const PHOTOS_BASEURL = process.env.PHOTOS_BASEURL;
-
-var workbook = XLSX.readFile(process.env.SOURCE_SPREADSHEET_PATH);
-
-const sheetNames = [...workbook.SheetNames];
-// Skip the overview sheet
-sheetNames.shift();
 
 // Each sheet has a different name for the column...
 function getPhotoColumnKey(sheetJson: any): string {
@@ -130,23 +126,15 @@ export function parseCoordinates(
 
   if (latitude < 50 || latitude > 61 || longitude < -9 || longitude > 0) {
     // Out of range coordinates
-    console.warn(
-      "Probably transposed lat/long: ",
-      inputLatitude,
-      inputLongitude
-    );
+    console.warn("Probably transposed lat/long: ", inputLatitude, inputLongitude);
     return undefined;
   }
 
   return { latitude, longitude };
 }
 
-export async function getWikimediaPhotoData(
-  wikiUrl: string
-): Promise<WikimediaPhoto> {
-  const wikiFile = wikiUrl.substring(
-    "https://commons.wikimedia.org/wiki/File:".length
-  );
+export async function getWikimediaPhotoData(wikiUrl: string): Promise<WikimediaPhoto> {
+  const wikiFile = wikiUrl.substring("https://commons.wikimedia.org/wiki/File:".length);
 
   const queryUrl = `https://en.wikipedia.org/w/api.php?format=json&action=query&titles=File:${wikiFile}&prop=imageinfo&iiprop=user|extmetadata|url&iiextmetadatafilter=LicenseShortName&iiurlwidth=640`;
 
@@ -166,11 +154,10 @@ export async function getWikimediaPhotoData(
   };
 }
 
-let photoLinkCount = 0;
-let photoFileCount = 0;
-
 export async function getPhotos(locationId: string, photoRef: string) {
-  const photos: GGSPhoto[] = [];
+  let photoLinkCount = 0;
+  let photoFileCount = 0;
+    const photos: GGSPhoto[] = [];
 
   if (PHOTO_LINKS[photoRef]) {
     // Already processed linked (or file with attribution) photo - skip fetching again
@@ -223,88 +210,19 @@ export async function getPhotos(locationId: string, photoRef: string) {
   return photos;
 }
 
-export async function buildLocations(workbook: any): Promise<GGSLocation[]> {
-  let successCount = 0;
-  let failCount = 0;
-  photoLinkCount = 0;
-  photoFileCount = 0;
-  const result: GGSLocation[] = [];
+export async function buildLocations(csv_file_path: string): Promise<GGSLocation[]> {
+  const csvData: object[] = [];
+  let result: GGSLocation[] = [];
 
-  for (let sheetName of sheetNames) {
-    const contents = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], {
-      range: ROWS_TO_SKIP,
-    });
-    // TODO photo handling
-    let photoColumnKey = getPhotoColumnKey(contents);
+  // Parse the CSV file
+  fs.createReadStream(csv_file_path)
+    .pipe(csv())    // first line should be header
+    .on('data', (data) => csvData.push(data))
+    .on('end', () => {
+      console.log(`csv data length: ${csvData.length}`);
+      result = processCsvData(csvData);
+  });
 
-    console.log("Sheet", sheetName);
-
-    // Some column values carry forward (ie not populated in succeeding rows)
-    let county: string = "";
-    let city: string | undefined = undefined;
-
-    for (let row of contents) {
-      // console.log(row);
-      
-      const newCounty = row[COLUMN_COUNTY];
-      if (newCounty) {
-        county = newCounty;
-        city = undefined;
-      }
-      city = row[COLUMN_CITY] || city;
-      const name = row[COLUMN_NAME];
-      const locationId = createLocationId(county, city, name);
-
-      const photos: GGSPhoto[] = await getPhotos(
-        locationId,
-        row[photoColumnKey]
-      );
-
-      const coordinates = parseCoordinates(
-        row[COLUMN_LATITUDE],
-        row[COLUMN_LONGITUDE]
-      );
-
-      const description = row[COLUMN_DESCRIPTION];
-      const challenge = row[COLUMN_CHALLENGE];
-      if (!coordinates) {
-        console.warn("Incomplete location coordinates: ", sheetName, {
-          [COLUMN_COUNTY]: county,
-          [COLUMN_CITY]: city,
-          [COLUMN_NAME]: row[COLUMN_NAME],
-          [COLUMN_LATITUDE]: row[COLUMN_LATITUDE],
-          [COLUMN_LONGITUDE]: row[COLUMN_LONGITUDE],
-        }, row);
-        failCount++;
-      } else if (!name || !county || !description || !challenge) {
-        console.warn("Incomplete location information: ", sheetName, {
-          [COLUMN_COUNTY]: county,
-          [COLUMN_CITY]: city,
-          ...row,
-        });
-        failCount++;
-      } else {
-        result.push({
-          locationId,
-          region: sheetName,
-          county,
-          city,
-          latitude: coordinates.latitude,
-          longitude: coordinates.longitude,
-          name,
-          description,
-          challenge,
-          photos,
-        });
-        successCount++;
-      }
-    }
-  }
-
-  console.log("success: ", successCount);
-  console.log("fail: ", failCount);
-  console.log("photo links: ", photoLinkCount);
-  console.log("photo files: ", photoFileCount);
   return result;
 }
 
@@ -323,7 +241,12 @@ async function uploadToDynamoDB(locations: GGSLocation[]) {
 }
 
 export async function checkSpreadsheet() {
-  const locations = await buildLocations(workbook);
+  const csv_file_path = process.env.SOURCE_SPREADSHEET_PATH;
+  if (csv_file_path == undefined) {
+    throw new Error(`Error reading SOURCE_SPREADSHEET_PATH: ${csv_file_path}.`);
+  }
+
+  const locations = await buildLocations(csv_file_path!);
 
   locations.forEach((location) => {
     console.log(location.locationId, location.name);
@@ -333,11 +256,85 @@ export async function checkSpreadsheet() {
 }
 
 export async function processSpreadsheet() {
-  const locations = await buildLocations(workbook);
+  const csv_file_path = process.env.SOURCE_SPREADSHEET_PATH;
+  if (csv_file_path == undefined) {
+    throw new Error(`Error reading SOURCE_SPREADSHEET_PATH: ${csv_file_path}.`);
+  }
+
+  const locations = await buildLocations(csv_file_path!);
 
   locations.forEach((location) => {
     console.log(location.locationId, location.name);
   });
 
   await uploadToDynamoDB(locations);
+}
+
+function processCsvData(csvData: object[]): GGSLocation[] {
+  const result: GGSLocation[] = [];
+
+  let photoLinkCount = 0;
+  let photoFileCount = 0;
+  let successCount = 0;
+  let failCount = 0;
+
+  for (let csvRow of csvData) {
+
+    console.log("Row: ");
+    console.log(csvRow);
+
+    // TODO photo handling
+    let photoColumnKey = getPhotoColumnKey(csvData);
+    const county = csvRow[COLUMN_COUNTY];
+    const district = csvRow[COLUMN_DISTRICT];
+    const city = csvRow[COLUMN_CITY];
+    const name = csvRow[COLUMN_NAME];
+    const locationId = createLocationId(county, city, name);
+
+//    const photos: GGSPhoto[] = await getPhotos(locationId, csvRow[photoColumnKey]);
+
+    const coordinates = parseCoordinates(csvRow[COLUMN_LATITUDE], csvRow[COLUMN_LONGITUDE]);
+
+    const description = csvRow[COLUMN_DESCRIPTION];
+    const challenge = csvRow[COLUMN_CHALLENGE];
+    if (!coordinates) {
+      console.warn("Incomplete location coordinates: ", county, {
+        [COLUMN_COUNTY]: county,
+        [COLUMN_CITY]: city,
+        [COLUMN_NAME]: csvRow[COLUMN_NAME],
+        [COLUMN_LATITUDE]: csvRow[COLUMN_LATITUDE],
+        [COLUMN_LONGITUDE]: csvRow[COLUMN_LONGITUDE],
+      }, csvRow);
+      failCount++;
+    } else if (!name || !county || !description || !challenge) {
+      console.warn("Incomplete location information: ", county, {
+        [COLUMN_COUNTY]: county,
+        [COLUMN_CITY]: city,
+        ...csvRow,
+      });
+      failCount++;
+    } else {
+      const photos: GGSPhoto[] = [];
+      result.push({
+        locationId,
+        region: county,
+        county,
+        city,
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+        name,
+        description,
+        challenge,
+        photos,
+      });
+      successCount++;
+    }
+  }
+  
+  console.log("success: ", successCount);
+  console.log("fail: ", failCount);
+  console.log("photo links: ", photoLinkCount);
+  console.log("photo files: ", photoFileCount);
+  
+  return result;
 }
