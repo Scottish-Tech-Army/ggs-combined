@@ -246,10 +246,8 @@ export async function checkSpreadsheet() {
   console.log(`Checking CSV import files in: ${csv_file_location_abs}...`);
 
   const allFiles = fs.readdirSync(csv_file_location_abs);
-  let allFilesAbs: string[] = [];
-  allFiles.forEach((relativeFile) => {
-    const absFile = path.join(csv_file_location_abs, relativeFile);
-    allFilesAbs.push(absFile);
+  const allFilesAbs = allFiles.map((relativeFile) => {
+    return path.join(csv_file_location_abs, relativeFile);
   });
   const csvFiles = allFilesAbs.filter(x => path.extname(x) === '.csv')
 
