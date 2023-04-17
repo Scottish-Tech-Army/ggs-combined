@@ -6,6 +6,7 @@ require("dotenv").config({ path: ".env.local" });
 import { dynamodbClient } from "./aws";
 import { PHOTO_LINKS } from "./photoLinks";
 require("isomorphic-fetch");
+const path = require('path');
 
 type GGSPhoto = {
   url: string;
@@ -24,6 +25,8 @@ type GGSLocation = {
   name: string;
   description: string;
   challenge: string;
+  image_location: string;
+  image_ref: string;
   photos: GGSPhoto[];
 };
 
@@ -43,6 +46,8 @@ const COLUMN_LATITUDE: string = "Latitude";
 const COLUMN_LONGITUDE: string = "Longitude";
 const COLUMN_DESCRIPTION: string = "Description";
 const COLUMN_CHALLENGE: string = "Challenge";
+const COLUMN_IMAGE_LOCATION: string = "Image location";
+const COLUMN_IMAGE_REF: string = "Image ref";
 
 const ROWS_TO_SKIP = 0;
 
@@ -211,10 +216,10 @@ export async function getPhotos(locationId: string, photoRef: string) {
 }
 
 export async function buildLocations(csvFilePath: string): Promise<GGSLocation[]> {
-  const fileContents = fs.readFileSync(csvFilePath, 'utf8');
+  const csvFileContents = fs.readFileSync(csvFilePath, 'utf8');
 
   // Parse the CSV file contents
-  const records = parse(fileContents, { columns: true, skip_empty_lines: true });
+  const records = parse(csvFileContents, { columns: true, skip_empty_lines: true });
 
   return processCsvData(records);
 }
@@ -234,18 +239,32 @@ async function uploadToDynamoDB(locations: GGSLocation[]) {
 }
 
 export async function checkSpreadsheet() {
-  const csv_file_path = process.env.SOURCE_SPREADSHEET_PATH;
-  if (csv_file_path == undefined) {
-    throw new Error(`Error reading SOURCE_SPREADSHEET_PATH: ${csv_file_path}.`);
+  const partial_csv_file_location = process.env.SOURCE_SPREADSHEET_PATH;
+  const csv_file_location = path.join(__dirname, partial_csv_file_location);
+  const csv_file_location_abs = path.resolve(csv_file_location);
+
+  console.log(`Checking CSV import files in: ${csv_file_location_abs}...`);
+
+  const allFiles = fs.readdirSync(csv_file_location_abs);
+  let allFilesAbs: string[] = [];
+  allFiles.forEach((relativeFile) => {
+    const absFile = path.join(csv_file_location_abs, relativeFile);
+    allFilesAbs.push(absFile);
+  });
+  const csvFiles = allFilesAbs.filter(x => path.extname(x) === '.csv')
+
+  const all_locations: GGSLocation[] = [];
+
+  for (const csvFile of csvFiles) {
+    const locations = await buildLocations(csvFile);
+
+    locations.forEach((location) => {
+      console.log(location.locationId, location.name);
+      all_locations.push(location);
+    });
   }
 
-  const locations = await buildLocations(csv_file_path!);
-
-  locations.forEach((location) => {
-    console.log(location.locationId, location.name);
-  });
-
-  return locations.length;
+  return all_locations.length;
 }
 
 export async function processSpreadsheet() {
@@ -273,8 +292,8 @@ function processCsvData(csvData: object[]): GGSLocation[] {
 
   for (let csvRow of csvData) {
 
-    console.log("Row: ");
-    console.log(csvRow);
+//    console.log("Row: ");
+//    console.log(csvRow);
 
     // TODO photo handling
     let photoColumnKey = getPhotoColumnKey(csvData);
@@ -289,6 +308,8 @@ function processCsvData(csvData: object[]): GGSLocation[] {
     const coordinates = parseCoordinates(csvRow[COLUMN_LATITUDE], csvRow[COLUMN_LONGITUDE]);
 
     const description = csvRow[COLUMN_DESCRIPTION];
+    const image_location = csvRow[COLUMN_IMAGE_LOCATION];
+    const image_ref = csvRow[COLUMN_IMAGE_REF];
     const challenge = csvRow[COLUMN_CHALLENGE];
     if (!coordinates) {
       console.warn("Incomplete location coordinates: ", county, {
@@ -310,7 +331,7 @@ function processCsvData(csvData: object[]): GGSLocation[] {
       const photos: GGSPhoto[] = [];
       result.push({
         locationId,
-        region: county,
+        region: district,
         county,
         city,
         latitude: coordinates.latitude,
@@ -319,6 +340,8 @@ function processCsvData(csvData: object[]): GGSLocation[] {
         description,
         challenge,
         photos,
+        image_location,
+        image_ref
       });
       successCount++;
     }
