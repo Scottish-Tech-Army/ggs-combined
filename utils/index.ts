@@ -1,7 +1,7 @@
 import { PutItemCommand, PutItemOutput } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
+import { parse } from 'csv-parse/sync';
 import fs from 'fs';
-import csv from 'csv-parser';
 require("dotenv").config({ path: ".env.local" });
 import { dynamodbClient } from "./aws";
 import { PHOTO_LINKS } from "./photoLinks";
@@ -210,20 +210,13 @@ export async function getPhotos(locationId: string, photoRef: string) {
   return photos;
 }
 
-export async function buildLocations(csv_file_path: string): Promise<GGSLocation[]> {
-  const csvData: object[] = [];
-  let result: GGSLocation[] = [];
+export async function buildLocations(csvFilePath: string): Promise<GGSLocation[]> {
+  const fileContents = fs.readFileSync(csvFilePath, 'utf8');
 
-  // Parse the CSV file
-  fs.createReadStream(csv_file_path)
-    .pipe(csv())    // first line should be header
-    .on('data', (data) => csvData.push(data))
-    .on('end', () => {
-      console.log(`csv data length: ${csvData.length}`);
-      result = processCsvData(csvData);
-  });
+  // Parse the CSV file contents
+  const records = parse(fileContents, { columns: true, skip_empty_lines: true });
 
-  return result;
+  return processCsvData(records);
 }
 
 async function uploadToDynamoDB(locations: GGSLocation[]) {
