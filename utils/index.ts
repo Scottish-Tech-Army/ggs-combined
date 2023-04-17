@@ -38,6 +38,15 @@ type WikimediaPhoto = {
   copyright: string;
 };
 
+type CsvFileInfo = {
+  file: string;
+  successful: number;
+  failures: number;
+  photo_links: number;
+  photo_files: number;
+  locations: GGSLocation[];
+};
+
 const COLUMN_COUNTY: string = "County";
 const COLUMN_DISTRICT: string = "District";
 const COLUMN_CITY: string = "City";
@@ -215,13 +224,13 @@ export async function getPhotos(locationId: string, photoRef: string) {
   return photos;
 }
 
-export async function buildLocations(csvFilePath: string): Promise<GGSLocation[]> {
+export async function buildLocations(csvFilePath: string): Promise<LocationInfo> {
   const csvFileContents = fs.readFileSync(csvFilePath, 'utf8');
 
   // Parse the CSV file contents
   const records = parse(csvFileContents, { columns: true, skip_empty_lines: true });
 
-  return processCsvData(records);
+  return await processCsvData(records);
 }
 
 async function uploadToDynamoDB(locations: GGSLocation[]) {
@@ -240,6 +249,9 @@ async function uploadToDynamoDB(locations: GGSLocation[]) {
 
 export async function checkSpreadsheet() {
   const partial_csv_file_location = process.env.SOURCE_SPREADSHEET_PATH;
+  if (partial_csv_file_location == undefined) {
+    throw new Error(`Error reading SOURCE_SPREADSHEET_PATH: ${partial_csv_file_location}.`);
+  }
   const csv_file_location = path.join(__dirname, partial_csv_file_location);
   const csv_file_location_abs = path.resolve(csv_file_location);
 
@@ -251,18 +263,24 @@ export async function checkSpreadsheet() {
   });
   const csvFiles = allFilesAbs.filter(x => path.extname(x) === '.csv')
 
-  const all_locations: GGSLocation[] = [];
+  const allCsvFileInfos: CsvFileInfo[] = [];
+
+  console.log('Report Summary');
 
   for (const csvFile of csvFiles) {
-    const locations = await buildLocations(csvFile);
+    const csvFileInfo = await buildLocations(csvFile);
 
-    locations.forEach((location) => {
-      console.log(location.locationId, location.name);
-      all_locations.push(location);
-    });
+    console.log(`File: ${csvFileInfo.file}`);
+    console.log("success: ", csvFileInfo.successCount);
+    console.log("fail: ", csvFileInfo.failCount);
+    console.log("photo links: ", csvFileInfo.photoLinkCount);
+    console.log("photo files: ", csvFileInfo.photoFileCount);
+
+//    locations.forEach((location) => {
+//      console.log(location.locationId, location.name);
+//      all_locations.push(location);
+//    });
   }
-
-  return all_locations.length;
 }
 
 export async function processSpreadsheet() {
@@ -280,7 +298,7 @@ export async function processSpreadsheet() {
   await uploadToDynamoDB(locations);
 }
 
-function processCsvData(csvData: object[]): GGSLocation[] {
+async function processCsvData(csvData: object[]): Promise<CsvFileInfo> {
   const result: GGSLocation[] = [];
 
   let photoLinkCount = 0;
@@ -290,9 +308,6 @@ function processCsvData(csvData: object[]): GGSLocation[] {
 
   for (let csvRow of csvData) {
 
-//    console.log("Row: ");
-//    console.log(csvRow);
-
     // TODO photo handling
     let photoColumnKey = getPhotoColumnKey(csvData);
     const county = csvRow[COLUMN_COUNTY];
@@ -301,7 +316,7 @@ function processCsvData(csvData: object[]): GGSLocation[] {
     const name = csvRow[COLUMN_NAME];
     const locationId = createLocationId(county, city, name);
 
-//    const photos: GGSPhoto[] = await getPhotos(locationId, csvRow[photoColumnKey]);
+    const photos: GGSPhoto[] = await getPhotos(locationId, csvRow[photoColumnKey]);
 
     const coordinates = parseCoordinates(csvRow[COLUMN_LATITUDE], csvRow[COLUMN_LONGITUDE]);
 
@@ -345,10 +360,14 @@ function processCsvData(csvData: object[]): GGSLocation[] {
     }
   }
   
-  console.log("success: ", successCount);
-  console.log("fail: ", failCount);
-  console.log("photo links: ", photoLinkCount);
-  console.log("photo files: ", photoFileCount);
-  
-  return result;
+  const locationInfo: CsvFileInfo = { 
+    file: '',
+    successful: successCount,
+    failures: failCount,
+    photo_links: photoLinkCount,
+    photo_files: photoFileCount,
+    locations: result
+  };
+
+  return locationInfo;
 }
