@@ -25,8 +25,6 @@ type GGSLocation = {
   name: string;
   description: string;
   challenge: string;
-  image_location: string;
-  image_ref: string;
   photos: GGSPhoto[];
 };
 
@@ -230,7 +228,7 @@ export async function buildLocations(csvFilePath: string): Promise<LocationInfo>
   // Parse the CSV file contents
   const records = parse(csvFileContents, { columns: true, skip_empty_lines: true });
 
-  return await processCsvData(records);
+  return await processCsvData(csvFilePath, records);
 }
 
 async function uploadToDynamoDB(locations: GGSLocation[]) {
@@ -271,15 +269,10 @@ export async function checkSpreadsheet() {
     const csvFileInfo = await buildLocations(csvFile);
 
     console.log(`File: ${csvFileInfo.file}`);
-    console.log("success: ", csvFileInfo.successCount);
-    console.log("fail: ", csvFileInfo.failCount);
-    console.log("photo links: ", csvFileInfo.photoLinkCount);
-    console.log("photo files: ", csvFileInfo.photoFileCount);
-
-//    locations.forEach((location) => {
-//      console.log(location.locationId, location.name);
-//      all_locations.push(location);
-//    });
+    console.log("success: " + csvFileInfo.successCount);
+    console.log("fail: " + csvFileInfo.failCount);
+    console.log("photo links: " + csvFileInfo.photoLinkCount);
+    console.log("photo files: " + csvFileInfo.photoFileCount);
   }
 }
 
@@ -291,14 +284,10 @@ export async function processSpreadsheet() {
 
   const locations = await buildLocations(csv_file_path!);
 
-  locations.forEach((location) => {
-    console.log(location.locationId, location.name);
-  });
-
   await uploadToDynamoDB(locations);
 }
 
-async function processCsvData(csvData: object[]): Promise<CsvFileInfo> {
+async function processCsvData(filePath: string, csvData: object[]): Promise<CsvFileInfo> {
   const result: GGSLocation[] = [];
 
   let photoLinkCount = 0;
@@ -352,16 +341,14 @@ async function processCsvData(csvData: object[]): Promise<CsvFileInfo> {
         name,
         description,
         challenge,
-        photos,
-        image_location,
-        image_ref
+        photos
       });
       successCount++;
     }
   }
   
   const locationInfo: CsvFileInfo = { 
-    file: '',
+    file: filePath,
     successful: successCount,
     failures: failCount,
     photo_links: photoLinkCount,
