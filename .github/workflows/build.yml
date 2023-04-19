@@ -4,30 +4,40 @@ jobs:
   build-frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: checkout repo
+        uses: actions/checkout@v3
+
+      - name: install node
+        uses: actions/setup-node@v3
         with:
           node-version: '19'
+
       - name: install backend dependencies
         working-directory: ./ggs-backend
         run: npm install
+
       - name: install backend resources dependencies
         working-directory: ./ggs-backend/resources/ggsLambda
         run: npm install
+
       - name: build backend
         working-directory: ./ggs-backend
         run: npm run build
+
       - name: run backend tests
         working-directory: ./ggs-backend/resources/ggsLambda
         run: npm test
+
       - name: install frontend dependencies
         working-directory: ./ggs-frontend
         run: npm ci
+
       - name: build frontend
         working-directory: ./ggs-frontend
         env:
           CI: false         # CI=true makes react build fail on warnings
         run: npm run build
+        
       - name: run frontend tests
         working-directory: ./ggs-frontend
         run: npm test
