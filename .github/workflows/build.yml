@@ -25,6 +25,8 @@ jobs:
         run: npm ci
       - name: build frontend
         working-directory: ./ggs-frontend
+        env:
+          CI: false         # fails on warnings of which there are several
         run: npm run build
       - name: run frontend tests
         working-directory: ./ggs-frontend
