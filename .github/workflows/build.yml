@@ -8,6 +8,21 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '19'
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+      - name: install backend dependencies
+        working-directory: ./ggs-backend
+        run: npm ci
+      - name: build backend
+        working-directory: ./ggs-backend
+        run: npm run build
+      - name: run backend tests
+        working-directory: ./ggs-backend/resources/ggsLambda
+        run: npm test
+      - name: install frontend dependencies
+        working-directory: ./ggs-frontend
+        run: npm ci
+      - name: build frontend
+        working-directory: ./ggs-frontend
+        run: npm run build
+      - name: run frontend tests
+        working-directory: ./ggs-frontend
+        run: npm test
