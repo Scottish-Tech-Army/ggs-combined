@@ -257,8 +257,6 @@ export async function checkSpreadsheet() {
   });
   const csvFiles = allFilesAbs.filter(x => path.extname(x) === '.csv')
 
-  const allCsvFileInfos: CsvFileInfo[] = [];
-
   console.log('Report Summary');
 
   for (const csvFile of csvFiles) {
@@ -339,8 +337,6 @@ async function processCsvData(filePath: string, csvData: object[]): Promise<CsvF
     }
   }
 
-  console.log(`successCount: ${successCount}`);
-  
   return { 
     file: filePath,
     successful: successCount,
