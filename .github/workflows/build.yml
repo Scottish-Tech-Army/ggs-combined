@@ -3,7 +3,7 @@ on: [push]
 on:
   push:
     branches:
-      - '*'
+      - '**'    # build all branches
 jobs:
   build:
     runs-on: ubuntu-latest
