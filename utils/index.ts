@@ -36,7 +36,7 @@ type WikimediaPhoto = {
   copyright: string;
 };
 
-type CsvFileInfo = {
+interface CsvFileInfo {
   file: string;
   successful: number;
   failures: number;
@@ -45,18 +45,14 @@ type CsvFileInfo = {
   locations: GGSLocation[];
 };
 
-const COLUMN_COUNTY: string = "County";
-const COLUMN_DISTRICT: string = "District";
-const COLUMN_CITY: string = "City";
-const COLUMN_NAME: string = "Name";
-const COLUMN_LATITUDE: string = "Latitude";
-const COLUMN_LONGITUDE: string = "Longitude";
-const COLUMN_DESCRIPTION: string = "Description";
-const COLUMN_CHALLENGE: string = "Challenge";
-const COLUMN_IMAGE_LOCATION: string = "Image location";
-const COLUMN_IMAGE_REF: string = "Image ref";
-
-const ROWS_TO_SKIP = 0;
+const COLUMN_COUNTY = "County";
+const COLUMN_DISTRICT = "District";
+const COLUMN_CITY = "City";
+const COLUMN_NAME = "Name";
+const COLUMN_LATITUDE = "Latitude";
+const COLUMN_LONGITUDE = "Longitude";
+const COLUMN_DESCRIPTION = "Description";
+const COLUMN_CHALLENGE = "Challenge";
 
 const PHOTOS_BASEURL = process.env.PHOTOS_BASEURL;
 
@@ -222,7 +218,7 @@ export async function getPhotos(locationId: string, photoRef: string) {
   return photos;
 }
 
-export async function buildLocations(csvFilePath: string): Promise<LocationInfo> {
+export async function buildLocations(csvFilePath: string): Promise<CsvFileInfo> {
   const csvFileContents = fs.readFileSync(csvFilePath, 'utf8');
 
   // Parse the CSV file contents
@@ -269,10 +265,10 @@ export async function checkSpreadsheet() {
     const csvFileInfo = await buildLocations(csvFile);
 
     console.log(`File: ${csvFileInfo.file}`);
-    console.log("success: " + csvFileInfo.successCount);
-    console.log("fail: " + csvFileInfo.failCount);
-    console.log("photo links: " + csvFileInfo.photoLinkCount);
-    console.log("photo files: " + csvFileInfo.photoFileCount);
+    console.log(`success: ${csvFileInfo.successful}`);
+    console.log(`fail: ${csvFileInfo.failures}`);
+    console.log(`photo links: ${csvFileInfo.photo_links}`);
+    console.log(`photo files: ${csvFileInfo.photo_files}`);
   }
 }
 
@@ -290,14 +286,13 @@ export async function processSpreadsheet() {
 async function processCsvData(filePath: string, csvData: object[]): Promise<CsvFileInfo> {
   const result: GGSLocation[] = [];
 
-  let photoLinkCount = 0;
-  let photoFileCount = 0;
-  let successCount = 0;
-  let failCount = 0;
+  let photoLinkCount: number = 0;
+  let photoFileCount: number = 0;
+  let successCount: number = 0;
+  let failCount: number = 0;
 
   for (let csvRow of csvData) {
 
-    // TODO photo handling
     let photoColumnKey = getPhotoColumnKey(csvData);
     const county = csvRow[COLUMN_COUNTY];
     const district = csvRow[COLUMN_DISTRICT];
@@ -310,8 +305,6 @@ async function processCsvData(filePath: string, csvData: object[]): Promise<CsvF
     const coordinates = parseCoordinates(csvRow[COLUMN_LATITUDE], csvRow[COLUMN_LONGITUDE]);
 
     const description = csvRow[COLUMN_DESCRIPTION];
-    const image_location = csvRow[COLUMN_IMAGE_LOCATION];
-    const image_ref = csvRow[COLUMN_IMAGE_REF];
     const challenge = csvRow[COLUMN_CHALLENGE];
     if (!coordinates) {
       console.warn("Incomplete location coordinates: ", county, {
@@ -330,7 +323,6 @@ async function processCsvData(filePath: string, csvData: object[]): Promise<CsvF
       });
       failCount++;
     } else {
-      const photos: GGSPhoto[] = [];
       result.push({
         locationId,
         region: district,
@@ -346,8 +338,10 @@ async function processCsvData(filePath: string, csvData: object[]): Promise<CsvF
       successCount++;
     }
   }
+
+  console.log(`successCount: ${successCount}`);
   
-  const locationInfo: CsvFileInfo = { 
+  return { 
     file: filePath,
     successful: successCount,
     failures: failCount,
@@ -355,6 +349,4 @@ async function processCsvData(filePath: string, csvData: object[]): Promise<CsvF
     photo_files: photoFileCount,
     locations: result
   };
-
-  return locationInfo;
 }
