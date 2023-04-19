@@ -26,7 +26,7 @@ jobs:
       - name: build frontend
         working-directory: ./ggs-frontend
         env:
-          CI: false         # fails on warnings of which there are several
+          CI: false         # CI=true makes react build fail on warnings
         run: npm run build
       - name: run frontend tests
         working-directory: ./ggs-frontend
