@@ -10,7 +10,10 @@ jobs:
           node-version: '19'
       - name: install backend dependencies
         working-directory: ./ggs-backend
-        run: npm ci
+        run: npm install
+      - name: install backend resources dependencies
+        working-directory: ./ggs-backend/resources/ggsLambda
+        run: npm install
       - name: build backend
         working-directory: ./ggs-backend
         run: npm run build
