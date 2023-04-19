@@ -1,7 +1,11 @@
-name: GGS CI
+name: Build
 on: [push]
+on:
+  push:
+    branches:
+      - '*'
 jobs:
-  build-frontend:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repo
@@ -37,7 +41,7 @@ jobs:
         env:
           CI: false         # CI=true makes react build fail on warnings
         run: npm run build
-        
+
       - name: run frontend tests
         working-directory: ./ggs-frontend
         run: npm test
