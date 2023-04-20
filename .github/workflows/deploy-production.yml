@@ -33,7 +33,6 @@ jobs:
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'bootstrap'
-          cdk_stack: 'GGS-backend-prod'
           cdk_args: '--context env=prod'
           actions_comment: false
         env:
