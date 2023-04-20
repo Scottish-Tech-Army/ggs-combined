@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - name: checkout repo
+        uses: actions/checkout@v3
+
       - name: install node
         uses: actions/setup-node@v3
         with:
