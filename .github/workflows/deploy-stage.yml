@@ -2,9 +2,9 @@ name: Deploy Stage
 
 on:
   workflow_run:
-    workflows: Build    # Execute build workflow prior to this one
-    branches: develop   # Only deploy develop branch to stage
-    types: completed
+    workflows: [Build]      # Execute build workflow prior to this one
+    branches: [develop]     # Only run when develop branch
+    types: [completed]
 
 jobs:
   build:
@@ -31,6 +31,7 @@ jobs:
       name: stage
     steps:
       - name: cdk deploy backend
+        working-directory: ./cdk
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'deploy'

@@ -2,9 +2,9 @@ name: Deploy Production
 
 on:
   workflow_run:
-    workflows: Build    # Execute build workflow prior to this one
-    branches: main      # Only deploy main branch to production
-    types: completed
+    workflows: [Build]      # Execute build workflow prior to this one
+    branches: [main]        # Only run when main branch
+    types: [completed]
 
 jobs:
   build:
