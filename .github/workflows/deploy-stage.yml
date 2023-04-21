@@ -53,6 +53,10 @@ jobs:
         working-directory: ./cdk
         run: npm install
 
+      - name: build cdk deploy script
+        working-directory: ./cdk
+        run: npm run build
+
       - name: cdk bootstrap
         uses: youyo/aws-cdk-github-actions@v2
         with:
@@ -64,9 +68,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: 'eu-west-2'
 
-      - name: build deploy script
-        working-directory: ./cdk
-        run: npm run build
       - name: cdk deploy backend
         working-directory: ./cdk
         uses: youyo/aws-cdk-github-actions@v2
