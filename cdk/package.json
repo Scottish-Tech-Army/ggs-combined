@@ -2,24 +2,25 @@
     "name": "cdk",
     "version": "0.1.0",
     "bin": {
-      "cdk": "bin/cdk.js"
+        "cdk": "bin/cdk.js"
     },
     "scripts": {
-      "build": "tsc",
-      "watch": "tsc -w",
-      "test": "jest",
-      "cdk": "cdk"
+        "build": "tsc",
+        "watch": "tsc -w",
+        "test": "jest",
+        "cdk": "cdk"
     },
-      "devDependencies": {
-      "aws-cdk": "^2.9.0",
-      "aws-cdk-lib": "^2.9.0",
-      "esbuild": "^0.14.14",
-      "jest": "^27.5.1"
+    "devDependencies": {
+        "aws-cdk": "^2.9.0",
+        "aws-cdk-lib": "^2.9.0",
+        "esbuild": "^0.14.14",
+        "jest": "^27.5.1"
     },
     "dependencies": {
-      "@aws-sdk/client-dynamodb": "^3.284.0",
-      "@aws-sdk/util-dynamodb": "^3.284.0",
-      "es6-promise": "^4.2.8",
-      "isomorphic-fetch": "^3.0.0"
+        "@aws-sdk/client-dynamodb": "^3.284.0",
+        "@aws-sdk/util-dynamodb": "^3.284.0",
+        "constructs": "^10.2.2",
+        "es6-promise": "^4.2.8",
+        "isomorphic-fetch": "^3.0.0"
     }
 }
