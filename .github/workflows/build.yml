@@ -2,7 +2,9 @@ name: Build
 on:
   push:
     branches:
-      - '**'    # build all branches
+      - '**'        # run this job on all branches
+      - '!main'     # ... except main
+      - '!develop'  # ... and develop which have their own jobs
 jobs:
   build:
     runs-on: ubuntu-latest
