@@ -1,15 +1,15 @@
 name: Deploy Stage
 
 on:
-  workflow_run:
-    workflows: [Build]      # Execute build workflow prior to this one
-    branches: [develop]     # Only run when develop branch
-    types: [completed]
+  push:
+    branches:
+      - 'develop'  # Only run on develop branch and no other
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    environment: 
+      name: stage       # Ties back to environment name configured in github | settings | environments
     steps:
       - name: checkout repo
         uses: actions/checkout@v3
@@ -19,21 +19,54 @@ jobs:
         with:
           node-version: '19'
 
+      - name: install backend dependencies
+        working-directory: ./ggs-backend
+        run: npm install
+
+      - name: install backend resources dependencies
+        working-directory: ./ggs-backend/resources/ggsLambda
+        run: npm install
+
+      - name: build backend
+        working-directory: ./ggs-backend
+        run: npm run build
+
+      - name: run backend tests
+        working-directory: ./ggs-backend/resources/ggsLambda
+        run: npm test
+
+      - name: install frontend dependencies
+        working-directory: ./ggs-frontend
+        run: npm ci
+
+      - name: build frontend
+        working-directory: ./ggs-frontend
+        env:
+          CI: false         # CI=true makes react build fail on warnings
+        run: npm run build
+
+      - name: run frontend tests
+        working-directory: ./ggs-frontend
+        run: npm test
+
       - name: install cdk dependencies
         working-directory: ./cdk
         run: npm install
 
+      - name: cdk bootstrap
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'bootstrap'
+          cdk_args: '--context env=test'
+          actions_comment: false
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: 'eu-west-2'
+
       - name: build deploy script
         working-directory: ./cdk
         run: npm run build
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    environment: 
-      name: stage
-    steps:
       - name: cdk deploy backend
         working-directory: ./cdk
         uses: youyo/aws-cdk-github-actions@v2
