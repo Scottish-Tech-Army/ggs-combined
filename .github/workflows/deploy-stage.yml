@@ -58,6 +58,7 @@ jobs:
         run: npm run build
 
       - name: cdk bootstrap
+        working-directory: ./cdk
         uses: youyo/aws-cdk-github-actions@v2
         with:
           cdk_subcommand: 'bootstrap'
