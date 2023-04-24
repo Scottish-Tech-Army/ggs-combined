@@ -10,6 +10,9 @@
 # Website content to be copied to S3 bucket on deployment
 /build
 
+# Artifact created by backend build to inform frontend where backend resources are
+src/config.json
+
 # misc
 .DS_Store
 .env.local
