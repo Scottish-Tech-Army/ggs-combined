@@ -64,7 +64,7 @@ export class CdkBackendStack extends Stack {
     });
 
     // Database tables for locations and units
-    const locationsTable = new dynamodb.Table(this, "Locations", {
+    const locationsTable = new dynamodb.Table(this, LOCATIONS_TABLE_NAME, {
       partitionKey: { name: "locationId", type: dynamodb.AttributeType.STRING },
     });
     new CfnOutput(this, "Locations table", {
@@ -72,7 +72,7 @@ export class CdkBackendStack extends Stack {
       description: "DynamoDB table containing locations",
     });
 
-    const unitsTable = new dynamodb.Table(this, "Units", {
+    const unitsTable = new dynamodb.Table(this, UNITS_TABLE_NAME, {
       partitionKey: { name: "unitId", type: dynamodb.AttributeType.STRING },
     });
     new CfnOutput(this, "Units table", {
@@ -87,8 +87,8 @@ export class CdkBackendStack extends Stack {
       handler: "handler",
       environment: {
         REGION: region,
-        LOCATIONS_TABLE_NAME,
-        UNITS_TABLE_NAME,
+        LOCATIONS_TABLE_NAME: locationsTable.tableName,
+        UNITS_TABLE_NAME: unitsTable.tableName,
       },
       timeout: Duration.seconds(30),
       bundling: {
