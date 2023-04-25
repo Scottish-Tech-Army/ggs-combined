@@ -8,7 +8,8 @@
 /coverage
 
 # Website content to be copied to S3 bucket on deployment
-/build
+/build/*
+!/build/.gitkeep
 
 # Artifact created by backend build to inform frontend where backend resources are
 src/config.json

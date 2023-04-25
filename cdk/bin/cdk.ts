@@ -14,7 +14,7 @@ if (!envStageName) {
   );
 }
 
-new CdkFrontendStack(app, `GGS-frontend-${envStageName}`, envStageName);
 new CdkBackendStack(app, `GGS-backend-${envStageName}`, envStageName);
+new CdkFrontendStack(app, `GGS-frontend-${envStageName}`, envStageName);
 
 Tags.of(app).add("DeployEnvironment", envStageName);
