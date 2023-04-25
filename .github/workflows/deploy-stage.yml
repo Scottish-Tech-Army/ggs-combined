@@ -57,6 +57,7 @@ jobs:
         working-directory: ./cdk
         run: npm run build
 
+      # Note that the backend outputs a file with the various endpoints used by the frontend
       - name: cdk deploy backend
         uses: youyo/aws-cdk-github-actions@v2
         with:
