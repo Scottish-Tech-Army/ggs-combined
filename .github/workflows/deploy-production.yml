@@ -9,45 +9,6 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    environment: 
-      name: production
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v3
-
-      - name: install node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '19'
-
-      - name: install cdk dependencies
-        working-directory: ./cdk
-        run: npm install
-
-      - name: build deploy script
-        working-directory: ./cdk
-        run: npm run build
-
-      - name: cdk bootstrap
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'bootstrap'
-          cdk_args: '--context env=prod'
-          actions_comment: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'eu-west-2'
-
-      - name: cdk deploy backend
-        uses: youyo/aws-cdk-github-actions@v2
-        with:
-          cdk_subcommand: 'deploy'
-          cdk_stack: 'GGS-backend-prod'
-          cdk_args: '--require-approval never --context env=prod --outputs-file ../ggs-frontend/src/config.json'
-          actions_comment: false
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'eu-west-2'
+      - name: succeed
+        run: exit 0
