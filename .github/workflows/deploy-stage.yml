@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: 
-      name: stage       # Ties back to environment name configured in github repo | settings | environments
+      name: stage       # Ties back to environment name configured in ggs-combined repo | settings | environments
     steps:
       - name: checkout repo
         uses: actions/checkout@v3
