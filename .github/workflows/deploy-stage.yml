@@ -66,6 +66,8 @@ jobs:
         working-directory: ./ggs-frontend
         env:
           CI: false         # CI=true makes react build fail on warnings
+          # React build will bundle the MapBox access token into the app
+          REACT_APP_MAPBOX_ACCESS_TOKEN: ${{ secrets.REACT_APP_MAPBOX_ACCESS_TOKEN }}
         run: npm run build
 
       - name: run frontend tests
