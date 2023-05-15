@@ -1,0 +1,3 @@
+# Ignore website content to be copied to S3 bucket on deployment
+*
+!.gitignore
