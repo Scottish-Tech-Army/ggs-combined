@@ -5,7 +5,6 @@ on:
     branches:
       - 'develop'  # Only run on develop branch and no other
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -46,6 +45,19 @@ jobs:
         working-directory: ./cdk
         run: npm run build
 
+      - name: bootstrap aws environment
+        uses: youyo/aws-cdk-github-actions@v2
+        with:
+          cdk_subcommand: 'bootstrap'
+          cdk_args: '--require-approval never --context env=test'
+          actions_comment: false
+          working_dir: 'cdk'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_DEFAULT_REGION: $AWS_REGION
+      
       # Note that the backend outputs a file with the various endpoints used by the frontend
       - name: cdk deploy backend
         uses: youyo/aws-cdk-github-actions@v2
