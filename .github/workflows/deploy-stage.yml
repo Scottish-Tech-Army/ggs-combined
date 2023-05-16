@@ -52,6 +52,7 @@ jobs:
           cdk_args: '--require-approval never --context env=test'
           actions_comment: false
           working_dir: 'cdk'
+          debug_log: true
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
