@@ -10,6 +10,11 @@
 # Artifact created by backend build to inform frontend where backend resources are
 src/config.json
 
+# The build directory is created when building the frontend React application.
+# This content will be copied to S3 bucket on deployment
+/build/*
+!/build/.gitignore
+
 # misc
 .DS_Store
 .env.local

@@ -30,6 +30,8 @@ starting_dir=$(pwd)
 backend_name="GGS-backend-${env}"
 frontend_name="GGS-frontend-${env}"
 
+export AWS_PROFILE=sta
+
 cd ./cdk
 
 npm install
