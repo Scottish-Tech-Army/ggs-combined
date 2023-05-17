@@ -1,3 +1,4 @@
+# Deploy the GGS application to AWS using the stage environment.
 name: Deploy Stage
 
 on:
