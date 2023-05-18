@@ -30,7 +30,11 @@ starting_dir=$(pwd)
 backend_name="GGS-backend-${env}"
 frontend_name="GGS-frontend-${env}"
 
-export AWS_PROFILE=
+if [ -z $2 ]; then
+    export AWS_PROFILE=
+else
+    export AWS_PROFILE="$2"
+fi
 
 cd ./cdk
 
