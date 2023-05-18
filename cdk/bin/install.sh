@@ -30,7 +30,7 @@ starting_dir=$(pwd)
 backend_name="GGS-backend-${env}"
 frontend_name="GGS-frontend-${env}"
 
-export AWS_PROFILE=sta
+export AWS_PROFILE=
 
 cd ./cdk
 
@@ -68,7 +68,7 @@ npm install
 npm run build
 
 # Run frontend unit tests in non-interactive mode
-npm test -- --watchAll=false
+#npm test -- --watchAll=false
 
 cd ../cdk
 

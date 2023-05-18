@@ -11,7 +11,7 @@ const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
  * and are trying to log in:
  * email xxx.yyy@zzz.com and 
  * name developerOne
-*/
+ */
 export function login(email) {
   return fetch(BASE_URL + "unit/login", {
     method: "POST",
