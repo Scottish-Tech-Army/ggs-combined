@@ -1,9 +1,6 @@
-import config from "../config.json";
+const BASE_URL = process.env.REACT_APP_AWS_CLIENT_API_ENDPOINT;
 
 export function getLeaderboard(email) {
-  // TODO: Need to fix the backend name below with the correct environment...
-  const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
-
   return fetch(BASE_URL + "unit/leaderboard", {
     method: "GET",
     headers: {

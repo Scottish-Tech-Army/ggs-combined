@@ -30,3 +30,5 @@ src/ggs.code-workspace
 
 .env.ggs.test.local
 .env.ggs.live.local
+
+/.sass-cache
