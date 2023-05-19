@@ -1,6 +1,6 @@
 import { readConfig } from '../configReader.js';
 
-const BASE_URL = configReader('GGSclientAPIendpoint');
+const BASE_URL = readConfig('GGSclientAPIendpoint');
 
 /** 
  * email (the request body above) is {"email":"xxx.yyy@zzz.com”}

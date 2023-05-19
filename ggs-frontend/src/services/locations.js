@@ -1,6 +1,6 @@
 import { readConfig } from '../configReader.js';
 
-const BASE_URL = configReader('GGSclientAPIendpoint');
+const BASE_URL = readConfig('GGSclientAPIendpoint');
 
 export function getLocations(email) {
   return fetch(BASE_URL + "locations", {
