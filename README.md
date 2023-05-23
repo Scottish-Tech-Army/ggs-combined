@@ -2,7 +2,11 @@
 
 ## Deployment
 
-Run the following command from the `ggs-combined` root directory: `./cdk/bin/install.sh`. You may need to `chmod +x` the script before you are able to run it. The script assumes that you have configured your AWS credentials inside your `~/.aws/credentials` file.
+During development when you are working on features of the application locally, run the following command from the `ggs-combined` root directory: `./cdk/bin/install.sh`. You may need to `chmod +x` the script before you are able to run it. The script assumes that you have configured your AWS credentials inside your `~/.aws/credentials` file.
+
+The `./cdk/bin/install.sh` script takes two arguments. The first is the environment you wish to deploy. The second is the AWS profile you wish to use. The second argument is optional. If you don't provide a profile, the script assumes you mean to deploy using your `default` profile in `~/.aws/credentials` file.
+
+For instance, the following will deploy the `dev` environment to the default AWS profile: `./cdk/bin/install.sh dev`. The following command will deploy the `dev` environment to the `sta` AWS profile: `./cdk/bin/install.sh dev sta`.
 
 The installation script will install the GGS application to your AWS account.
 
@@ -13,6 +17,10 @@ Changes to the `develop` branch are assumed to be intended for the `stage` deplo
 Changes to the `main` branch are assumed to be intended for the `production` deployment. They are deployed automatically to the production environment on AWS. This will become the live web application used by end users.
 
 Changes to all other branches are not deployed to AWS. These changes are built and then the unit tests are executed to ensure that the software is working as expected.
+
+Both the `production` and `stage` deployments are made to AWS. The Scottish Tech Army has an AWS account, and both environments are deployed automatically to the STA AWS account. The GGS-combined repository has two Github environments, one for `stage` and another for `production`. The github environments contain secrets relating to the AWS credentials needed to deploy to AWS.
+
+Under **no** circumstances must the AWS secrets be added plain text to the source code in this repository.
 
 ## Deployment Flow
 
