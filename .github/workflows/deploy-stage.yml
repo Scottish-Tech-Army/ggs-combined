@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - 'develop'  # Only run on develop branch and no other
+  pull_request:
+    branches:
+      - 'develop'  # Only run on develop branch and no other
 
 jobs:
   build:
