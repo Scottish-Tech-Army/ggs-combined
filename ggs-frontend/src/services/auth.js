@@ -1,27 +1,39 @@
-import config from "../config.json";
+import { readConfig } from '../configReader.js';
 
+const BASE_URL = readConfig('GGSclientAPIendpoint');
+
+/** 
+ * email (the request body above) is {"email":"xxx.yyy@zzz.com”}
+ * and the response body is 
+ * {"email":"xxx.yyy@zzz.com","name":"developerOne"}
+ * assuming you have already registered with the following details
+ * and are trying to log in:
+ * email xxx.yyy@zzz.com and 
+ * name developerOne
+ */
 export function login(email) {
-  // TODO: Need to fix the backend name below with the correct environment...
-  const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
-
   return fetch(BASE_URL + "unit/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email }),
+    body: JSON.stringify({ email }), // jsonify JS object {email: "xxx.yyy@zzz.com”} and make it the request body
   }).then(response => {
     if (response.ok) {
-      return response.json();
+      return response.json(); // unjson the response (which is  {"email":"xxx.yyy@zzz.com","name":"developerOne"} )
     }
     throw response;
   })
 }
 
+/** 
+ * When you try to register with the following personal info:
+ * {"email":"xxx@yyy.com","name":"MrDeveloper"}
+ * The response body is:
+ * {"email":"xxx@yyy.com","name":"MrDeveloper"}
+ * (ie the same)
+ */
 export function register(email, name) {
-  // TODO: Need to fix the backend name below with the correct environment...
-  const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
-
   return fetch(BASE_URL + "unit/register", {
     method: "POST",
     headers: {

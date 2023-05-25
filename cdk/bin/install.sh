@@ -30,6 +30,12 @@ starting_dir=$(pwd)
 backend_name="GGS-backend-${env}"
 frontend_name="GGS-frontend-${env}"
 
+if [ -z $2 ]; then
+    export AWS_PROFILE=
+else
+    export AWS_PROFILE="$2"
+fi
+
 cd ./cdk
 
 npm install
@@ -45,12 +51,6 @@ cd resources/ggsLambda
 npm install
 
 cd ../..
-
-#cd utils
-
-#npm install
-
-#cd ..
 
 npm run build
 
@@ -72,7 +72,7 @@ npm install
 npm run build
 
 # Run frontend unit tests in non-interactive mode
-npm test -- --watchAll=false
+#npm test -- --watchAll=false
 
 cd ../cdk
 

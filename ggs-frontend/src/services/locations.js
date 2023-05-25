@@ -1,9 +1,8 @@
-import config from "../config.json";
+import { readConfig } from '../configReader.js';
+
+const BASE_URL = readConfig('GGSclientAPIendpoint');
 
 export function getLocations(email) {
-  // TODO: Need to fix the backend name below with the correct environment...
-  const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
-
   return fetch(BASE_URL + "locations", {
     method: "GET",
     headers: {
@@ -17,9 +16,6 @@ export function getLocations(email) {
 }
 
 export function collectLocation(email, id) {
-  // TODO: Need to fix the backend name below with the correct environment...
-  const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
-
   return fetch(BASE_URL + "unit/collect", {
     method: "POST",
     headers: {

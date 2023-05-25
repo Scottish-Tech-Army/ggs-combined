@@ -1,9 +1,8 @@
-import config from "../config.json";
+import { readConfig } from '../configReader.js';
+
+const BASE_URL = readConfig('GGSclientAPIendpoint');
 
 export function getLeaderboard(email) {
-  // TODO: Need to fix the backend name below with the correct environment...
-  const BASE_URL = config["GGS-backend-test"].GGSclientAPIendpoint;
-
   return fetch(BASE_URL + "unit/leaderboard", {
     method: "GET",
     headers: {
