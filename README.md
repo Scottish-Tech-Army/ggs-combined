@@ -2,6 +2,9 @@
 
 ## Deployment
 
+Some dummy text -- get rid of this!
+
+
 During development when you are working on features of the application locally, run the following command from the `ggs-combined` root directory: `./cdk/bin/install.sh`. You may need to `chmod +x` the script before you are able to run it. The script assumes that you have configured your AWS credentials inside your `~/.aws/credentials` file.
 
 The `./cdk/bin/install.sh` script takes two arguments. The first is the environment you wish to deploy. The second is the AWS profile you wish to use. The second argument is optional. If you don't provide a profile, the script assumes you mean to deploy using your `default` profile in `~/.aws/credentials` file.
