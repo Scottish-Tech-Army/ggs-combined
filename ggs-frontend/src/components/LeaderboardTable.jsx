@@ -95,7 +95,7 @@ function setEqualRanks(arrayArg){
                             }
                                                }
   return tempArray
-                                  }
+                                }
  
 //--------------------------------------------------------     
 
@@ -108,7 +108,7 @@ Rank         Unit          Completed
                            Challenges
 -------------------------------------
 1 (gold      unit name A       9
-start 
+star 
 here)
 2 (silver    unit name B       7
 star)
