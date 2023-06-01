@@ -1,5 +1,7 @@
 # GGS-combined README
 
+This repository contains the source code for the Girlguiding Scotland Treasure Hunting web application.
+
 ## Deployment
 
 Some dummy text -- get rid of this!

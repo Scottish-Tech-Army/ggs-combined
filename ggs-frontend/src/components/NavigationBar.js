@@ -25,7 +25,7 @@ export default function NavigationBar({iconsObject}){
 return (
 <div className="navbarContainer">  
 
-{/* The button to click to show the landing/welcome/home page.*/}
+{/* The button to click to show the home/landing/welcome page.*/}
 
 <SquareButton
 imgSRC = {homePic}
