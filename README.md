@@ -1,5 +1,7 @@
 # GGS-combined README
 
+This repository contains the source code for the Girlguiding Scotland Treasure Hunting web application.
+
 ## Deployment
 
 During development when you are working on features of the application locally, run the following command from the `ggs-combined` root directory: `./cdk/bin/install.sh`. You may need to `chmod +x` the script before you are able to run it. The script assumes that you have configured your AWS credentials inside your `~/.aws/credentials` file.
