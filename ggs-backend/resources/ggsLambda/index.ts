@@ -10,8 +10,9 @@ import { dynamodbClient } from "./aws";
 import { APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
 
 type GGSUnit = {
-  unitId: string; // Email
+  unitId: string;       // Email
   name: string;
+  county?: string;      // Older records do not have a county
   locations: string[];
 };
 
@@ -125,7 +126,7 @@ export const handler = async (
     return {
       headers,
       statusCode: 200,
-      body: JSON.stringify({ email: unit.unitId, name: unit.name }),
+      body: JSON.stringify({ email: unit.unitId, name: unit.name, county: unit.county ?? '' }),
     };
   }
 
@@ -142,9 +143,12 @@ export const handler = async (
     if (!payload.email) {
       return errorResponse(400, "Unit register email missing");
     }
+    // County is a mandatory field for new units
+    if (!payload.county) {
+      return errorResponse(400, "Unit register county missing");
+    }
 
     const inputEmail = payload.email.trim().toLowerCase();
-    const inputName = payload.name.trim();
 
     if (!VALID_EMAIL_REGEX.test(inputEmail)) {
       return errorResponse(
@@ -152,6 +156,9 @@ export const handler = async (
         "Unit register email invalid: " + payload.email
       );
     }
+
+    const inputName = payload.name.trim();
+    const inputCounty = payload.county.trim();
 
     const unit = await getUnit(inputEmail);
 
@@ -162,13 +169,13 @@ export const handler = async (
       );
     }
 
-    const newUnit = { unitId: inputEmail, name: inputName };
+    const newUnit = { unitId: inputEmail, name: inputName, county: inputCounty };
     await updateUnit(newUnit);
 
     return {
       headers,
       statusCode: 201,
-      body: JSON.stringify({ email: inputEmail, name: inputName }),
+      body: JSON.stringify({ email: inputEmail, name: inputName, county: inputCounty }),
     };
   }
 
