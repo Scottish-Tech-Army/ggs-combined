@@ -7,17 +7,20 @@ jest.mock("./aws");
 
 const TEST_EMAIL = "team1@example.com";
 const TEST_TEAM_NAME = "Team Awesome";
+const TEST_COUNTY = 'Angus';
 
 const DB_UNITS_RESPONSE = {
   Items: [
     {
       unitId: { S: TEST_EMAIL },
       name: { S: TEST_TEAM_NAME },
+      county: { S: TEST_COUNTY },
       locations: { L: [] },
     },
     {
       unitId: { S: "team2@example.com" },
       name: { S: "Test Team 2" },
+      county: { S: TEST_COUNTY },
       locations: { L: [] },
     },
   ],
@@ -27,6 +30,7 @@ const DB_GET_UNIT_RESPONSE = {
   Item: {
     unitId: { S: TEST_EMAIL },
     name: { S: TEST_TEAM_NAME },
+    county: { S: TEST_COUNTY },
     locations: { L: [] },
   },
 };
@@ -117,7 +121,7 @@ describe("api call POST /unit/login", () => {
 
     expect(result.statusCode).toEqual(200);
     expect(result.body).toEqual(
-      JSON.stringify({ email: TEST_EMAIL, name: TEST_TEAM_NAME })
+      JSON.stringify({ email: TEST_EMAIL, name: TEST_TEAM_NAME, county: TEST_COUNTY })
     );
 
     expect(dynamodbClient.send).toHaveBeenCalledTimes(1);
@@ -137,6 +141,7 @@ describe("api call POST /unit/login", () => {
       Item: {
         unitId: { S: "team2@example.com" },
         name: { S: "Test Team 2" },
+        county: { S: "Angus" },
         locations: { L: [] },
       },
     });
@@ -151,7 +156,7 @@ describe("api call POST /unit/login", () => {
 
     expect(result.statusCode).toEqual(200);
     expect(result.body).toEqual(
-      JSON.stringify({ email: "team2@example.com", name: "Test Team 2" })
+      JSON.stringify({ email: "team2@example.com", name: "Test Team 2", county: "Angus" })
     );
   });
 
@@ -262,6 +267,7 @@ describe("api call POST /unit/register", () => {
       body: JSON.stringify({
         email: "\t   \tnew@eXAMple.com \t",
         name: "\t   New team1\t  ",
+        county: TEST_COUNTY
       }),
       resource: "/unit/register",
     };
@@ -269,7 +275,11 @@ describe("api call POST /unit/register", () => {
 
     expect(result.statusCode).toEqual(201);
     expect(result.body).toEqual(
-      JSON.stringify({ email: "new@example.com", name: "New team1" })
+      JSON.stringify({ 
+        email: "new@example.com", 
+        name: "New team1",
+        county: TEST_COUNTY 
+      })
     );
 
     expect(dynamodbClient.send).toHaveBeenCalledTimes(2);
@@ -291,6 +301,7 @@ describe("api call POST /unit/register", () => {
           Item: {
             name: { S: "New team1" },
             unitId: { S: "new@example.com" },
+            county: { S: TEST_COUNTY }
           },
           TableName: TEST_UNITS_TABLE_NAME,
         },
@@ -302,14 +313,18 @@ describe("api call POST /unit/register", () => {
     (dynamodbClient.send as jest.Mock).mockResolvedValueOnce({});
 
     const event: Partial<APIGatewayProxyEvent> = {
-      body: JSON.stringify({ email: "new@eXAMple.com", name: "" }),
+      body: JSON.stringify({ 
+        email: "new@eXAMple.com", 
+        name: "",
+        county: TEST_COUNTY 
+      }),
       resource: "/unit/register",
     };
     const result = await handler(event as APIGatewayProxyEvent);
 
     expect(result.statusCode).toEqual(201);
     expect(result.body).toEqual(
-      JSON.stringify({ email: "new@example.com", name: "" })
+      JSON.stringify({ email: "new@example.com", name: "", county: TEST_COUNTY })
     );
 
     expect(dynamodbClient.send).toHaveBeenCalledTimes(2);
@@ -331,6 +346,7 @@ describe("api call POST /unit/register", () => {
           Item: {
             unitId: { S: "new@example.com" },
             name: { S: "" },
+            county: { S: TEST_COUNTY }
           },
           TableName: TEST_UNITS_TABLE_NAME,
         },
@@ -344,7 +360,7 @@ describe("api call POST /unit/register", () => {
     );
 
     const event: Partial<APIGatewayProxyEvent> = {
-      body: JSON.stringify({ email: TEST_EMAIL, name: "Something else" }),
+      body: JSON.stringify({ email: TEST_EMAIL, name: "Something else", county: TEST_COUNTY }),
       resource: "/unit/register",
     };
     const result = await handler(event as APIGatewayProxyEvent);
@@ -354,7 +370,7 @@ describe("api call POST /unit/register", () => {
       JSON.stringify({
         message: "Unit register email already exists: team1@example.com",
         request: {
-          body: '{"email":"team1@example.com","name":"Something else"}',
+          body: `{"email":"team1@example.com","name":"Something else","county":"${TEST_COUNTY}"}`,
           resource: "/unit/register",
         },
       })
@@ -377,6 +393,7 @@ describe("api call POST /unit/register", () => {
       body: JSON.stringify({
         email: "not a real email",
         name: "Something else",
+        county: TEST_COUNTY
       }),
       resource: "/unit/register",
     };
@@ -387,7 +404,7 @@ describe("api call POST /unit/register", () => {
       JSON.stringify({
         message: "Unit register email invalid: not a real email",
         request: {
-          body: '{"email":"not a real email","name":"Something else"}',
+          body: `{"email":"not a real email","name":"Something else","county":"${TEST_COUNTY}"}`,
           resource: "/unit/register",
         },
       })
@@ -740,6 +757,7 @@ describe("api call POST /unit/collect", () => {
           Item: {
             name: { S: TEST_TEAM_NAME },
             unitId: { S: TEST_EMAIL },
+            county: { S: TEST_COUNTY },
             locations: {
               L: [{ S: "Arthur's Seat" }],
             },
@@ -755,6 +773,7 @@ describe("api call POST /unit/collect", () => {
       Item: {
         name: { S: TEST_TEAM_NAME },
         unitId: { S: TEST_EMAIL },
+        county: { S: TEST_COUNTY },
         locations: {
           L: [{ S: "Old College" }, { S: "Brig o'Balgownie" }],
         },
@@ -802,6 +821,7 @@ describe("api call POST /unit/collect", () => {
           Item: {
             name: { S: TEST_TEAM_NAME },
             unitId: { S: TEST_EMAIL },
+            county: { S: TEST_COUNTY },
             locations: {
               L: [
                 { S: "Old College" },
@@ -821,6 +841,7 @@ describe("api call POST /unit/collect", () => {
       Item: {
         name: { S: TEST_TEAM_NAME },
         unitId: { S: TEST_EMAIL },
+        county: { S: TEST_COUNTY },
         locations: {
           L: [{ S: "Old College" }, { S: "Brig o'Balgownie" }],
         },
@@ -863,7 +884,11 @@ describe("api call POST /unit/collect", () => {
 
   it("successful response - stored unit without locations array", async () => {
     (dynamodbClient.send as jest.Mock).mockResolvedValueOnce({
-      Item: { name: { S: TEST_TEAM_NAME }, unitId: { S: TEST_EMAIL } },
+      Item: { 
+        name: { S: TEST_TEAM_NAME }, 
+        unitId: { S: TEST_EMAIL },
+        county: { S: TEST_COUNTY } 
+      },
     });
     (dynamodbClient.send as jest.Mock).mockResolvedValueOnce({
       Item: DYNAMO_LOCATIONS[1],
@@ -907,6 +932,7 @@ describe("api call POST /unit/collect", () => {
           Item: {
             name: { S: TEST_TEAM_NAME },
             unitId: { S: TEST_EMAIL },
+            county: { S: TEST_COUNTY },
             locations: {
               L: [{ S: "Arthur's Seat" }],
             },
@@ -922,6 +948,7 @@ describe("api call POST /unit/collect", () => {
       Item: {
         name: { S: TEST_TEAM_NAME },
         unitId: { S: TEST_EMAIL },
+        county: { S: TEST_COUNTY },
         locations: {
           L: [{ S: "Unknown location" }, { S: "Brig o'Balgownie" }],
         },
@@ -1149,7 +1176,10 @@ describe("api call GET /unit/leaderboard", () => {
 
   it("successful response with unit missing locations array", async () => {
     (dynamodbClient.send as jest.Mock).mockResolvedValueOnce({
-      Item: { unitId: { S: TEST_EMAIL } },
+      Item: { 
+        unitId: { S: TEST_EMAIL },
+        county: { S: TEST_COUNTY },
+      },
     });
     (dynamodbClient.send as jest.Mock).mockResolvedValueOnce(
       DB_LOCATIONS_RESPONSE
@@ -1190,6 +1220,7 @@ describe("api call GET /unit/leaderboard", () => {
     (dynamodbClient.send as jest.Mock).mockResolvedValueOnce({
       Item: {
         unitId: { S: TEST_EMAIL },
+        county: { S: TEST_COUNTY },
         locations: {
           L: [{ S: "Old College" }, { S: "Brig o'Balgownie" }],
         },
@@ -1218,6 +1249,7 @@ describe("api call GET /unit/leaderboard", () => {
     (dynamodbClient.send as jest.Mock).mockResolvedValueOnce({
       Item: {
         unitId: { S: TEST_EMAIL },
+        county: { S: TEST_COUNTY },
         locations: {
           L: [
             { S: "Unknown Location" },
