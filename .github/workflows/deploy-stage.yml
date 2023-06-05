@@ -79,7 +79,7 @@ jobs:
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_DEFAULT_REGION: $AWS_REGION
 
-      - name: Create folder
+      - name: create frontend build directory
         run: mkdir -p build
 
       - name: install frontend dependencies
