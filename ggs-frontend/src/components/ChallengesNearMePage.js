@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 
 // Modal pop-ups:
 import LocationModal from "./LocationModal";
-import Loading from "./Loading";
+import GeolocErrorModal from "./GeolocErrorModal";
 
 // Stuff do do with ReactMapGL:
 import Markers from "./Markers";
@@ -29,6 +29,21 @@ import { authContext } from "../contexts/AuthContext";
 
 // css stuff:
 import "mapbox-gl/dist/mapbox-gl.css";
+
+
+/*
+HOW THIS PAGE WORKS
+-------------------
+
+
+
+*/
+
+
+
+
+
+
 
 
 // Start app centred on Old College, Edinburgh
@@ -71,28 +86,58 @@ export default function ChallengesNearMePage({
 
     // Mukund: Get the unit object from <AuthContext>:
     const { unit } = useContext(authContext);
-    // Mukund added the following two lines for testing only:
-    // var str = JSON.stringify(unit);
-    // console.log(`Inside <ChallengesNearMe/> and json-string version of unit is: ` + str)
+
 
     // Consume the big object
     const bigIconsObject = useContext(MenuContext);
 
-    // Mukund: Get a reference to component <ReactGraphGl/>
+    
+
+// A boolean state property. Code changes this
+// so that the error modal shows (eg when the 
+// user has blocked location services) or does 
+// not:
+const [showGeolocErrorModal, setShowGeolocErrorModal] = useState(false);
+
+
+// A variable that code gives one of two values:
+// i)   JSX for the GeolocErrorModal 
+// ii)  null: 
+let showModal 
+
+
+    // Mukund: To get a reference to component <ReactGraphGl/>
     // so that you can access all of the component's functions
-    // this way:   mapRef.current.*nameOfFunction()*.
+    // do this:   
+    // const mapRef = useRef();
+    // mapRef.current.*nameOfFunction()*.
     // See https://docs.mapbox.com/mapbox-gl-js/api/map/ for list of MapBox's Map functions: 
     
-    
     const mapRef = useRef();
-// The clikc event handler for the button:
+
+
+
+//---------------------------------------
+
+// The click event handler for the button.
+// This function must
+// 1) determine whether the user has set her 
+// browser so that it allows apps to 
+// determine the user's location
+// 2) show the error modal if the user has 
+// not set that browser setting:
     const runFlyToOnce = () =>{
-  
-  mapRef.current.flyTo({
+// 1):       
+ if (userLatLong !== undefined) {
+    mapRef.current.flyTo({
     center: [userLatLong.longitude, userLatLong.latitude],
     duration: 2000,
-                       });
-                           }
+                         });
+                                } else {
+// 2):
+setShowGeolocErrorModal(true)
+                                       }
+                              }
 
 
 
@@ -102,16 +147,19 @@ const [locations, setLocations] = useState([]);
 
 
 
-// When <AuthProvider/>'s state property unit changes 
-// ask the backend for the locations array associated with
-// this unit (ie the user):
+// When <AuthProvider/>'s state property unit changes, 
+// getLocations() asks the backend for the locations 
+// array associated with this unit (or user):
 useEffect(() => {
   if (unit) {
-    // setShowLogin(false);
+
+    // locations is a state property that is an array 
+    
     getLocations(unit.email).then(setLocations);
     // 30 Mar23: Mukund added the following two lines for testing only:
-    // let locationsData = JSON.stringify(locations)
+    let locationsData = JSON.stringify(locations)
     // console.log(`Inside useEffect inside <ChallengesNearMe/> and locations is: ` + locationsData)
+    console.log(`Inside useEffect inside unit.email is: ${unit.email}`)
   } else {
     // setShowLogin(true);
   }
@@ -122,15 +170,18 @@ useEffect(() => {
 
 
 
-
+// state property to hold the lat and long
+// coords of the user.
 const [userLatLong, setUserLatLong] = useState();
 
 const navControlStyle = { right: 10, top: 10 };
 const geolocateControlStyle = { left: 15, top: 55 };
 
-// get user coordinates
+// On startup of the app do this:
+// 1) set some options and callbacks for function navigator.geolocation.getCurrentPosition()
+// 2) Get the lat and long of the user
 useEffect(() => {
-  // set up device coordinate collection
+  // 1):
   var options = {
     enableHighAccuracy: true,
     timeout: 5000,
@@ -138,41 +189,39 @@ useEffect(() => {
   };
 
   function success(position) {
-    // console.log("Geolocation available", position);
-    setUserLatLong(position.coords);
-   
+        setUserLatLong(position.coords);
     // 30mar23: Mukund: mapRef represents component <ReactMapGL/>
-
     /* 31Mar23: Mukund: original code commented out: 
-    
     mapRef.current &&
       mapRef.current.flyTo({
         center: [position.coords.longitude, position.coords.latitude],
         duration: 2000,
       });
     */
+                              }
 
-  }
 
   function showError(error) {
     switch (error.code) {
       case error.PERMISSION_DENIED:
-        console.warn("User denied the request for Geolocation.");
+         console.warn("User denied the request for Geolocation.");
         break;
       case error.POSITION_UNAVAILABLE:
-        console.warn("Location information is unavailable.");
+         console.warn("Location information is unavailable.");
         break;
       case error.TIMEOUT:
-        console.warn("The request to get user location timed out.");
+         console.warn("The request to get user location timed out.");
         break;
       default:
-        console.error("An unknown error occurred.", error);
+         console.error("An unknown error occurred.", error);
         break;
     }
   }
 
+// 2):   
   navigator.geolocation.getCurrentPosition(success, showError, options);
-}, []); // empty array (2nd arg) = run this useEffect() only on first mount of component
+}, []); // When 2nd arg is empty array -> run this useEffect() only once, after the first 
+// render of the component (ie the execution of the component function)
 
 
 // Loading-graphic controls
@@ -211,8 +260,9 @@ console.log(
 // ------------------- Now the actual rendering -------------------
 
 // Define the variable whose value 
-// will be either a load of JSX that 
-// describes the page or null 
+// will be either 
+// i)  a load of JSX that describes the page
+// ii) null 
 let renderThis
 
 // Now conditionally set renderThis 
@@ -220,26 +270,21 @@ let renderThis
 // isThisPageActive:
 
 if (isThisPageActive) {
-// If the parent component (ie <Home/>) 
-// has set this component's prop isThisPageActive to 
+// If parent component <Home/> has set this 
+// component's prop isThisPageActive to 
 // true, render the ChallengesNearMe page:
 
 renderThis = (
 <div>
 
-{/* The Go button: */}
+{/* The button that reads "Click for your map": */}
 <GGSbuttonOne
  buttonDivCSSclass = {"largeButton1New positionButton"}
  pTextCSSclass = {"buttonOperable"}
  clickHandler = {()=>{runFlyToOnce()}}
- pText = {"Go"}
+ pText = {"Tap here for your map"}
 />
 
-{/* old code -- remove when ready to
-<div className="largeButton1New positionButton" onClick={()=>{runFlyToOnce()}}>
-  <p className="buttonOperable">Go</p>
-</div>
-*/}
 
   <div
       className="container-fluid"
@@ -262,7 +307,7 @@ renderThis = (
           locations={locations}
           setSelectedLocation={setSelectedLocation}
         />
-        <NavigationControl style={navControlStyle} showCompass={false} />
+        <NavigationControl style={navControlStyle} showCompass={true} />
         <GeolocateControl
           style={geolocateControlStyle}
           positionOptions={{ enableHighAccuracy: true }}
@@ -271,7 +316,7 @@ renderThis = (
           onGeolocate={({ coords }) => setUserLatLong(coords)}
           auto
         />
-      </ReactMapGL>
+</ReactMapGL>
       {selectedLocation && (
         <LocationModal
           handleCloseLocation={() => setSelectedLocation(undefined)}
@@ -280,26 +325,34 @@ renderThis = (
           userLatLong={userLatLong}
         />
       )}
-      {/* {leaderboard && (
-        <LeaderboardModal
-          handleCloseLeaderboard={() => setLeaderboard(undefined)}
-          leaderboard={leaderboard}
-        />
-      )}*/}
-      {/* Mukund: The following is only for the login modal and not needed here:
-      {showLoading && (
-        <Loading
-          handleCloseLoading={() => setShowLoading(false)}
-          loadingText={loadingText}
-          loadingTimer={loadingTimer}
-        />
-        
-      )}
-      */}
+            
+
+{ /* If  there has been an error in getting the geolocation 
+data from the browser (eg because the user has not turned on 
+location services) then for several seconds show the modal that 
+tells the user to turn on location services and then make 
+the modal disappear. */ }
+{ /* First the jsx for the modal box. showModal gets set either to
+jsx that describes the modal or to null depending on the value of 
+showGeolocErrorModal: */ }
+{showModal}
+
+{ /* set showModal either to null or the jsx : */ }
+{showGeolocErrorModal ? ( <>
+  {showModal} = <GeolocErrorModal errorMessage = {`This app cannot tell where you are. Change the setting in your browser that will allow this app to locate you.`} />
+  {setTimeout(() => {
+    showModal = null
+    // Trigger a rerender:
+    setShowGeolocErrorModal(false)
+          }, 5000)}
+</>
+              ) : showModal = null
+
+}
 
 
-
-{/* The navigation bar (which includes the plus-icon menu)*/}
+{/* The navigation bar at the bottom of the page,
+ which includes the home button and plus button)*/}
 <NavigationBar iconsObject = {bigIconsObject.p2}/>
 
 
@@ -309,7 +362,7 @@ renderThis = (
                       } // end if (isThisPageActive)
 
                       
-// If the parent component (ie <Home/>) 
+// If parent component <Home/> 
 // has set prop isThisPageActive to  
 // false, don't render anything:
 if (!isThisPageActive) {

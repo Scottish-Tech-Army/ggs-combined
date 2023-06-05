@@ -97,7 +97,7 @@ style.scss into React components. Do not create a CSS file and import that
 into React components. Put your CSS directly in the Sass files (style.scss
 and the file that it imports, _custom.scss)
 - [Bootstrap](https://getbootstrap.com)
-Bootstrap provides a lot of ready-made scss classes.
+Bootstrap provides a lot of ready-made css classes.
 - [React-Bootstrap](https://getbootstrap.com)
 React-Bootstrap provides ready-made React components that have already have
 classes for styling applied to them. This app uses only React-Bootstrap's 
@@ -116,7 +116,7 @@ process to which the coder is oblivious.
 
 ## Getting Started
 
-This is an example of how you may set up your project locally.
+This shows how you may set up your project locally.
 To get a local copy up and running follow these steps.
 
 ### Prerequisites
@@ -153,15 +153,375 @@ To get a local copy up and running follow these steps.
 
 ### Working on the Project
 
-When working on this project, you will need to:
+To view the working application, complete steps 1 and 2 below:
 
 1. Run the ggs-backend server by navigating to that directory on your machine's CLI. Checkout the appropriate branch and run `dotnet run`.
 2. Run the ggs-frontend server by navigating to that directory on your machine's CLI in a new window/tab. Checkout the appropriate branch and run `npm run`. If the backend database has been updated you may need to use `npm run start`.
-3. **** [BY MUKUND, MARCH 2023: DON'T DO THIS! THIS IS WRONG!] Run the compile:sass script by navigating to the ggs-frontend directory on your machine's CLI in a new window/tab. Checkout the appropriate branch and run `compile:sass`. This will allow live updates to the style sheet based on instructions written in the src/scss directory. [BY MUKUND, MARCH 2023 DON'T DO THIS! THIS IS WRONG!] ****
 
-To view the working application, complete steps 1 and 2. [BY MUKUND, MARCH 2023: DO ONLy STEPS 1 AND 2. IGNORE STEP 3; IT'S WRONG!]
-You will be presented with a web application which can request your location information and display landmarks marked on a map. Touching or clicking on the markers will bring up a modal giving information about the landmarks and a button to add that location to a collection of visited places.
+The app will now run in your browser
+
+3. You will be presented with a web application which can request your location information and display landmarks marked on a map. Touching or clicking on the markers will bring up a modal giving information about the landmarks and a button to add that location to a collection of visited places.
 
 ### Using and Testing the Application
 
 To access the location data, the application requires a team name. On submission of this name, the application will retrieve the data from the backend server to display the location map markers.
+
+
+
+
+
+
+
+
+
+
+<!-- HOW THE FRONTEND CODE WORKS -->
+<!--  -->
+<!--  -->
+<!--  -->
+<!--  -->
+
+   
+<br>
+<br>
+<br>
+<br>
+<br>
+   
+
+# How the frontend code works
+
+
+## Purpose of the app
+
+This app allows users to perform a treasure hunt.<br>
+The app makes the user think it has multiple pages. In reality it is a single-page app made with create-react-app. Each of the pages (as they appear to the user) is rendered conditionally.<br>
+One of the app's pages shows a map of the user’s location. <br> The map contains markers, each of which represents a landmark that the user collects.
+When the user taps a marker a modal pops up that contains an image of a point of interest at the loation. The user has to be within 20m of the landmark to be able to see the modal. 
+The description includes a challenge for the user to complete.<br>
+Once the user has completed the challenge, the user has collected the location.<br>
+The user attempts to collect as many locations as possible.<br><br>
+
+
+
+<br>
+
+
+## Main components of the app
+
+The main components this app uses are:<br>
+`<App/>`  -- the parent component of all other components. This component doesn’t actually do anything (and should be removed!).<br>
+`<Home/>` -- child of `<App/>`. This invokes five main components, one for each of the five pages of the app:<br>
+`<LandingPage/>` -- the welcome or home page<br>
+`<ChallengesNearMePage/>` -- the page that shows a map of the region hte user is in, along with  the markers<br>
+`<UserGuidePage/>` -- a page that explains how to use the app<br>
+`<CompletedChallengesPage/>` -- a page that lists the locations the user has collected<br>
+`<LeaderboardPage/>` -- a page that shows a table that ranks GGS users from all regions according to the number of locations they have collected.<br>
+`<FormLinkPage/>` -- this is only for field testers. It is commented out in the code for production<br><br>
+
+The page the user sees first is the `<LandingPage/>`, where she first either <br>
+* i)   taps the Login button to log in. A modal pops up with a field for entering an email address) or <br>
+* ii)  taps the Learn how to register button, which makes a modal pop up where the user can learn how to register and actually register, entering email, unit name and county. Once the user registers she is automatically logged in. <br><br>
+You can only use the app's facilities after you have logged in. <br>
+
+<br><br>
+
+
+## Heirarchy of components
+
+index.js invokes `<App/>`, which actually does nothing except invoke `<Home/>`.
+
+`<Home/>` calls all five page components.*<br>
+*In the case of the version of the app for field testers (which is not for production) `<Home/>` also calls a page on which the link to the survey form exists. This page is commented out for production code. This readme won’t from now on mention this page. 
+
+<br>
+The main components of the app take their places in a heirarchy that looks like this:<br>
+
+`<App/>` (This serves no purpose! It came with the original code; I should remove it - Mukund )<br>
+  - `<Home/>`<br>
+     - `<LandingPage/>`<br>
+         - `<LogoutModal/>`<br>
+         - `<GGSbuttonOne/>` (Login button)<br>
+         - `<GGSbuttonOne/>` (How to register button)<br>
+         - `<GGSbuttonOne/>` (Large brown button for field testers only; will be commented out for production)<br>
+         - `<SquareButton/>` (contains image, not clickable)<br>
+         - `<GGSbuttonOne/>` (Takes you to Challenges near me page)<br>
+         - `<SquareButton/>` (contains image, not clickable)<br>
+         - `<GGSbuttonOne/>` (Takes you to Completed challenges page)<br>
+         - `<SquareButton/>` (contains image, not clickable)<br>
+         - `<GGSbuttonOne/>` (Takes you to Leaderboard page)<br>
+         - `<SquareButton/>` (contains image, not clickable)<br>
+         - `<GGSbuttonOne/>` (Takes you to User guide page)<br>
+         - `<LoginModal/>`<br><br>
+     - `<ChallengesNearMePage/>`<br>
+         - `<GGSbuttonOne/>` (Loads a map of the user’s area)<br>
+         - `<ReactMapGL/>` (The map)<br>
+         - `<LocationModal/>` (Shows info about the location clicked on)<br>
+         - `<GeolocErrorModal/>` (Pops up if user has not turned on location services on her mobile)<br>
+         - `<NavigationBar/>`<br>
+             - `<PlusMenu/>`<br><br>
+     - `<CompletedChallengesPage/>`<br>
+         - `<NavigationBar/>`<br>
+             - `<PlusMenu/>`<br><br>
+     - `<LeaderboardPage/>`<br>
+         - `<SearchForm/>` (An input and a search button)<br>
+         - `<LeaderboardTable/>` (A table)<br>
+         - `<NavigationBar/>`<br>
+             - `<PlusMenu/>`<br><br>
+     - `<UserGuidePage/>` <br>
+         - `<NavigationBar/>`<br>
+            - `<PlusMenu/>`<br><br>
+     - `<FormLinkPage>` (For field testers only. Commented out in production code)<br><br><br>
+
+
+## Operation of the navigational buttons of the app
+
+Each of the five pages contains buttons that allow the user to go to any other page of the app.<br>
+
+The landing page is different to the other four pages in that it has four buttons the user can tap to go to any other page.<br>
+
+Each of the other four pages has a navigation bar at 
+the bottom that includes two buttons: 
+1) a home button - clicking this takes the user back to the landing page
+2) a plus button - clicking this makes a three-button menu pop up. Clicking any of those three buttons takes the user to one of the other three pages. The buttons in this menu have different icons depending on the page in question.<br><br><br>
+
+
+## Conditional rendering
+
+This is how the app creates the illusion of being multi-page.<br>
+Each page has an associated pageIndex (a number). <br>
+The `<Home/>` component has state property pageIndex. Clicking a navigational button (either those on the `<LandingPage/>` or those in the `<NavigationBar/>`/`<PlusMenu/>` of the other pages), changes the value of `<LandingPage/>`'s state property pageIndex. When the value of pageIndex changes, code makes only the jsx for the page related to that value of pageIndex showe. For example the pageIndex value associated with `<UserGuidePage/>` is 3. The following table shows the pageIndex values associated with each page:<br><br>
+
+
+| Page | pageIndex | Component |
+| --- | :---:  | --- |
+| Landing page.           |          0  |       `<LandingPage/>` | 
+| Challenges near me page |          2  |       `<ChallengesNearMePage/>` | 
+| User guide page        |           3  |       `<UserGuidePage/>` | 
+| Completed challenges page |        4  |       `<CompletedChallengesPage/>` | 
+| Leaderboard page        |          5  |       `<LeaderboardPage/>` | 
+
+<br><br>
+
+Whichever page the user is in, when the user clicks a button to take her to another page, the button’s click handler simply changes the value of <Home/>’s state property pageIndex to the number corresponding to the page in question (see table above). Conditional logic in <Home/> renders only the component for the page that corresponds to the value of pageIndex.<br><br>
+
+
+### Conditional logic
+
+<Home/> sets a page component’s isThisPageActive prop 
+to true or false by reading the value of <Home/>’s 
+pageIndex state property, like this for example:
+<UserGuidePage 
+  isThisPageActive = {pageIndex === 3}  
+  />
+So, above, isThisPageActive has value true if pageIndex has 
+value 3 and value false if pageIndex = 0, 2, 3, 4 or 5.
+3) Code in each of the six page components renders the page 
+if the value of isThisPageActive is true by returning JSX 
+that describes the page. If isThisPageActive is false the code 
+returns null, so the page does not display.
+
+So tapping a home icon in <NavigationBar/> or an icon in <PlusMenu/> or tapping 
+a button of the landing page changes the value of <Home/>’s 
+state property pageIndex, causing a rerender of <Home/> and its descendants, 
+causing a new page to show.
+
+For example clicking an icon <img> in <PlusMenu/> changes the value 
+of <Home/>’s state property pageIndex. 
+Changing pageIndex to, say, 5 makes <Home/> rerender. But only the page that is 
+associated with a pageIndex value of 5 (<LeaderboardPage/>) 
+will display because when <Home/> calls a page component
+it does so like this:
+<LeaderboardPage
+  isThisPageActive = {pageIndex === 5}  
+  />
+With pageIndex having a value of 5 <LeaderboardPage>’s
+prop isThisPageActive gains value true. All the other
+page components will have isThisPageActive props with 
+value false. 
+Conditional rendering in each page component
+definition looks at the value of isThisPageActive. If it 
+is true the component definition returns JSX that describes
+the page (and the page displays). If it is false the 
+component definition returns null (and the page is hidden).<br><br>
+
+
+
+
+
+
+# Data flow
+
+1) The onClick event handlers for <br>
+i)   the four buttons of the landing page<br>
+ii)  the home icon of the other four pages and <br>
+iii) the three plus-menu icons of the other four pages <br>
+all do exacly the same thing: they change the value of `<Home/>`’s state
+property pageIndex to a value related to the page the user wants to
+go to (see table above).<br><br>
+
+2) `<Home/>` makes iconsObject available to each of the five page components via a React context hook. iconsObject contains five objects, each relevant to a specific page.<br><br>
+
+
+3) In the case of the landing page<br>
+`<LandingPage/>` extracts object p0 from iconsObject. p0 contains onClick handlers for the buttons on the landing page. `<LandingPage/>` passes these onClick handlers to these `<GGSbuttonOne/>`s as props.
+These onClick event handlers change the value of `<Home/>`’s state property pageIndex. 
+
+4) In the case of the other four pages:
+`<ChallengesNearMePage/>` extracts object p2 from iconsObject.
+`<UserGuidePage/>` extracts object p3 from iconsObject.
+`<CompletedChallengesPage/>` extracts object p4 from iconsObject.
+`<LeaderboardPage/>` extracts object p5 from iconsObject.
+
+Each of the page components above has child `<NavigationBar/>`, to which it sends the object (p2, p3, p4 or p5) as props. `<NavigationBar/>` sends that object as props to its child `<PlusMenu/>`.
+
+Each of the objects p2-p5 contains
+i)   an onClick handler for the home button for a page (this button appears in `<NavigationBar/>`)
+ii)  three onClick handlers, one for each of the icons in a page’s `<PlusMenu/>` (they are obviuously different for each page)
+iii) three image srcs, one for each of the icons in a page’s `<PlusMenu/>` (they are obviously different for each page).
+<br><br><br>
+
+
+
+
+
+
+
+# An alternative way of getting data from `<Home/>` to `<PlusMenu/>`
+
+The following would have been a bit more elegant perhaps but 
+no less long than the solution I actually employed:
+Instead of passing data from `<Home/>` to `<PlusMenu/>` first by sending 
+that data via a React context hook to a page component and from there 
+via props to `<NavigationBar/>` and from there via props to `<PlusMenu/>`
+I could have:
+1) made the iconObject data in `<Home/>` available to `<PlusMenu/>` via a React context hook (which is actually also the case at the moment)
+2) passed a prop from a page component to `<NavigationBar/>` to `<PlusMenu/>`
+that tells `<PlusMenu/>` what the page is. The prop could be whatPage and
+its value would be a string, eg, “Userguide page” or “Completed challenges page”.
+3) used conditional statements in the definition of `<PlusMenu/>` to 
+set the src and onClick attributes of `<PlusMenu/>`’s icons.
+4) `<PlusMenu/>` would take this form:<br>
+
+`export function PlusMenu({whatPage}) {`
+
+`let dataObject;`
+
+`... if statements here for pages 1 and 2`
+
+`if (whatPage === “Userguide page”) {`
+`dataObject = iconsObject.p3`
+							`}`
+
+`if (whatPage === “Completed challenges page”) {`
+`dataObject = iconsObject.p4`
+    						            `    }`
+
+`... if statement here for page 5`
+
+`return (`
+
+`<img src = {dataObject.icon1src}`
+        `onClick = {dataObject.icon1ClickHandler}`
+
+`<img src = {dataObject.icon2src}`
+        `onClick = {dataObject.icon2ClickHandler}`
+
+... similarly set the src and onClick attribs of the other 
+two `<img>`s here
+
+`)`
+`}`
+
+<br><br><br><br>
+
+# Other operations of each page
+
+### **`<LandingPage/>`**<br>
+A)<br>
+Operation of child `<LogoutModal/>`:<br>
+If the user has logged in and then at some stage logs out, the `<LogoutModal/>` shows for several seconds then disappears. It simply displays a message telling the user that she has logged out. <br>
+NOTE: Fri2June23 - might be worth moving most of the code that conditionally renders `<LogoutModal/>` out of `<LandingPage/>`’s return function (and obviously change the code completely) but it may not be worth bothering as it is valid code and does work -- see notes<br><br><br><br>
+
+B)<br>
+Operation of child `<LoginModal/>`:<br>
+a)<br>
+`<LoginModal/>` has two screens, one for logging in and one for registering.<br>
+Code conditionally renders this component according to the value of state property showLogin. <br>
+Two onClick handlers set the value of showLogin:<br>
+i)    the onClick handler of `<LandingPage/>`’s Login button. this also sets `<LoginModal/>` prop whichModalScreen to “login”, which tells `<LoginModal/>` to show the login screen only<br>
+ii)   the onClick handler of `<LandingPage/>`’s Learn how to register button. This also sets `<LoginModal/>` prop whichModalScreen to “register”, which tells `<LoginModal/>` to show the register screen only.<br><br><br>
+
+b)<br>
+`<LoginModal/>`’s login screen:<br>
+This is a form with one input (for email). <br>
+The onClick handler for this screen’s Start exploring button:<br>
+i)   validates the email input (showing error messages in red on screen on invalid user input and NOT contacting the backend) <br>
+ii)  on valid user input sends the email string to the backend, which returns a js object like this:<br>
+`{
+email: “test@test”,
+name: “Testy Tester”
+}`<br>
+iii) sets AuthContext.js’s state property unit to this js object<br>
+iv)  calls a `<LandingPage/>` function that makes all of the main `<LandingPage/>` buttons operable and opaque.<br><br><br>
+
+c)<br>
+`<LoginModal/>`’s registration screen:<br>
+This is a form with three inputs.<br>
+The onClick handler of the Register button has the same sort of form validation as the onClick handler of the Start exploring button of the login screen.<br><br><br><br>
+
+C)<br>
+After the user enters valid input for email, unit name and county name and taps the Register button, the registration screen and login modal disappear and the user has to log in. (fri2June23: This will change soon so that the app automatically logs in the new user after she has registered successfully).<br><br><br><br>
+
+
+
+### **`<ChallengesNearMePage/>`**<br>
+A) <br>
+This page has access to <AuthProvider/>’s unit state property (through context).<br>
+When unit changes this component gets the locations array from the backend (this is done via a `useEffect()` hook). <br>
+
+The locations array contains xxxx<br>
+
+On first execution of this component (function) a `useEffect()` hook gets the user’s location data.<br>
+
+When the page first loads it shows a map of Edinburgh with markers showing the points of interest. The user must click button Tap here for your map for the page to show the map surrounding the user’s location (also with markers showing the points of interest).<br>
+
+This page employs `<ReactMapGL/>` to provide the maps.<br>
+`<ReactMapGL/>` has child `<Markers/>`.<br>
+`<Markers/>` has children `<Marker/>` and `<Pin/>`<br>
+
+The markers are dark blue and fully opaque if the user has still to collect that location. A marker becomes more see-through after the user has collected that location.<br><br><br>
+
+B) child `<LocationModal/>`<br>
+`<ChallengesNearMePage/>` conditionally renders `<LocationModal/>`, which pops up when the user clicks on an opaque blue marker. <LocationModal/> contains an image and information about the location/point of interest.<br><br><br><br>
+
+
+
+
+### **`<UserGuidePage/>`**<br>
+This is no more than headings and text that explain to the user how to use the app.<br><br><br><br>
+
+
+
+### **`<CompletedChallengesPage/>`**<br>
+This page contains button Show completed challenges and a table, initially empty.<br>
+
+The onClick handler for button Show completed challenges <br>
+i)   gets the user’s completed challenges from the backend.<br>
+	this is an array of objects and looks like this: <br>
+	`[{area: “Watford, Hertfordshire”, percentageCollected: 50}, etc ]` <br>
+ii)  uses the array returned by the backend to make a table of two headers and columns (“Area” and “% collected”) <br><br><br><br>
+
+
+### **`<LeaderboardPage/>`**<br>
+This consists of an search input field and a Find button.<br>
+The user types in the input field and a dropdown of regions appears.<br>
+The user selects an option from the dropdown and clicks the Find button.<br>
+The click handler for the find button:<br>
+i)   retrieves data from the backend<br>
+ii)  builds a table and puts that data in it<br><br><br><br>
+
+### **All modals**<br>
+For example `<LogoutModal/>` and `<LoginModal/>`. <br>
+All components representing modals in this app employ React-Bootstrap’s `<Form/>`, `<Modal/>` and `<Button/>` components.<br><br>
+

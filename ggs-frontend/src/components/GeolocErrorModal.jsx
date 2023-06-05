@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 
 
 
-const LogoutModal = () => {
+const GeolocErrorModal = ({errorMessage}) => {
   
   return (
     <Modal
@@ -15,10 +15,10 @@ const LogoutModal = () => {
        
       </Modal.Header>
       <Modal.Body className="mt-n3">
-        <h1>You logged out</h1>
+        <h1>Error!</h1>
         
           <div>
-            <p>You are now logged out.</p>
+            <p>{errorMessage}</p>
           </div>
         
       </Modal.Body>
@@ -26,4 +26,4 @@ const LogoutModal = () => {
   );
 };
 
-export default LogoutModal;
+export default GeolocErrorModal;
