@@ -67,6 +67,9 @@ cdk deploy ${backend_name} --require-approval never --context env=${env} --outpu
 
 cd ../ggs-frontend
 
+# React app is built in the build folder but its contents are deleted each time the frontend app is built
+mkdir -p build
+
 npm install
 
 npm run build
