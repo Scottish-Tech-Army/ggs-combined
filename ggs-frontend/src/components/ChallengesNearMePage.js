@@ -3,6 +3,7 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 // Modal pop-ups:
 import LocationModal from "./LocationModal";
 import GeolocErrorModal from "./GeolocErrorModal";
+import GeolocErrorModal from "./GeolocErrorModal";
 
 // Stuff do do with ReactMapGL:
 import Markers from "./Markers";
@@ -113,7 +114,15 @@ let showModal
     // mapRef.current.*nameOfFunction()*.
     // See https://docs.mapbox.com/mapbox-gl-js/api/map/ for list of MapBox's Map functions: 
     
+    
     const mapRef = useRef();
+// The click event handler for the button.
+// This function must
+// 1) determine whether the user has set her 
+// browser so that it allows apps to 
+// determine the user's location
+// 2) show the error modal if the user has 
+// not set that browser setting:
 
 
 
@@ -130,8 +139,17 @@ let showModal
 // 1):       
  if (userLatLong !== undefined) {
     mapRef.current.flyTo({
+// 1):       
+ if (userLatLong !== undefined) {
+    mapRef.current.flyTo({
     center: [userLatLong.longitude, userLatLong.latitude],
     duration: 2000,
+                         });
+                                } else {
+// 2):
+setShowGeolocErrorModal(true)
+                                       }
+                              }
                          });
                                 } else {
 // 2):
@@ -153,6 +171,8 @@ const [locations, setLocations] = useState([]);
 useEffect(() => {
   if (unit) {
 
+    // locations is an state property that is an array 
+
     // locations is a state property that is an array 
     
     getLocations(unit.email).then(setLocations);
@@ -172,6 +192,8 @@ useEffect(() => {
 
 // state property to hold the lat and long
 // coords of the user.
+// state property to hold the lat and long
+// coords of the user.
 const [userLatLong, setUserLatLong] = useState();
 
 const navControlStyle = { right: 10, top: 10 };
@@ -180,7 +202,11 @@ const geolocateControlStyle = { left: 15, top: 55 };
 // On startup of the app do this:
 // 1) set some options and callbacks for function navigator.geolocation.getCurrentPosition()
 // 2) Get the lat and long of the user
+// On startup of the app do this:
+// 1) set some options and callbacks for function navigator.geolocation.getCurrentPosition()
+// 2) Get the lat and long of the user
 useEffect(() => {
+  // 1):
   // 1):
   var options = {
     enableHighAccuracy: true,
@@ -190,6 +216,7 @@ useEffect(() => {
 
   function success(position) {
         setUserLatLong(position.coords);
+        setUserLatLong(position.coords);
     // 30mar23: Mukund: mapRef represents component <ReactMapGL/>
     /* 31Mar23: Mukund: original code commented out: 
     mapRef.current &&
@@ -198,7 +225,9 @@ useEffect(() => {
         duration: 2000,
       });
     */
-                              }
+
+  }
+
 
 
   function showError(error) {
@@ -207,17 +236,18 @@ useEffect(() => {
          console.warn("User denied the request for Geolocation.");
         break;
       case error.POSITION_UNAVAILABLE:
-         console.warn("Location information is unavailable.");
+        console.warn("Location information is unavailable.");
         break;
       case error.TIMEOUT:
-         console.warn("The request to get user location timed out.");
+        console.warn("The request to get user location timed out.");
         break;
       default:
-         console.error("An unknown error occurred.", error);
+        console.error("An unknown error occurred.", error);
         break;
     }
   }
 
+// 2):   
 // 2):   
   navigator.geolocation.getCurrentPosition(success, showError, options);
 }, []); // When 2nd arg is empty array -> run this useEffect() only once, after the first 
@@ -263,6 +293,9 @@ console.log(
 // will be either 
 // i)  a load of JSX that describes the page
 // ii) null 
+// will be either 
+// i)  a load of JSX that describes the page
+// ii) null 
 let renderThis
 
 // Now conditionally set renderThis 
@@ -270,6 +303,8 @@ let renderThis
 // isThisPageActive:
 
 if (isThisPageActive) {
+// If parent component <Home/> has set this 
+// component's prop isThisPageActive to 
 // If parent component <Home/> has set this 
 // component's prop isThisPageActive to 
 // true, render the ChallengesNearMe page:
@@ -308,6 +343,7 @@ renderThis = (
           setSelectedLocation={setSelectedLocation}
         />
         <NavigationControl style={navControlStyle} showCompass={true} />
+        <NavigationControl style={navControlStyle} showCompass={true} />
         <GeolocateControl
           style={geolocateControlStyle}
           positionOptions={{ enableHighAccuracy: true }}
@@ -325,6 +361,30 @@ renderThis = (
           userLatLong={userLatLong}
         />
       )}
+            
+
+{ /* If  there has been an error in getting the geolocation 
+data from the browser (eg because the user has not turned on 
+location services) then for several seconds show the modal that 
+tells the user to turn on location services and then make 
+the modal disappear. */ }
+{ /* First the jsx for the modal box. showModal gets set either to
+jsx that describes the modal or to null depending on the value of 
+showGeolocErrorModal: */ }
+{showModal}
+
+{ /* set showModal either to null or the jsx : */ }
+{showGeolocErrorModal ? ( <>
+  {showModal} = <GeolocErrorModal errorMessage = {`This app cannot tell where you are. Change the setting in your browser that will allow this app to locate you.`} />
+  {setTimeout(() => {
+    showModal = null
+    // Trigger a rerender:
+    setShowGeolocErrorModal(false)
+          }, 5000)}
+</>
+              ) : showModal = null
+
+}
             
 
 { /* If  there has been an error in getting the geolocation 

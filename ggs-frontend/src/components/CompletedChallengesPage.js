@@ -1,4 +1,5 @@
 import React, { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 
 // Other components:
 import NavigationBar from "./NavigationBar.js";
@@ -13,6 +14,7 @@ import { authContext } from "../contexts/AuthContext";
 // the names reflect the fact that this page is to do with 
 // showing completed challenges)
 import { getCompletedChallenges } from "../services/completedChallenges.js";
+import { getCompletedChallenges } from "../services/completedChallenges.js";
 
 
 
@@ -21,6 +23,9 @@ export default function CompletedChallengesPage({
     isThisPageActive
                                                 })
                                             {
+
+// Two vars used by function makeTableRows:
+let rowsList, sortedTableDataArray
 
 // Two vars used by function makeTableRows:
 let rowsList, sortedTableDataArray
@@ -35,6 +40,7 @@ const { unit } = useContext(authContext);
 
 // create a state property to hold the 
 // array of collected locations:
+const [complChallenges, setComplChallenges] = useState();
 const [complChallenges, setComplChallenges] = useState();
 
 // A function to get the leaderboard array
@@ -105,11 +111,13 @@ if (isThisPageActive) {
 
 renderThis = (
   <div> 
+  <div> 
 <div className="completedPageOuterContainer" >
 
 
 
     {/*A button that the user clicks to show the completed challenges*/}
+<div className="largeButton1New positionButton" onClick={()=>{retrieveCompletedChallenges()}}>
 <div className="largeButton1New positionButton" onClick={()=>{retrieveCompletedChallenges()}}>
   <p className="buttonOperable">Show completed challenges</p>
 </div>    
@@ -138,9 +146,31 @@ renderThis = (
 
 {/*
   ((complChallenges && complChallenges.length === 0) || !complChallenges) && (
+{/* Here this component uses the same CSS styles as <LeaderboardPage/> uses*/}
+<div className="leaderboardTableOutermostContainer">
+
+<table className="leaderboardPageTable">
+<thead>
+<tr>
+    <th className="thRank"  rowSpan="1"><div className="rankHead"><p className="rankHeadText" >Area</p></div></th>
+    <th className="thUnit"  rowSpan="1"><div className="unitHead"><p className="unitHeadText" >% collected</p></div></th>
+</tr>
+</thead>
+<tbody>   
+  {complChallenges}
+  </tbody>    
+</table>
+
+</div>
+
+
+{/*
+  ((complChallenges && complChallenges.length === 0) || !complChallenges) && (
     <div>
       Collect some locations for them to appear on the leaderboard.
     </div>
+  )
+*/}
   )
 */}
 
@@ -148,6 +178,8 @@ renderThis = (
     
 
 </div> {/* end completedPageMainContainer*/}
+
+</div> {/* end completedPageOuterContainer */}
 
 </div> {/* end completedPageOuterContainer */}
 

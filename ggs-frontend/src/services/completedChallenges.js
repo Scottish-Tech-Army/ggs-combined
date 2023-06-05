@@ -1,4 +1,6 @@
-const BASE_URL = process.env.REACT_APP_AWS_CLIENT_API_ENDPOINT;
+import { readConfig } from '../configReader.js';
+
+const BASE_URL = readConfig('GGSclientAPIendpoint');
 
 
 // NOTE: in the original code the following function 
