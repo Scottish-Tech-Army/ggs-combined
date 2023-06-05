@@ -10,8 +10,6 @@ const BASE_URL = readConfig('GGSclientAPIendpoint');
 // of the app and the second arg an object you'd expect.
 // 2) returns 
 export function login(email) {
-
-
   return fetch(BASE_URL + "unit/login", {
     method: "POST",
     headers: {
@@ -24,14 +22,10 @@ export function login(email) {
       return response.json(); // the response is like this: {"email":"xxx.yyy@zzz.com","name":"developerOne"}.
       // Method json() is part of the fetch() API. it returns a Promise that resolves as a JS object.
                      }
-      console.log(`in auth.js, in login(), and  response.status is ${response.status} and  response.statusText is ${response.statusText}`)
-      return response.json(); // the response is like this: {"email":"xxx.yyy@zzz.com","name":"developerOne"}.
-      // Method json() is part of the fetch() API. it returns a Promise that resolves as a JS object.
-                     }
+      
     throw response;
                     })
-                    })
-}
+                            }
 
 // email, before it becomes the request body above, is {email: "xxx.yyy@zzz.com”}
 // and the response body is 

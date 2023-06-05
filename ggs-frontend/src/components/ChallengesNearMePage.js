@@ -137,19 +137,11 @@ let showModal
 // not set that browser setting:
     const runFlyToOnce = () =>{
 // 1):       
- if (userLatLong !== undefined) {
-    mapRef.current.flyTo({
-// 1):       
+    
  if (userLatLong !== undefined) {
     mapRef.current.flyTo({
     center: [userLatLong.longitude, userLatLong.latitude],
     duration: 2000,
-                         });
-                                } else {
-// 2):
-setShowGeolocErrorModal(true)
-                                       }
-                              }
                          });
                                 } else {
 // 2):

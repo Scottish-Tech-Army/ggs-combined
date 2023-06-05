@@ -27,8 +27,6 @@ export default function CompletedChallengesPage({
 // Two vars used by function makeTableRows:
 let rowsList, sortedTableDataArray
 
-// Two vars used by function makeTableRows:
-let rowsList, sortedTableDataArray
 
 
 // Get the unit object from <AuthContext>:
@@ -41,7 +39,7 @@ const { unit } = useContext(authContext);
 // create a state property to hold the 
 // array of collected locations:
 const [complChallenges, setComplChallenges] = useState();
-const [complChallenges, setComplChallenges] = useState();
+
 
 // A function to get the leaderboard array
 const retrieveCompletedChallenges = () =>{
@@ -110,7 +108,7 @@ let renderThis
 if (isThisPageActive) {
 
 renderThis = (
-  <div> 
+  
   <div> 
 <div className="completedPageOuterContainer" >
 
@@ -171,8 +169,7 @@ renderThis = (
     </div>
   )
 */}
-  )
-*/}
+
 
        
     
