@@ -80,6 +80,7 @@ jobs:
           AWS_DEFAULT_REGION: $AWS_REGION
 
       - name: create frontend build directory
+        working-directory: ./ggs-frontend
         run: mkdir -p build
 
       - name: install frontend dependencies
