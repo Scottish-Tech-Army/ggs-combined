@@ -24,6 +24,8 @@ Both the `production` and `stage` deployments are made to AWS. The Scottish Tech
 
 Under **no** circumstances must the AWS secrets be added plain text to the source code in this repository.
 
+Please note that the deployment keys used to communicate with AWS are temporary and need periodic updating from the STA AWS account. Ideally this should not be necessary but at this point the solution to creating temporary AWS access keys during Github Actions deployment is unknown.
+
 ## Deployment Flow
 
 Changes to the software should follow the following steps:
