@@ -79,6 +79,10 @@ jobs:
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_DEFAULT_REGION: $AWS_REGION
 
+      - name: create frontend build directory
+        working-directory: ./ggs-frontend
+        run: mkdir -p build
+
       - name: install frontend dependencies
         working-directory: ./ggs-frontend
         run: npm ci
