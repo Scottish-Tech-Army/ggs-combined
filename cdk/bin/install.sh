@@ -36,6 +36,11 @@ else
     export AWS_PROFILE="$2"
 fi
 
+# React app is built in the build folder but its contents are deleted each time the 
+# frontend app is built. This makes it difficult to keep the build directory in
+# git because the .gitkeep file is deleted each time the react frontend build happens.
+mkdir -p ./ggs-frontend/build
+
 cd ./cdk
 
 npm install
@@ -66,11 +71,6 @@ cdk bootstrap --context env=${env}
 cdk deploy ${backend_name} --require-approval never --context env=${env} --outputs-file ../ggs-frontend/src/config.json
 
 cd ../ggs-frontend
-
-# React app is built in the build folder but its contents are deleted each time the 
-# frontend app is built. This makes it difficult to keep the build directory in
-# git because the .gitkeep file is deleted each time the react frontend build happens.
-mkdir -p build
 
 npm install
 
