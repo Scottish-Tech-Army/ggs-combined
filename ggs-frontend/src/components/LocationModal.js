@@ -1,12 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
+
+
+// Bootstrap stuff:
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
+
+// Other stuff:
 import { collectLocation } from "../services/locations";
 import { authContext } from "../contexts/AuthContext";
-import dividerLine from "./divider-line.svg";
+
+
+// Images:
+import placeholderPhoto from "../assets/images/noImageYet.svg";
 import xPrimary from "./x-primary.svg";
-import placeholderPhoto from "./image-coming-soon.png";
+import dividerLine from "./divider-line.svg";
+
+
 
 // Change this as needed for coordinate distance from landmark.
 const LOCATION_TOLERANCE_LATITUDE = 0.0002; // Note 0.0002 is approx equal to 22 metres.
@@ -84,6 +94,10 @@ const LocationModal = ({
 // If there's no photo available shove this into the
 // <Modal.Body/>:
         <>
+        <h1>Congratulations!</h1>
+        <div>
+          <p>You have collected this location:</p>
+        </div>
           <Image
             className="img-location"
             src={placeholderPhoto}
@@ -125,6 +139,11 @@ const LocationModal = ({
 // If there IS a photo available shove this into the
 // <Modal.Body/>:
       <>
+      <h1>Congratulations!</h1>
+        <div>
+          <p>You have collected this location:</p>
+        </div>
+
         <Image
           className="img-location"
           src={photo.url}
