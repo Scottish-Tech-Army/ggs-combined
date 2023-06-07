@@ -77,9 +77,12 @@ const LocationModal = ({
       ? `${selectedLocation.city}, ${selectedLocation.county}`
       : selectedLocation.county;
 
+
   function getPhoto(photo) {
     if (!photo) {
       return (
+// If there's no photo available shove this into the
+// <Modal.Body/>:
         <>
           <Image
             className="img-location"
@@ -99,8 +102,9 @@ const LocationModal = ({
           </div>
         </>
       );
-    }
+                 } // end if there's no photo
 
+// Set creditLine to some jsx that contains info about the photo:
     let creditLine = null;
     if (photo.attribution || photo.copyright) {
       let attributionElement = photo.originalUrl ? (
@@ -118,6 +122,8 @@ const LocationModal = ({
     }
 
     return (
+// If there IS a photo available shove this into the
+// <Modal.Body/>:
       <>
         <Image
           className="img-location"
@@ -128,7 +134,10 @@ const LocationModal = ({
         {creditLine}
       </>
     );
-  }
+                        } // end getPhoto
+
+
+
 
   return (
     <Modal
