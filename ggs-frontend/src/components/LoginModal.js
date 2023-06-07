@@ -4,7 +4,7 @@ import React, { useRef, useState, useContext, useEffect } from "react";
 import { authContext } from "../contexts/AuthContext";
 // import { login, newRegister } from "../services/auth"; // use this line instead of the one below 
 // when Jack has made the appropriate change in the backend 
-import { login, register } from "../services/auth";
+import { login, newRegister } from "../services/auth";
 
 // components:
 import Button from "react-bootstrap/Button";
@@ -414,30 +414,7 @@ setShowLoginEmailErrMess(true)
     // Validate user input:
     if (validateRegistrationInputs()) {
 // console.log(`All inputs passed validation!`)
-/*  NEW CODE FOLLOWS  !!! NOTE fri2June23: this now needs to change!!!    
-    newRegister(email, name, county)
-      .then((unit) => {
-        setUnit(unit);
-        handleLoginClose();
-      })
-      .catch((error) => {
-        console.error(error);
-        if (error.status === 409) {
-          setError("Email address already registered. Please log in instead.");
-        } else {
-          setError("Problem registering. Please try again.");
-        }
-      });
-                                } // end if
-*/                                
-
-    /* OLD CODE FOLLOWS 
-    Thurs 1June23: When Jack has made the appropriate change
-    to the backend, dump the following call to function register() 
-    and replace it with a call to newRegister above (and ensure  
-    that newRegister is imported from auth.js instead)
-    */
-    register(email, name)
+newRegister(email, name, county)
       .then((unit) => {
         setUnit(unit);
         // Log in:

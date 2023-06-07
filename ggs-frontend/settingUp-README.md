@@ -28,10 +28,10 @@
     <img src="src/assets/images/gg-logo.png" alt="Logo" width="auto" height="80">
   </a>
 
-<h3 align="center">Girl Guiding Scotland treasure hunt</h3>
+<h3 align="center">Girlguiding Scotland treasure hunt</h3>
 
   <p align="center">
-    Web application developed for mobile providing a treasure hunt of Scottish landmarks, where girl guides can interact and compete with units across the organisation.
+    This is a mobile web app that allows users to go on a treasure hunt of Scottish landmarks. Girlguide units can compete with other units across the organisation.
     <br />
     <a href="https://github.com/Scottish-Tech-Army/ggs-frontend"><strong>Explore the docs »</strong></a>
     <br />
@@ -101,26 +101,29 @@
 
 - [Node.js](https://nodejs.org/en/)
 - [React.js](https://reactjs.org/) 
-The original coders created this app by using NodeJS module create-react-app.
-create-react-app <br>
-uses bundler webpack under the hood
-transpiles sass files automatically into CSS, so this app requires the coder simply to write (CSS) 
-classes for React components in a Sass file called style.scss then to import 
-style.scss into React components. Do not create a CSS file and import that 
-into React components. Put your CSS directly in the Sass files (style.scss
-and the file that it imports, _custom.scss)
-- [Bootstrap](https://getbootstrap.com)
-Bootstrap provides a lot of ready-made css classes.
-- [React-Bootstrap](https://getbootstrap.com)
-React-Bootstrap provides ready-made React components that have already have
-classes for styling applied to them. This app uses only React-Bootstrap's 
-<Modal> component (for modal windows).
-- [Sass](https://sass-lang.com/dart-sass)
-Sass is a CSS preprocessor. The coder must write (CSS) classes in the 
-style.scss file. There is no style.css file. When the app compiles, 
-the under-the-hood webpack transpiles the style.scss file into CSS. 
-- [Mapbox](https://www.mapbox.com/)
-- [React Map GL](https://visgl.github.io/react-map-gl/)
+The original coders created this app by using NodeJS module create-react-app.<br>
+create-react-app uses bundler webpack under the hood to <br>
+transpile Sass files automatically into CSS, so this app <br>
+requires the coder simply to write (CSS) classes for React <br>
+components in a Sass file called style.scss then to import <br>
+style.scss into React components. Do not create a CSS file <br>
+and import that into React components. Put your CSS classes directly<br>
+in the Sass files (style.scss and the file that it imports, _custom.scss)<br>
+- [Bootstrap](https://getbootstrap.com)<br>
+Bootstrap provides a lot of ready-made css classes.<br>
+- [React-Bootstrap](https://getbootstrap.com)<br>
+React-Bootstrap provides ready-made React components that already have<br>
+classes for styling applied to them. This app only uses React-Bootstrap's <br>
+`<Modal/>` component (for modal windows).<br>
+- [Sass](https://sass-lang.com/dart-sass). This is a CSS preprocessor. <br>
+The coder must write (CSS) classes in the style.scss file. There is no <br>
+style.css file. When the app compiles, the under-the-hood webpack transpiles <br>
+the style.scss file into CSS. <br>
+- [Mapbox](https://www.mapbox.com/)<br>
+- [React Map GL](https://visgl.github.io/react-map-gl/) <br>This provides ready
+made React components that encapsulate Mapbox features. It allows you to use
+Mapbox in a React app by employing those ready made React Map GL React <br>
+components in the app.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -177,7 +180,7 @@ END NOTE: wed7June23: this is all out of date:
 ## Purpose of the app
 
 This app allows users to perform a treasure hunt.<br>
-If the user is in, for example, the centre of Glasgow, one of the app's pages shows a map of the user’s location. <br> 
+If the user is in the centre of Glasgow, for example, one of the app's pages shows a map of the user’s location. <br> 
 The map contains markers, each of which represents a landmark that the user collects.<br> 
 When the user gets to within 20m of the location the marker points to, the app deems the user to have collected the location. A modal pops up that contains an image of the point of interest at that location. <br> 
 The modal also includes a description of the point of interest and a challenge for the user to complete.<br>
@@ -228,12 +231,12 @@ Tapping the plus icon makes a menu pop up. The menu contains three icons, one fo
 Tapping one of those icons takes the user to the page in question.<br>
 
 8. Main modals<br>
-Login modal<br>
+- [Login modal]<br>
 This pops up when the user is on the `<LandingPage/>` and clicks the Login button. <br>
 This modal presents the user with one input field for entering an email address.<br>
 Frontend code validation ensures the user has entered a valid address, ie one that contains symbols on either side of an '@' symbol.<br>
 Successful log in makes the buttons on the `<LandingPage/>` operable.<br>
-Register modal<br>
+- [Register modal]<br>
 This pops up when the user is on the `<LandingPage/>` and clicks the button that reads 'Learn how to register'. <br>
 This modal presents the user with three input fields, for entering email address, county and unit name.<br>
 Frontend code vallidates the data entered.<br>

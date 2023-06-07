@@ -35,36 +35,13 @@ export function login(email) {
 // email xxx.yyy@zzz.com and 
 // name developerOne
 
-
-
-// ORIGINAL CODE. this function must be replaced by 
-// newRegister() below when Jack has made the appropriate chaneg to the backend code:
-export function register(email, name) {
-  return fetch(BASE_URL + "unit/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, name }), // stringify this object: {email: "test@test, name: "Testy Tester"}
-  }).then(response => {
-    if (response.ok) {
-      return response.json();
-    }
-    throw response;
-  })
-}
-
-// tues30May23 This is the new function that code in <LoginModal/>
-// calls. The change is necessary because the new register screen 
-// has a field for county. <LoginModal/> must import this function
-// once Jack has made the appropriate change to the backend:
 export function newRegister(email, name, county) {
   return fetch(BASE_URL + "unit/register", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, name, county }),
+    body: JSON.stringify({ email, name, county }),  // stringify this object: {email: "test@test, name: "Testy Tester", county: "Aberdeen"}
   }).then(response => {
     if (response.ok) {
       return response.json();
