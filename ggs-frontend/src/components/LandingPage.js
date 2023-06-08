@@ -4,9 +4,6 @@ import React, { useEffect, useState, useContext} from "react";
 import LoginModal from "./LoginModal";
 import LogoutModal from "./LogoutModal";
 
-
-
-
 // Context:
 // Get access to the object that contains the stuff to do with making 
 // this app a multi-page app:
@@ -14,13 +11,9 @@ import {MenuContext} from "./Home.js"
 // Get access to <AuthProvider/>'s unit and setUnit():
 import { authContext } from "../contexts/AuthContext";
 
-
-
 // Components:
 import SquareButton from "./SquareButton";
 import GGSbuttonOne from "./GGSbuttonOne";
-
-
 
 // Images:
 // Main logo:
@@ -35,7 +28,6 @@ import completedIcon from "../assets/images/completedChallenges.svg";
 import leaderboardIcon from "../assets/images/clipboardIcon3.svg";
 // NO LONGER USED:
 // import HowToIcon from "../assets/images/howToComplete2.svg";
-
 
 // styles:
 import "bootstrap/dist/css/bootstrap.min.css";

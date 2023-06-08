@@ -1,15 +1,24 @@
 import React from "react";
+
+// Stuff from react bootstrap:
 import Modal from "react-bootstrap/Modal";
 
+// components:
+import GGSbuttonOne from "./GGSbuttonOne";
 
 
-const GeolocErrorModal = ({errorMessage}) => {
+
+const GeolocErrorModal = ({
+  errorMessage,
+handleClose
+}) => {
   
   return (
     <Modal
       show={true}
-      
-      className="custom-modal logout-modal"
+      backdrop="static"
+      keyboard={false}
+      className="custom-modal login-modal"
     >
       <Modal.Header className="border-0 mb-n4">
        
@@ -20,8 +29,15 @@ const GeolocErrorModal = ({errorMessage}) => {
           <div>
             <p>{errorMessage}</p>
           </div>
-        
       </Modal.Body>
+      <div className="positionModalCloseButton">
+          <GGSbuttonOne
+ buttonDivCSSclass = {"largeButton1New positionButton"}
+ pTextCSSclass = {"buttonOperable"}
+ clickHandler = {handleClose}
+ pText = {"Close"}
+          />
+          </div>
     </Modal>
   );
 };

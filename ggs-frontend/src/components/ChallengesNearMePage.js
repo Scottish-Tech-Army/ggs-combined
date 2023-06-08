@@ -15,7 +15,6 @@ import { getLocations } from "../services/locations";
 
 // Other components:
 import NavigationBar from "./NavigationBar.js";
-import GGSbuttonOne from "./GGSbuttonOne";
 
 // context
 // Consume the context that gets made available to this
@@ -73,6 +72,11 @@ const OPENSTREETMAP_MAPSTYLE = {
   ],
 };
 
+
+
+
+
+
 const MAPBOX_MAPSTYLE = "mapbox://styles/mapbox/streets-v11";
 
 
@@ -99,11 +103,14 @@ export default function ChallengesNearMePage({
 // not:
 const [showGeolocErrorModal, setShowGeolocErrorModal] = useState(false);
 
+// A boolean state property. Code changes this
+// so that the error modal shows (eg when the 
+// user has blocked location services) or does 
+// not:
+const [locationServicesOffFlag, setLocationServicesOffFlag] = useState(false);
 
-// A variable that code gives one of two values:
-// i)   JSX for the GeolocErrorModal 
-// ii)  null: 
-let showModal 
+
+
 
 
     // Mukund: To get a reference to component <ReactGraphGl/>
@@ -118,7 +125,25 @@ let showModal
 
 
 //---------------------------------------
+// A ref to hold lat and long data of the mobile:
+const positionCoords = useRef()
 
+
+
+// a function that is passed in to 
+// <GeolocErrorModal> as props 
+// that makes the modal go away.
+// This function must:
+// 1) set to false  
+function handleClose(){
+// 1):
+  setShowGeolocErrorModal(false)
+                      }
+
+
+
+
+/* OLD CODE REMOVE EVENTUALLY:
 // The click event handler for the button.
 // This function must
 // 1) determine whether the user has set her 
@@ -126,6 +151,16 @@ let showModal
 // determine the user's location
 // 2) show the error modal if the user has 
 // not set that browser setting:
+*/
+
+// This function has to run when the 
+// user visits the page and must
+// 1) determine whether the user has set her 
+// browser so that it allows apps to 
+// determine the user's location
+// 2) show the error modal if the user has 
+// not set that browser setting::
+/*
     const runFlyToOnce = () =>{
 // 1):       
  if (userLatLong !== undefined) {
@@ -138,13 +173,52 @@ let showModal
 setShowGeolocErrorModal(true)
                                        }
                               }
+*/
+
+const runFlyToOnce = () =>{
+// 1):       
+// if (userLatLong !== undefined) {
+  if (positionCoords.current !== undefined) {  
+    mapRef.current.flyTo({
+    center: [positionCoords.current.longitude, positionCoords.current.latitude],
+    duration: 2000,
+                         });
+                               }  else {
+                                // 2):
+                                console.log(`Inside runFlyToOnce and positionCoords.current is ${positionCoords.current}`)
+                                setShowGeolocErrorModal(true)
+                                       }
+                          }
+
+
+
+
+
+// This function gets called from inside the 
+// conditional logic that shows this page or not.
+// This function must:
+// 1) if location services is set in the browser
+// return true and get the map to fly to the 
+// user's location
+// 2) if location services is NOT set in the browser
+// take action to make the condional rendering logic
+// show the error modal (simply return false):
+function isBrowserLocationServicesSet () {
+  console.log(`Function isBrowserLocationServicesSet has been called`)
+// 1):
+  if (userLatLong !== undefined) {
+    return true                     
+                                 }
+// 2):
+    return false                               
+                                         }
+
+                                        
 
 
 
 // Get the locations collection
 const [locations, setLocations] = useState([]);
-
-
 
 
 // When <AuthProvider/>'s state property unit changes, 
@@ -189,15 +263,19 @@ useEffect(() => {
   };
 
   function success(position) {
-        setUserLatLong(position.coords);
-    // 30mar23: Mukund: mapRef represents component <ReactMapGL/>
-    /* 31Mar23: Mukund: original code commented out: 
-    mapRef.current &&
+    positionCoords.current = position.coords
+        // setUserLatLong(position.coords);
+        // console.log(`In the success function. positionCoords.current.latitude is ${positionCoords.current.latitude} and mapRef.current is ${mapRef.current}`)
+
+    // mapRef.current &&
+    
       mapRef.current.flyTo({
-        center: [position.coords.longitude, position.coords.latitude],
+        // center: [position.coords.longitude, position.coords.latitude],
+         center: [positionCoords.current.longitude, positionCoords.current.latitude],
         duration: 2000,
       });
-    */
+
+    
                               }
 
 
@@ -205,21 +283,32 @@ useEffect(() => {
     switch (error.code) {
       case error.PERMISSION_DENIED:
          console.warn("User denied the request for Geolocation.");
+         setShowGeolocErrorModal(true)
+         setLocationServicesOffFlag(true)
         break;
       case error.POSITION_UNAVAILABLE:
          console.warn("Location information is unavailable.");
+         setShowGeolocErrorModal(true)
+         setLocationServicesOffFlag(true)
         break;
       case error.TIMEOUT:
          console.warn("The request to get user location timed out.");
+         setShowGeolocErrorModal(true)
+         setLocationServicesOffFlag(true)
         break;
       default:
          console.error("An unknown error occurred.", error);
+         setShowGeolocErrorModal(true)
+         setLocationServicesOffFlag(true)
         break;
     }
   }
 
 // 2):   
   navigator.geolocation.getCurrentPosition(success, showError, options);
+// 3):
+  // runFlyToOnce()
+
 }, []); // When 2nd arg is empty array -> run this useEffect() only once, after the first 
 // render of the component (ie the execution of the component function)
 
@@ -259,38 +348,82 @@ console.log(
 
 // ------------------- Now the actual rendering -------------------
 
+
+
+let showModal = < GeolocErrorModal 
+errorMessage = {
+`This app cannot tell where you are. Change 
+the setting in your browser that will allow 
+this app to locate you.`
+               }
+handleClose =  {handleClose} 
+                />
+
+
 // Define the variable whose value 
 // will be either 
 // i)  a load of JSX that describes the page
 // ii) null 
 let renderThis
+let renderTheMapAndStuff
 
 // Now conditionally set renderThis 
 // depending on the value of prop 
 // isThisPageActive:
 
-if (isThisPageActive) {
+// if (isThisPageActive) {
+
+  
 // If parent component <Home/> has set this 
 // component's prop isThisPageActive to 
 // true, render the ChallengesNearMe page:
+// renderThis = renderTheMapAndStuff
 
-renderThis = (
-<div>
+/*
+// Determine whether the user has set her browser to
+// allow location services and render accordingly:
+if (isBrowserLocationServicesSet()){    
+  renderThis = renderTheMapAndStuff
+  
+                                   } else {
+  renderThis = showModal
+                                          }
+*/
 
-{/* The button that reads "Click for your map": */}
+// renderTheMapAndStuff = (
+  renderThis = (
+<div className={isThisPageActive ? "challengesNearMeOuterContainerShow" : "challengesNearMeOuterContainerHide"}>
+
+
+{/* The button that reads "Click for your map".
+This is now no longer necessary.
+Remove eventally:
+
 <GGSbuttonOne
  buttonDivCSSclass = {"largeButton1New positionButton"}
  pTextCSSclass = {"buttonOperable"}
  clickHandler = {()=>{runFlyToOnce()}}
  pText = {"Tap here for your map"}
 />
+*/}
 
+{/*The following line is necessary because the modal's Close button sets 
+showGeolocErrorModal to false, closing the modal and allowing the user
+once again to click on the home icon or icons in the plus menu. When the
+user goes to another page and comes back showGeolocErrorModal must be
+true again to show the error modal: */}
+{/* 
+{(!isThisPageActive && !showGeolocErrorModal) ? (setShowGeolocErrorModal(true)) : (setShowGeolocErrorModal(false))}
+*/}
+
+{(!isThisPageActive && !showGeolocErrorModal) ? (setShowGeolocErrorModal(true)) : null}
+
+{(isThisPageActive && showGeolocErrorModal && locationServicesOffFlag) ? showModal : <></>}
 
   <div
       className="container-fluid"
       style={{ paddingLeft: "0px", paddingRight: "0px" }}
       >
-
 
 <ReactMapGL
         ref={mapRef}
@@ -325,30 +458,7 @@ renderThis = (
           userLatLong={userLatLong}
         />
       )}
-            
 
-{ /* If  there has been an error in getting the geolocation 
-data from the browser (eg because the user has not turned on 
-location services) then for several seconds show the modal that 
-tells the user to turn on location services and then make 
-the modal disappear. */ }
-{ /* First the jsx for the modal box. showModal gets set either to
-jsx that describes the modal or to null depending on the value of 
-showGeolocErrorModal: */ }
-{showModal}
-
-{ /* set showModal either to null or the jsx : */ }
-{showGeolocErrorModal ? ( <>
-  {showModal} = <GeolocErrorModal errorMessage = {`This app cannot tell where you are. Change the setting in your browser that will allow this app to locate you.`} />
-  {setTimeout(() => {
-    showModal = null
-    // Trigger a rerender:
-    setShowGeolocErrorModal(false)
-          }, 5000)}
-</>
-              ) : showModal = null
-
-}
 
 
 {/* The navigation bar at the bottom of the page,
@@ -359,16 +469,18 @@ showGeolocErrorModal: */ }
 </div>
 </div>
              ) 
-                      } // end if (isThisPageActive)
+                          
+//                      } // end if (isThisPageActive)
 
-                      
+
+/*
 // If parent component <Home/> 
 // has set prop isThisPageActive to  
 // false, don't render anything:
 if (!isThisPageActive) {
     renderThis = null
                        } // end if
-
+*/
     
 
     return (

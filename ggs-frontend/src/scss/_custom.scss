@@ -168,11 +168,32 @@ z-index: 20;
                               }
 
 
+// ------- styles to do with the challengesNearMe page -------  -------  ------- 
 
+.challengesNearMeOuterContainerShow{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+opacity: 1;  
+z-index: 100;
+                                    }
 
+.challengesNearMeOuterContainerHide{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+opacity: 0;  
+z-index: -100;
+                                    }
 
-
-
+// To position the close button 
+// in the Error modal for the 
+// Challenges near me page:
+.positionModalCloseButton{
+position: absolute;
+bottom: 40px;
+right: 65px;
+                          }
 
 
 
@@ -181,12 +202,12 @@ z-index: 20;
 
 // The all-encompassing div:
 .leaderboardPageOuterContainer{
- 
+  position: absolute;
+  left: 0px;
+  top: 0px; 
 
    height: 100vh;
    width: 100vw;
- 
- position: fixed;
  
  border-style: solid;
  border-color: $browniesLightBlue;
@@ -947,8 +968,10 @@ tr {
 /* -------- styles for the completed-challenges page -------------- */ 
 .completedPageOuterContainer{
 
-  display: block;
-  position: relative;
+
+  position: absolute;
+  left: 0px;
+  top: 0px;
   
   height: 90vh;
   width: 100vw;
@@ -1297,6 +1320,10 @@ top: -55px;
 // Styles for the user guide page
 
 .userGuidePageOuterContainer{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+
 height: 90vh;
 width: 100vw;
 
@@ -1343,6 +1370,10 @@ margin-bottom: 10px;
 
 // For the all-enclosing div:
 .howToPageOuterContainer{
+  position: absolute;
+  left: 0px;
+  top: 0px;
+
   height: 90vh;
   width: 100vw;
   
@@ -2279,11 +2310,13 @@ margin: 0px;
 
 // The all-encompassing div:
 .FormLinkPageOuterContainer{
- 
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  
+
   height: 100vh;
   width: 100vw;
-
-position: fixed;
 
 border-style: solid;
 border-color: $browniesLightBlue;
