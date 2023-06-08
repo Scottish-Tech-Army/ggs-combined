@@ -316,7 +316,11 @@ if (isEmailValid && isUnitNameValid && isCountyValid) {
 
 
 // A function to Validate the email input of 
-// the registration screen or the login screen: 
+// the registration screen or the login screen.
+// This simply tests whether the email typed by the
+// user takes the form preceding@succeeding, where
+// 'preceeding' and 'succeeding' can be any text
+// at all: 
 function validateEmailInput(){
 let validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 if (email.match(validEmailRegex)) {
@@ -364,6 +368,12 @@ return false
   const handleLogin = (event) => {
     event.preventDefault(); // This line stops the modal window from
                             // vanishing even when the email address is invalid.
+    // The following line is necessary to clear a 
+    // previous error message that showed after a 404 type error:
+    setError(false)
+    // The following line is necessary to ensure that a 
+    // previously showing invalid email error message is removed:      
+    setShowLoginEmailErrMess(false)
     // Only send the form data (an email address) to the back end 
     // if it passes validation:
     if (validateLoginInput()) {
@@ -451,7 +461,7 @@ newRegister(email, name, county)
           "Email address not found. If this is your first visit, please register first."
         );
       } else {
-        setError("Problem logging in. Please try again.");
+        setError("There was a problem in the log-in process. Please try again.");
       }
     });
         
@@ -481,14 +491,14 @@ newRegister(email, name, county)
     >
       <Modal.Header className="border-0 mb-n3"></Modal.Header>
       <Modal.Body className="mt-n3">
-        {/* if the user tapped the Login button, state property state
+        {/* jsx follows for th elogin screen. If the user tapped the Login button, state property state
          has value "login", so show the login screen only: */}
         {state === LOGIN && (
           <>
             <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Ready to explore?</h1>
             {/* The messsage that shows when there's a login error: */}
-            {error && <p className="error-text text-center mt-n3">{error}</p>} 
-             {/* if user typed an invalid email, the following error message shows: */}
+            {error && <p style={{position: "relative", top: "-30px", color: "red", fontStyle: "italic"}} className="error-text text-center mt-n3">{error}</p>} 
+             {/* if user typed an invalid email (eg "xxxxx@"), the following error message shows: */}
              {showLoginEmailErrMess &&  
               <p style={{position: "relative", top: "-30px", color: "red", fontStyle: "italic"}} className="registerErrorMessage">Please type a valid email address</p>
               }
