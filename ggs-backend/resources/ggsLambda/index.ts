@@ -1,10 +1,6 @@
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
-import {
-  ScanCommand,
-  GetItemCommand,
-  PutItemCommand,
-} from "@aws-sdk/client-dynamodb";
+import { ScanCommand, GetItemCommand, PutItemCommand, } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { dynamodbClient } from "./aws";
 import { APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
