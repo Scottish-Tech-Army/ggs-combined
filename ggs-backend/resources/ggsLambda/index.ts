@@ -247,18 +247,9 @@ export const handler = async (
   }
 
   if (event.resource === "/unit/leaderboard") {
-    if (!event.body) {
-      return errorResponse(400, "Invalid request body");
-    }
-    let payload;
-    try {
-      payload = JSON.parse(event.body);
-    } catch (error) {
-      return errorResponse(400, "Invalid request body");
-    }
-    const unitId = payload.id;
+    const unitId = event.headers.ggsunit;
     if (!unitId) {
-      return errorResponse(400, "Missing unit identifier");
+      return errorResponse(400, "Request missing header: ggsunit");
     }
 
     const unit = await getUnit(unitId);
@@ -267,7 +258,7 @@ export const handler = async (
 
     /* 
      * Unit county is not guaranteed to be present. It is missing on units 
-     * registered before the county became compulsory when registering
+     * registered before the county became compulsory when registering a unit
      */
     const unitCounty = unit?.county;
 
