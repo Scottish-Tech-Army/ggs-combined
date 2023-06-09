@@ -43,12 +43,12 @@ jobs:
           cat <<EOF > config.json
           {
             "GGS-backend-test": {
-              "GGSClientApiEndpointFA6F00A7": "https://sn1z9e094a.execute-api.eu-west-2.amazonaws.com/test/",
-              "LocationPhotosbucket": "ggs-backend-test-ggstestlocationphotos114535ae-10b3porjwg3qs",
-              "ggstestlocationphotosURL": "https://d1roi0vswi5mjg.cloudfront.net",
-              "GGSclientAPIendpoint": "https://sn1z9e094a.execute-api.eu-west-2.amazonaws.com/test/",
-              "Locationstable": "GGS-backend-test-GGStestLocationsD72B343A-W4O7KTHNWMXW",
-              "Unitstable": "GGS-backend-test-GGStestUnitsF42C98E8-10FUT91G61DSU"
+              "GGSClientApiEndpointFA6F00A7": "https://xxxxxxxxxxxx.execute-api.eu-west-2.amazonaws.com/test/",
+              "LocationPhotosbucket": "xxxxxxxxxxxx-ggstestlocationphotosxxxxxxxxx",
+              "ggstestlocationphotosURL": "https://xxxxxxxxxxxxxx.cloudfront.net",
+              "GGSclientAPIendpoint": "https://xxxxxxxxxxxx.execute-api.eu-west-2.amazonaws.com/test/",
+              "Locationstable": "GGS-backend-test-GGStestLocationsxxxxxxxxxxxxxxx",
+              "Unitstable": "GGS-backend-test-GGStestUnitszzzxxxxxxxxxxxxxx"
             }
           }
           EOF
