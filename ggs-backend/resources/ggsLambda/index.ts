@@ -247,48 +247,50 @@ export const handler = async (
   }
 
   if (event.resource === "/unit/leaderboard") {
-    const locations = await getLocations();
-
-    const locationAreas: Record<string, string> = {};
-    const areaTotals: Record<string, number> = {};
-    locations.forEach((location) => {
-      const area = location.city
-        ? `${location.city}, ${location.county}`
-        : location.county;
-      const count = areaTotals[area] || 0;
-      areaTotals[area] = count + 1;
-
-      locationAreas[location.locationId] = area;
-    });
-
-    const areas = Object.keys(areaTotals);
-    const collectedTotals: Record<string, number> = {};
-    if (unit.locations) {
-      unit.locations.forEach((locationId) => {
-        const area = locationAreas[locationId];
-        if (area) {
-          const count = collectedTotals[area] || 0;
-          collectedTotals[area] = count + 1;
-        }
-      });
+    if (!event.body) {
+      return errorResponse(400, "Invalid request body");
+    }
+    let payload;
+    try {
+      payload = JSON.parse(event.body);
+    } catch (error) {
+      return errorResponse(400, "Invalid request body");
+    }
+    const unitId = payload.id;
+    if (!unitId) {
+      return errorResponse(400, "Missing unit identifier");
     }
 
-    const collectedPercentages = areas
-      .map((area) => ({
-        area,
-        percentageCollected: Math.round(
-          (100 * (collectedTotals[area] || 0)) / areaTotals[area]
-        ),
-      }))
-      .filter(({ percentageCollected }) => percentageCollected > 0);
+    const unit = await getUnit(unitId);
 
-    const dummyData = '[{"locationsTotalNumber": 24}, [{"location": "Thomas Muir Trail", "collected": "1 June 2023" }]]';
+    const allLocations = await getLocations();
+
+    /* 
+     * Unit county is not guaranteed to be present. It is missing on units 
+     * registered before the county became compulsory when registering
+     */
+    const unitCounty = unit?.county;
+
+    // Get all of the locations in the unit county
+    const locationsInCounty = allLocations.filter((location) => {
+      location.county === unitCounty
+    });
+
+    // Date location is collected is not yet recorded by the backend
+    const locationsCollected = unit?.locations
+      .map((locationName) => ({
+        location: locationName, collected: '1 June 2023' 
+      }));
+
+    const collectedLocations = { 
+      totalLocations: locationsInCounty.length, 
+      locations: locationsCollected 
+    };
 
     return {
       headers,
       statusCode: 200,
-//      body: JSON.stringify(dummyData),
-      body: dummyData,
+      body: JSON.stringify(collectedLocations),
     };
   }
 
