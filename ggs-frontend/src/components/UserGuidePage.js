@@ -37,11 +37,10 @@ renderThis = (
 <div>
 <p className="userGuidePageSectionHeader">Plan a Route </p>
 <p className="userGuidePageBodyText">
-To help you plan a route, open ‘Challenges near me’ to open a map and click ‘Go’. 
-The app will zoom in on your current location.
+To help you plan a route, tap <span className="userGuidePagePageNames">Challenges near me</span> to open a map of your location. You'll see markers on the map that show you where the challenges lie.
 <br></br>
 <br></br>
-Move around the map to find challenges near you. These are indicated by a blue marker on the map. 
+Move around the map to find challenges near you. 
 </p>
 </div>
 
@@ -55,22 +54,24 @@ Click on a blue marker to read more information about the site.
 </div>
 
 <div>
+<br></br>
     <p className="userGuidePageSectionHeader">Complete a Challenge</p>
 <p className="userGuidePageBodyText">
 Head to the first challenge on your planned route. 
 <br></br>
 <br></br>
-When you are within 20 meters of the challenge, it will be collected automatically, and you will be able to reveal the challenge. 
+When you are within 20 metres of the challenge the app will collect the location automatically, and you will be able to reveal the challenge. 
 <br></br>
 <br></br>
-If you are not close enough, you will be asked to move closer to the challenge location. 
+If you are not close enough you will be asked to move closer to the challenge location. 
 </p>
+<br></br>
 <p className="userGuidePageSectionHeader">Check Your Progress</p>
 <p className="userGuidePageBodyText">
-If a marker is pale blue it means you have completed the challenge. If it's dark blue it means you have yet to do so.
+If a marker is pale blue it means you have collected the location. If it's dark blue it means you have yet to do so.
 <br></br>
 <br></br>
-A unit's completed challenges will appear on the Completed Challenges page.
+A unit's completed challenges will appear on page <span className="userGuidePagePageNames">Completed challenges</span>.
 </p>
 
 
