@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 // Other components:
 import NavigationBar from "./NavigationBar.js";
@@ -37,25 +37,46 @@ const { unit } = useContext(authContext);
 // array of collected locations:
 const [complChallenges, setComplChallenges] = useState();
 
+
+// testArray
+let testArray = [
+  {area:"Watford, Hertfordshire", percentageCollected: 50}, 
+  {area:"Ealing, London", percentageCollected: 25}, 
+  {area:"Milton Keynes, Buckinghamshire", percentageCollected: 35}
+                ]
+
+
+
 // A function to get the leaderboard array
 const retrieveCompletedChallenges = () =>{
-  // console.log(`Inside retrieveCompletedChallenges. The data returned from the backend is ${getCompletedChallenges(unit.email)}`)
   // getCompletedChallenges(unit.email).then(setComplChallenges)
   // setComplChallenges(getCompletedChallenges(unit.email)) 
   // getCompletedChallenges(unit.email).then(result => {setComplChallenges(result) }) 
   getCompletedChallenges(unit.email).then(result => {makeTableRows(result) }) 
+  // getCompletedChallenges(unit.email).then(result => {console.log(`INside the useEffect in CompletedChallenges page and result is ${result}`) }) 
   // result above is an array containing objects, like this: [{area:"Watford, Hertfordshire", percentageCollected: 50}]
+  // makeTableRows(testArray)
                                          }
 
-
 /*
-The table is going to look like this:
+Fri7June23
+The current table looks like this
 
 Area       Percent collected
 Watford       50%
 London        25%
 Wigan         12%
+etc
+
+But the new table has to look like this:
+Location                 Date collected
+Thomas Muir Trail         6 June 23
+Glasgow Central Station   1 June 23
+etc
 */
+
+
+
 
 //-------UTILITY FUNCTIONs-------
 // A utility function to make a deep 
@@ -94,6 +115,13 @@ if (dataArray.length > 0) {
 
 
 
+useEffect(() => {
+  retrieveCompletedChallenges()
+  
+}, [isThisPageActive]); // so this useEffect runs every time the user visits this page
+
+
+
 
 
 
@@ -109,15 +137,15 @@ renderThis = (
 
 
 
-    {/*A button that the user clicks to show the completed challenges*/}
+    {/*A button that the user clicks to show the completed challenges
 <div className="largeButton1New positionButton" onClick={()=>{retrieveCompletedChallenges()}}>
   <p className="buttonOperable">Show completed challenges</p>
 </div>    
-
+*/}
 
 <div className="completedPageMainContainer" >
 
-<h1>My completed challenges</h1>
+<p className="pageHeader">My completed challenges</p>
 {/* Here this component uses the same CSS styles as <LeaderboardPage/> uses*/}
 <div className="leaderboardTableOutermostContainer">
 

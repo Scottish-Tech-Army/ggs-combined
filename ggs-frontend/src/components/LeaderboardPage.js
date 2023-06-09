@@ -127,7 +127,7 @@ if (isThisPageActive) {
     {/*  1):   */}
     <div className="leaderboardPageContainerOne">
         <div className="leaderBoardPageHeaderContainer">
-    <p className="leaderBoardPageHeader">Leaderboard</p>
+    <p className="pageHeader">Leaderboard</p>
     </div>
     </div>
     
