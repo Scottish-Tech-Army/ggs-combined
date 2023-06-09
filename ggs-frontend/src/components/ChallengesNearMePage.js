@@ -46,7 +46,10 @@ HOW THIS PAGE WORKS
 
 
 // Start app centred on Old College, Edinburgh
-const START_LOCATION = { latitude: 55.9472096, longitude: -3.1892527 };
+// const START_LOCATION = { latitude: 55.9472096, longitude: -3.1892527 };
+let START_LOCATION = { latitude: 55.9472096, longitude: -3.1892527 };
+
+
 
 const OPENSTREETMAP_MAPSTYLE = {
   version: 8,
@@ -88,7 +91,7 @@ export default function ChallengesNearMePage({
                                             {
 
 
-    // Mukund: Get the unit object from <AuthContext>:
+    // Get the unit object from <AuthContext>:
     const { unit } = useContext(authContext);
 
 
@@ -243,6 +246,25 @@ useEffect(() => {
 
 
 
+// The following line is necessary for when the browser's location 
+// services facility is off, which makes the error modal show. 
+// The modal's Close button sets showGeolocErrorModal to 
+// false, closes the modal and allows the user once again to click
+// on the home icon or icons in the plus menu. When the user goes 
+// to another page and comes back showGeolocErrorModal must be
+// true again to show the error modal. This useEffect makes that 
+// happen:
+useEffect(() => {
+  if (!isThisPageActive && !showGeolocErrorModal  ){
+    setShowGeolocErrorModal(true)
+                                                   } 
+                }, [isThisPageActive]); // this useEffect only runs when isThisPageActive changes
+
+
+
+
+
+
 
 // state property to hold the lat and long
 // coords of the user.
@@ -263,18 +285,21 @@ useEffect(() => {
   };
 
   function success(position) {
-    positionCoords.current = position.coords
+    // positionCoords.current = position.coords
+    setShowGeolocErrorModal(false)
+    setLocationServicesOffFlag(false)
+    START_LOCATION = { latitude: position.coords.latitude, longitude: position.coords.longitude }
         // setUserLatLong(position.coords);
         // console.log(`In the success function. positionCoords.current.latitude is ${positionCoords.current.latitude} and mapRef.current is ${mapRef.current}`)
 
     // mapRef.current &&
-    
+    /*
       mapRef.current.flyTo({
         // center: [position.coords.longitude, position.coords.latitude],
          center: [positionCoords.current.longitude, positionCoords.current.latitude],
         duration: 2000,
       });
-
+      */
     
                               }
 
@@ -285,21 +310,25 @@ useEffect(() => {
          console.warn("User denied the request for Geolocation.");
          setShowGeolocErrorModal(true)
          setLocationServicesOffFlag(true)
+         START_LOCATION = { latitude: 55.9472096, longitude: -3.1892527 } // Edinburgh
         break;
       case error.POSITION_UNAVAILABLE:
          console.warn("Location information is unavailable.");
          setShowGeolocErrorModal(true)
          setLocationServicesOffFlag(true)
+         START_LOCATION = { latitude: 55.9472096, longitude: -3.1892527 } // Edinburgh
         break;
       case error.TIMEOUT:
          console.warn("The request to get user location timed out.");
          setShowGeolocErrorModal(true)
          setLocationServicesOffFlag(true)
+         START_LOCATION = { latitude: 55.9472096, longitude: -3.1892527 } // Edinburgh
         break;
       default:
          console.error("An unknown error occurred.", error);
          setShowGeolocErrorModal(true)
          setLocationServicesOffFlag(true)
+         START_LOCATION = { latitude: 55.9472096, longitude: -3.1892527 } // Edinburgh
         break;
     }
   }
@@ -371,7 +400,7 @@ let renderTheMapAndStuff
 // depending on the value of prop 
 // isThisPageActive:
 
-// if (isThisPageActive) {
+if (isThisPageActive) {
 
   
 // If parent component <Home/> has set this 
@@ -392,7 +421,7 @@ if (isBrowserLocationServicesSet()){
 
 // renderTheMapAndStuff = (
   renderThis = (
-<div className={isThisPageActive ? "challengesNearMeOuterContainerShow" : "challengesNearMeOuterContainerHide"}>
+<div className="challengesNearMeOuterContainerShow">
 
 
 {/* The button that reads "Click for your map".
@@ -415,8 +444,11 @@ true again to show the error modal: */}
 {/* 
 {(!isThisPageActive && !showGeolocErrorModal) ? (setShowGeolocErrorModal(true)) : (setShowGeolocErrorModal(false))}
 */}
-
+{/* 
 {(!isThisPageActive && !showGeolocErrorModal) ? (setShowGeolocErrorModal(true)) : null}
+*/}
+
+
 
 {(isThisPageActive && showGeolocErrorModal && locationServicesOffFlag) ? showModal : <></>}
 
@@ -470,17 +502,17 @@ true again to show the error modal: */}
 </div>
              ) 
                           
-//                      } // end if (isThisPageActive)
+                      } // end if (isThisPageActive)
 
 
-/*
+
 // If parent component <Home/> 
 // has set prop isThisPageActive to  
 // false, don't render anything:
 if (!isThisPageActive) {
     renderThis = null
                        } // end if
-*/
+/**/
     
 
     return (
