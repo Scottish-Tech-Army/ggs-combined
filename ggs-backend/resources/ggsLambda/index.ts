@@ -282,10 +282,13 @@ export const handler = async (
       }))
       .filter(({ percentageCollected }) => percentageCollected > 0);
 
+    const dummyData = '[{"locationsTotalNumber": 24}, [{"location": "Thomas Muir Trail", "collected": "1 June 2023" }]]';
+
     return {
       headers,
       statusCode: 200,
-      body: JSON.stringify(collectedPercentages),
+//      body: JSON.stringify(dummyData),
+      body: dummyData,
     };
   }
 
