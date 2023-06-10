@@ -189,6 +189,42 @@ z-index: 20;
 
 // ------- styles to do with the challengesNearMe page -------  -------  ------- 
 
+// For the div that contains the <p>s
+// tha t make up the "Congratulations! ..."
+// message:
+.congratsTextContainer{
+text-align: center;
+width: fit-content;
+height: fit-content;
+                      }
+
+// Two styles for the parts of the "Congratulations! ..." text
+// in the <LocationModal?/>.
+// First the headline:  
+.congratsTextHeadline{
+  font-family: 'Poppins';
+  font-style: italic;
+  font-weight: 300;
+  font-size: 28px;
+  line-height: 29px;
+  color: $girlGuidingLightBlue
+                    }
+
+// Then the smaller text:  
+.congratsTextSmall{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 17px;
+  color: $girlGuidingLightBlue
+                    }
+
+
+
+
+
+
 .challengesNearMeOuterContainerShow{
   position: absolute;
   left: 0px;

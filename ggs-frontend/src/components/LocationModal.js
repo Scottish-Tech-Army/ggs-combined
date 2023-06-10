@@ -84,11 +84,11 @@ const LocationModal = ({
 
 // set a variable to the jsx for the "Congratulations! ... " text:
 let congratsMessage = (   
-<> 
-<h1>Congratulations!</h1>
-  <div>
-    <p>You have collected this location:</p>
-  </div>
+<>
+<div className="congratsTextContainer"> 
+<p className="congratsTextHeadline">Congratulations!</p>
+<p className="congratsTextSmall">You have collected this location:</p><br></br><br></br>
+</div>
 </>
                    )
 
