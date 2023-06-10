@@ -2,3 +2,4 @@
 cdk.out
 
 ./ggs-frontend/env.local
+./ggs-frontend/src/components/roughWorkings.js
