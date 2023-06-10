@@ -109,7 +109,7 @@ const [showGeolocErrorModal, setShowGeolocErrorModal] = useState(false);
 // A boolean state property. Code changes this
 // so that the error modal shows (eg when the 
 // user has blocked location services) or does 
-// not:
+// not show:
 const [locationServicesOffFlag, setLocationServicesOffFlag] = useState(false);
 
 
@@ -137,7 +137,7 @@ const positionCoords = useRef()
 // <GeolocErrorModal> as props 
 // that makes the modal go away.
 // This function must:
-// 1) set to false  
+// 1) set showGeolocErrorModal to false  
 function handleClose(){
 // 1):
   setShowGeolocErrorModal(false)
@@ -178,6 +178,7 @@ setShowGeolocErrorModal(true)
                               }
 */
 
+/*
 const runFlyToOnce = () =>{
 // 1):       
 // if (userLatLong !== undefined) {
@@ -192,11 +193,11 @@ const runFlyToOnce = () =>{
                                 setShowGeolocErrorModal(true)
                                        }
                           }
+*/
 
 
 
-
-
+/*OLD CODE -- REMOVE EVENTUALLY
 // This function gets called from inside the 
 // conditional logic that shows this page or not.
 // This function must:
@@ -215,7 +216,7 @@ function isBrowserLocationServicesSet () {
 // 2):
     return false                               
                                          }
-
+*/
                                         
 
 
@@ -233,10 +234,10 @@ useEffect(() => {
     // locations is a state property that is an array 
     
     getLocations(unit.email).then(setLocations);
-    // 30 Mar23: Mukund added the following two lines for testing only:
+    
     let locationsData = JSON.stringify(locations)
     // console.log(`Inside useEffect inside <ChallengesNearMe/> and locations is: ` + locationsData)
-    console.log(`Inside useEffect inside unit.email is: ${unit.email}`)
+   // console.log(`Inside useEffect inside unit.email is: ${unit.email}`)
   } else {
     // setShowLogin(true);
   }
@@ -258,7 +259,8 @@ useEffect(() => {
   if (!isThisPageActive && !showGeolocErrorModal  ){
     setShowGeolocErrorModal(true)
                                                    } 
-                }, [isThisPageActive]); // this useEffect only runs when isThisPageActive changes
+                }, [isThisPageActive]); // this useEffect only runs when isThisPageActive changes,
+                                        // ie every time the user leaves and comes back to this page.  
 
 
 
@@ -338,7 +340,7 @@ useEffect(() => {
 // 3):
   // runFlyToOnce()
 
-}, []); // When 2nd arg is empty array -> run this useEffect() only once, after the first 
+}, []); // this useEffect() runs only once, after the first 
 // render of the component (ie the execution of the component function)
 
 
@@ -360,6 +362,13 @@ useEffect(() => {
 }, [locations, unit, loadingTimer]);
 
 
+
+
+
+
+
+
+
 // Retrieve modal data for selected pin
 const [selectedLocation, setSelectedLocation] = useState();
 
@@ -378,7 +387,9 @@ console.log(
 // ------------------- Now the actual rendering -------------------
 
 
-
+// a var to hold the jsx for the modal that 
+// shows if the user's browser does not have
+// location services turned on:
 let showModal = < GeolocErrorModal 
 errorMessage = {
 `This app cannot tell where you are. Change 
@@ -389,12 +400,11 @@ handleClose =  {handleClose}
                 />
 
 
-// Define the variable whose value 
+// Declare the variable whose value 
 // will be either 
 // i)  a load of JSX that describes the page
 // ii) null 
 let renderThis
-let renderTheMapAndStuff
 
 // Now conditionally set renderThis 
 // depending on the value of prop 
@@ -406,50 +416,16 @@ if (isThisPageActive) {
 // If parent component <Home/> has set this 
 // component's prop isThisPageActive to 
 // true, render the ChallengesNearMe page:
-// renderThis = renderTheMapAndStuff
 
-/*
-// Determine whether the user has set her browser to
-// allow location services and render accordingly:
-if (isBrowserLocationServicesSet()){    
-  renderThis = renderTheMapAndStuff
-  
-                                   } else {
-  renderThis = showModal
-                                          }
-*/
 
-// renderTheMapAndStuff = (
   renderThis = (
 <div className="challengesNearMeOuterContainerShow">
-
-
-{/* The button that reads "Click for your map".
-This is now no longer necessary.
-Remove eventally:
-
-<GGSbuttonOne
- buttonDivCSSclass = {"largeButton1New positionButton"}
- pTextCSSclass = {"buttonOperable"}
- clickHandler = {()=>{runFlyToOnce()}}
- pText = {"Tap here for your map"}
-/>
-*/}
 
 {/*The following line is necessary because the modal's Close button sets 
 showGeolocErrorModal to false, closing the modal and allowing the user
 once again to click on the home icon or icons in the plus menu. When the
 user goes to another page and comes back showGeolocErrorModal must be
 true again to show the error modal: */}
-{/* 
-{(!isThisPageActive && !showGeolocErrorModal) ? (setShowGeolocErrorModal(true)) : (setShowGeolocErrorModal(false))}
-*/}
-{/* 
-{(!isThisPageActive && !showGeolocErrorModal) ? (setShowGeolocErrorModal(true)) : null}
-*/}
-
-
-
 {(isThisPageActive && showGeolocErrorModal && locationServicesOffFlag) ? showModal : <></>}
 
   <div

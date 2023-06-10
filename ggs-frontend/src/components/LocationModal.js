@@ -62,7 +62,8 @@ const LocationModal = ({
   };
 
   // Mukund: Set a variable to the object that is in array photos 
-  // of object selectedLocation (location). array photos looks like this:
+  // of object selectedLocation. array photos looks like this
+  // (it contains only one object):
   // [{url:  "https://dz1ex1yb0vxyz.cloudfront.net/dunbartonshire-bearsden-thegruffalotrail.jpg"}]
     const photo = selectedLocation.photos[0];
 
