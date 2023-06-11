@@ -2691,21 +2691,46 @@ p {
   color: $secondary;
 }
 
-.place-name {
-  color: $primary;
+// For the div that contains the 
+// <p> that is the text for the 
+// place name:
+.place-name-container {
   font-weight: bold;
-  font-size: x-large;
   text-align: center;
   margin-bottom: 0.1rem;
 }
 
-.city-name {
-  color: $primary;
-  font-weight: bold;
-  font-size: large;
+
+// For the <p> of the text for the
+// name of the location:
+.place-name-text{
+  color: $girlGuidingLightBlue;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 31px;
+                }
+
+// For the div that contains the 
+// <p> that is the text for the 
+// city name:
+.city-name-container {
   text-align: center;
   margin-bottom: 0.5rem;
-}
+                     } 
+
+
+// For the <p> of the text for the
+// name of the location:
+.city-name-text {
+  color: $browniesBlue;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 21px;
+               }
 
 .modal-body .scroll-container {
   display: flex;
@@ -2718,28 +2743,76 @@ p {
   overflow-y: auto;
 }
 
-.description {
+
+
+
+
+// For the <div> that contains 
+// the <p> that is the text that 
+// describes the location (in 
+// <LocationModal/>:
+.description-container {
   margin: 1rem 0;
 }
 
-.challenge {
-  border: 4px $primary solid;
+// For the <p> that is the text that 
+// describes the location (in 
+// <LocationModal/>:
+.description-text {
+  color: black;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 16px;
+}
+
+
+// The div that has a border and that 
+// contains the challenge header 
+// (which reads "Challenge")
+// and challenge description:
+.challenge-container {
+  border: 4px $girlGuidingLightBlue solid;
+  border-radius: 8px;
   padding: 10px;
   display: flex;
   flex-direction: column;
 }
 
-.challenge h2 {
-  color: $primary;
-  font-weight: bold;
-  font-size: x-large;
+// The challenge header 
+// (which reads "Challenge"):
+.challenge-container h2 {
+  color: $girlGuidingLightBlue;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 25px;
+  line-height: 26px;  
   text-align: center;
-  margin-bottom: 20px;
-}
+  margin-bottom: 10px;
+                        }
 
-.challenge .content {
+// For the <div> that contains the 
+// <p> that is the text that describes
+// the challenge:
+.challenge-content-container {
   text-align: center;
-}
+  overflow-y: scroll;
+                             }
+
+// For <p> that is the text 
+// that describes the challenge:
+.challenge-content-text{
+  font-family: 'Poppins';
+  font-style: italic;
+  font-weight: 200;
+  font-size: 15px;
+  line-height: 16px;  
+                       }
+
+
+
 
 $enable-negative-margins: true;
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";

@@ -225,18 +225,26 @@ let congratsMessage = (
         {/*If the user has clicked the button that reads "Tap to reveal challenge"
         show the "Congratulations! ... " message: */} 
       {showCongrats ? congratsMessage : null} 
-        <div className="place-name">{selectedLocation.name}</div>
-        <div className="city-name">{areaName}</div>
+        <div className="place-name-container">
+          <p className="place-name-text">{selectedLocation.name}</p>
+          </div>
+        <div className="city-name-container">
+          <p className="city-name-text">{areaName}</p>
+          </div>
         <div className="scroll-container">
           <div className="scroll">
             {getPhoto(photo)}
-            <div className="description">{selectedLocation.description}</div>
-            {selectedLocation.collected && (
-              <div className="challenge">
-                <h2>Challenge</h2>
-                <div className="content">{selectedLocation.challenge}</div>
+            <div className="description-container">
+              <p className="description-text">{selectedLocation.description}</p>
               </div>
-            )}
+            {selectedLocation.collected && (
+              <div className="challenge-container">
+              <h2>Challenge</h2>
+                <div className="challenge-content-container">
+                <p className="challenge-content-text">{selectedLocation.challenge}</p>
+                </div>
+              </div>
+                                            )}
           </div>
         </div>
       </Modal.Body>
