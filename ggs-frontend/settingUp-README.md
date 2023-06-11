@@ -549,7 +549,108 @@ This page employs `<ReactMapGL/>` to provide the maps.<br>
 The markers are dark blue and fully opaque if the user has still to collect that location. A marker becomes more see-through after the user has collected that location.<br><br><br>
 
 B) child `<LocationModal/>`<br>
-`<ChallengesNearMePage/>` conditionally renders `<LocationModal/>`, which pops up when the user clicks on an opaque blue marker. <LocationModal/> contains an image and information about the location/point of interest.<br><br><br><br>
+`<ChallengesNearMePage/>` conditionally renders `<LocationModal/>`, which pops up when the user clicks on an opaque blue marker. <LocationModal/> contains an image and information about the location/point of interest.<br>
+
+`<ChallengesNearMePage/>` has a state property called selectedLocation.<br>
+`<ChallengesNearMePage/>` passes setSelectedLocation in to `<Markers/>`, a coder-made component.<br>
+`<ChallengesNearMePage/>` also has state property locations, which it passes in to `<Markers/>`.<br>
+`<ChallengesNearMePage/>` gets locations from the backend (via getLocations() of services/locations.js).<br>
+locations is an array of objects (see below), each representing one location and having many properties, such as latitude and longitude.<br>
+`<Markers/>` uses the map() function on array locations to create a `<Marker/>` for each member of locations (called a location in map()). There are 486 locations, so `<Markers/>` makes that many `<Marker/>`s.<br>
+`<Marker/>` is a built-in `<ReactMapGL/>` component.<br>
+The onClick handler of each `<Marker/>` is set to the passed-in prop setSelectedLocation, which is given the argument location. So if the user clicks on a marker `<ChallengesNearMePage/>`’s selectedLocation state property is set to a member object of the locations array, that member representing a particular location.<br>
+`<ChallengesNearMePage/>` will now render `<LocationModal/>` because selectedLocation is truthy:<br>
+`{selectedLocation && (`<br>
+        `<LocationModal`<br>
+          `handleCloseLocation={() => setSelectedLocation(undefined)}`<br>
+          `selectedLocation={selectedLocation}`<br>
+          `setLocations={setLocations}`<br>
+          `userLatLong={userLatLong}`<br>
+        `/>`<br>
+      `)}`<br>
+ie the user clicks a blue `<Marker/>`, which causes `<ChallengesNearMePage/>` to set selectedLocation, which becomes truthy, so `<ChallengesNearMePage/>` renders `<LocationModal/>`.<br>
+
+`<LocationModal/>` continually gets the user’s lat and long because `<ChallengesNearMePage/>` invokes `<ReactMapGL/>`, which has built-in component `<GeolocateControl/>`, which 
+gets set tin this way:<br>
+`<GeolocateControl
+          style={geolocateControlStyle}
+          positionOptions={{ enableHighAccuracy: true }}
+          trackUserLocation={true}
+          showUserHeading={true}
+          onGeolocate={({ coords }) => setUserLatLong(coords)}
+          auto
+        />`<br>
+
+A combination of  `<GeolocateControl/>`’s props trackUserLocation={true} and onGeolocate means that component continually gets the latitude and longitude of the user’s mobile and sets `<ChallengesNearMePage/>`’s state property userLatLong to those values, which `<ChallengesNearMePage/>` passes in to `<LocationModal/>`. <br>
+
+So if `<ChallengesNearMePage/>`’s selectedLocation changes (because the user has clicked on a new marker) `<LocationModal/>` knows about it.<br>
+Also if `<ChallengesNearMePage/>`’s userLatLong changes (which it continually will as the user moves) `<LocationModal/>` knows about it.<br>
+
+A useEffect in `<LocationModal/>` fires whenever passed-in props selectedLocation and userLatLong change. <br>
+This useEffect sets `<LocationModal/>`’s isOutOfRange state property (a boolean) by passing selectedLocation and userLatLong to `<LocationModal/>`’s function isLocationInRange(), which simply looks at the lat and long of the user’s position and compares them to the lat and long of object selectedLocation and returns true/false.<br>
+selectedLocation also has property collected, a boolean. <br>
+
+Code continually sets `<LocationModal/>` state property isOutOfRange 
+to true or false as the user moves and as the user clicks a new marker.<br>
+
+
+
+
+`<ChallengesNearMePage/>` passes selectedLocation in to `<LocationModal/>`<br>
+
+
+`<ChallengesNearMePage/>` has a useEffect that runs when unit changes. unit is an object made availavble to this component via context from <AuthProvider/>. <br>
+This useEffect does this to get from the backend an array that contains ALL of the locations (all 486 of them):<br>
+`getLocations(unit.email).then(setLocations)`<br>
+`getLocations` comes from `services/locations.js`.<br>
+So state property locations gets set to this array (only three member objects shown below, in json format):<br>
+   
+`[
+{
+"city":"Bearsden",
+"photos":[{"url":"https://dz1ex1yb0vxyz.cloudfront.net/dunbartonshire-bearsden-thegruffalotrail.jpg"}],
+"challenge":"Get a selfie with all the difference statues!",
+"county":"Dunbartonshire",
+"longitude":-4.32026,
+"locationId":"dunbartonshire-bearsden-thegruffalotrail",
+"region":"Dunbartonshire",
+"description":"The Gruffalo short trail has sculptures and uses boards showing selected extracts from the Scots version of the famous book to link the story to the setting of this special corner of the Woodland Garden. There's also a Fairy Trail in the lower part of the Woodland to explore.",
+"latitude":55.92769,
+"name":"The Gruffalo Trail"
+},
+
+{
+"city":"Fochabers",
+"photos":[{"attribution":"GeographBot","copyright":"CC BY-SA 2.0","originalUrl":"https://commons.wikimedia.org/wiki/File:Fochabers_Folk_Museum_-_geograph.org.uk_-_199959.jpg","url":"https://dz1ex1yb0vxyz.cloudfront.net/Fochabers_Folk_Museum_-_geograph.org.uk_-_199959.jpg"}],
+"challenge":"Check out the dressing up box inside and take a pic of your outfit!",
+"county":"Moray",
+"longitude":-3.093579,
+"locationId":"moray-fochabers-fochabersfolkmuseumheritage",
+"region":"Moray (Speyside, Keith, Buckie)",
+"description":"Has an eclectic array of everyday objects showing the way of life of the people in the NE 18th 19th Century",
+"latitude":57.613259,
+"name":"Fochabers Folk Museum & Heritage"
+},
+
+{
+"city":"Stirling",
+"photos":[{"url":"https://dz1ex1yb0vxyz.cloudfront.net/forthvalley-stirling-bannockburnguidehut.jpg"}],
+"challenge":"See if you can spot any other members nearby!",
+"county":"Forth Valley",
+"longitude":-3.90946529756569,
+"locationId":
+"forthvalley-stirling-bannockburnguidehut",
+"region":"Forth Valley",
+"description":"A local guiding headquarters for units in the community to meet! Bannockburn guide hut is over 100 years old and underwent an extensive 2 year programme of refurbishment before reopening to guiding and community groups in 2015.",
+"latitude":56.0898440804915,
+"name":"Bannockburn Guide Hut"
+}
+
+... // plus 483 more!
+
+]`
+
+<br><br><br><br>
 
 
 
