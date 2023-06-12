@@ -11,9 +11,15 @@ import { APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
  */
 type GGSCollected = {
   locationId: string;
+  /* Date is in ISO 8601 format i.e. YYYY-MM-DD (2023-06-05).
+   * See: https://en.wikipedia.org/wiki/ISO_8601 for further details.
+   */
   collectedAt: string;
 };
 
+/**
+ * Unit data including locations captured by the unit to date.
+ */
 type GGSUnit = {
   unitId: string;       // Email
   name: string;
@@ -26,6 +32,10 @@ type GGSUnit = {
   locations: Array<string | GGSCollected>;
 };
 
+/**
+ * Locations that may be captured by the units during their treasure hunting 
+ * expeditions.
+ */
 type GGSLocation = {
   locationId: string;
   city?: string;
@@ -241,8 +251,8 @@ export const handler = async (
     if (!location) {
       return errorResponse(404, "location not found: " + locationId);
     }
-
-    if (unit.locations && unit.locations.includes(locationId)) {
+    
+    if (unit.locations && isLocationPresent(unit.locations, locationId)) {
       console.warn(
         `Unit ${unitName} has already collected location ${locationId}`
       );
@@ -250,9 +260,14 @@ export const handler = async (
       console.log(`Updating unit ${unitName}`);
 
       if (!unit.locations) {
-        unit.locations = [];
+        unit.locations = Array<string | GGSCollected>();
       }
-      unit.locations.push(locationId);
+      const dateAsIso8601 = formatDateAsIso8601(new Date());
+      const collected: GGSCollected = {
+        locationId: locationId,
+        collectedAt: dateAsIso8601
+      };
+      unit.locations.push(collected);
       await updateUnit(unit);
       console.log(`Unit ${unitName} has collected location ${locationId}`);
     }
@@ -303,6 +318,11 @@ export const handler = async (
   };
 };
 
+/**
+ * Convert to GGSCollected type instance.
+ * @param collected string or GGSCollected type
+ * @returns a GGSCollected with appropriate data
+ */
 function convertToCollected(collected: string | GGSCollected): GGSCollected {
   if (typeof collected === 'string') {
     // Old style location collected. string is location identifier
@@ -314,4 +334,32 @@ function convertToCollected(collected: string | GGSCollected): GGSCollected {
     // Nothing to convert. Collected is in the format required already
     return collected;
   }
+}
+
+/**
+ * Convert date to a ISO 8601 date format e.g. 2023-06-05.
+ * @param date Date object
+ * @returns string with ISO 8601 formatted date
+ */
+function formatDateAsIso8601(date: Date): string {
+  return `${ date.getFullYear() }-${ date.getMonth() }-${ date.getDay() }`;
+}
+
+/**
+ * Find locationId in collected array.
+ * @param allCollected all collected locations array
+ * @param locationId location identifier to find
+ * @returns true if the location identifier is found, false if the location identifier is not found
+ */
+function isLocationPresent(allCollected: Array<string | GGSCollected>, locationId: string): boolean {
+  return allCollected.find((collected) => {
+      if (typeof collected === 'string') {
+        // Collected records were just recorded as the location identifier
+        return collected === locationId;
+      } else {
+        // Now a GGSCollected type is recorded with the location identifier as well as recorded date
+        const x: GGSCollected = collected;
+        return x.locationId === locationId;
+      }
+  }) != undefined;
 }
