@@ -231,11 +231,12 @@ const [locations, setLocations] = useState([]);
 useEffect(() => {
   if (unit) {
 
-    // locations is a state property that is an array 
-    
+    // State property locations is an array 
+    // that contains 486 objects, each 
+    // representing a location: 
     getLocations(unit.email).then(setLocations);
     
-    let locationsData = JSON.stringify(locations)
+    // let locationsData = JSON.stringify(locations)
     // console.log(`Inside useEffect inside <ChallengesNearMe/> and locations is: ` + locationsData)
    // console.log(`Inside useEffect inside unit.email is: ${unit.email}`)
   } else {
@@ -290,9 +291,11 @@ useEffect(() => {
     // positionCoords.current = position.coords
     setShowGeolocErrorModal(false)
     setLocationServicesOffFlag(false)
+    // When the component for this page first runs 
+    // START_LOCATION must contain the lat and long of
+    // the user's position: 
     START_LOCATION = { latitude: position.coords.latitude, longitude: position.coords.longitude }
-        // setUserLatLong(position.coords);
-        // console.log(`In the success function. positionCoords.current.latitude is ${positionCoords.current.latitude} and mapRef.current is ${mapRef.current}`)
+    console.log(`***In success fn. Your latitude and longitude are: ${START_LOCATION.latitude} and ${START_LOCATION.longitude}`)
 
     // mapRef.current &&
     /*
@@ -365,12 +368,16 @@ useEffect(() => {
 
 
 
-
-
-
-
-// Retrieve modal data for selected pin
+// The onClick handler for each <Marker/> sets this state property
+// to an object that represents the location that that <Marker/> 
+// represents. The object has various properties, including latitude 
+// and longitude. :
 const [selectedLocation, setSelectedLocation] = useState();
+
+
+
+
+
 
 const mapboxAccessToken = process.env.REACT_APP_MAPBOX_ACCESS_TOKEN;
 const mapStyle = mapboxAccessToken ? MAPBOX_MAPSTYLE : OPENSTREETMAP_MAPSTYLE;
@@ -444,6 +451,9 @@ true again to show the error modal: */}
         mapStyle={mapStyle}
         mapboxAccessToken={mapboxAccessToken}
       >
+        {/* Pass in to <Markers/> two things: 1) the array containing all 486 objects 
+        that represent the locations and 2) the function that sets state property
+        selectedLocation:*/}
         <Markers
           locations={locations}
           setSelectedLocation={setSelectedLocation}
@@ -458,6 +468,9 @@ true again to show the error modal: */}
           auto
         />
 </ReactMapGL>
+{/* Only show the location modal when selectedLocation is truthy, 
+ie when it contains an object representing a location (which 
+it will when the user clicks a <Marker/>:*/}
       {selectedLocation && (
         <LocationModal
           handleCloseLocation={() => setSelectedLocation(undefined)}
@@ -470,7 +483,7 @@ true again to show the error modal: */}
 
 
 {/* The navigation bar at the bottom of the page,
- which includes the home button and plus button)*/}
+ which includes the home button and plus button): */}
 <NavigationBar iconsObject = {bigIconsObject.p2}/>
 
 

@@ -56,12 +56,13 @@ const LocationModal = ({
     collectLocation(unit.email, selectedLocation.locationId)
       .then((response) => {
         if (response.ok) {
-          // Update the frontend locations with the 
-          // collected marker to match the backend status.
-          // The following function simply sets to true the 
-          // collected property of the object (a member of 
-          // array locations) that corresponds to
-          // the location in question: 
+          // Update the frontend array locations 
+          // (in <ChallengesNearMePage/>) so that the 
+          // object in it that corresponds to the location
+          // whose <Marker/> the user has clicked on 
+          // gains new property collected with value true.
+          // This makes the frontend locations array match 
+          // the backend data:
           setLocations((locations) => {
             const index = locations.findIndex(
               (i) => i.locationId === selectedLocation.locationId
@@ -102,7 +103,9 @@ let congratsMessage = (
 
 
 
-// The following useEffect either 
+// The following useEffect runs when either 
+// either selectedLocation or userLatLong
+// change. It does one of two things:
 // 1) if location tracking is not on:
 //    sets the error message, 
 //    sets boolean state property isOutOfRange to true
@@ -113,13 +116,15 @@ let congratsMessage = (
 // userLatLong) or whenever the user clicks on a new marker
 // (which changes selectedLocation)
   useEffect(() => {
-    if (!userLatLong) { // 1):
+    // 1):
+    if (!userLatLong) { 
       setDeviceErrMsg("Please turn on location tracking");
       setIsOutOfRange(true);
-    } else {  // 2):
+      // 2):
+                      } else {  
       setIsOutOfRange(!isLocationInRange(selectedLocation, userLatLong));
-    }
-  }, [selectedLocation, userLatLong]);
+                             }
+                  }, [selectedLocation, userLatLong]);
 
   
   

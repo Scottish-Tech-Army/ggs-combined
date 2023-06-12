@@ -599,11 +599,10 @@ to true or false as the user moves and as the user clicks a new marker.<br>
 `<ChallengesNearMePage/>` passes selectedLocation in to `<LocationModal/>`<br>
 
 
-`<ChallengesNearMePage/>` has a useEffect that runs when unit changes. unit is an object made availavble to this component via context from <AuthProvider/>. <br>
-This useEffect does this to get from the backend an array that contains ALL of the locations (all 486 of them):<br>
+`<ChallengesNearMePage/>` has a useEffect that runs when unit changes. unit is an object made available to this component via context from <AuthProvider/>. <br>
+This useEffect invokes `getLocations()` (imported from `services/locations.js`) to get from the backend an array that contains ALL of the locations (all 486 of them!):<br>
 `getLocations(unit.email).then(setLocations)`<br>
-`getLocations` comes from `services/locations.js`.<br>
-So state property locations gets set to this array (only three member objects shown below, in json format):<br>
+So then state property locations ends up containing the following array (which only actually only shows three member objects in json form whereas the real array contains 486 objects in javascript form):<br>
    
 `[
 {

@@ -2,6 +2,9 @@ import { readConfig } from '../configReader.js';
 
 const BASE_URL = readConfig('GGSclientAPIendpoint');
 
+// This function demands from the backend 
+// an array containint 486 objects, each 
+// representing a location: 
 export function getLocations(email) {
   return fetch(BASE_URL + "locations", {
     method: "GET",
