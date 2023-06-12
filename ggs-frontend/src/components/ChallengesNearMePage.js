@@ -295,7 +295,7 @@ useEffect(() => {
     // START_LOCATION must contain the lat and long of
     // the user's position: 
     START_LOCATION = { latitude: position.coords.latitude, longitude: position.coords.longitude }
-    console.log(`***In success fn. Your latitude and longitude are: ${START_LOCATION.latitude} and ${START_LOCATION.longitude}`)
+    console.log(`***In success fn. Your browser says your lat and long are: ${START_LOCATION.latitude} and ${START_LOCATION.longitude}`)
 
     // mapRef.current &&
     /*
@@ -389,6 +389,17 @@ console.log(
 );
 
 
+// A test function. This gets called by
+// the onGelocate event handler of 
+// <GeolocateControl/> (that event 
+// firing when the user clicks the button
+// in the top right of the screen):
+function testSetUserLatLong(coordsArg){
+  setUserLatLong(coordsArg)
+  // console.log(`***In the fn called by <GeolocateControl/>. coordsArg is ${coordsArg}`)
+                                      }
+
+
 
 
 // ------------------- Now the actual rendering -------------------
@@ -464,7 +475,8 @@ true again to show the error modal: */}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation={true}
           showUserHeading={true}
-          onGeolocate={({ coords }) => setUserLatLong(coords)}
+          // onGeolocate={({ coords }) => setUserLatLong(coords)}
+          onGeolocate={({ coords }) => testSetUserLatLong(coords)}
           auto
         />
 </ReactMapGL>

@@ -2469,6 +2469,11 @@ $primary: $teal;
 $secondary: $pink;
 $muted-secondary: $mutedPink;
 
+
+$newSecondary: $browniesBlue;
+$newMuted-secondary: $browniesLightBlue;
+
+
 // scss-docs-start gray-color-variables
 $white: #fff;
 $gray-100: #f8f9fa;
@@ -2518,7 +2523,7 @@ $black: #000;
 
 
 .btn-branding {
-  background-color: $secondary;
+  background-color: $newSecondary;
   color: $white;
   border-radius: 5px;
   border-style: none;
@@ -2527,11 +2532,11 @@ $black: #000;
 }
 
 .btn-branding-enabled {
-  background-color: $secondary;
+  background-color: $newSecondary;
 }
 
 .btn-branding-disabled {
-  background-color: $muted-secondary;
+  background-color: $newMuted-secondary;
 }
 
 .btn-leaderboard {
@@ -2541,13 +2546,13 @@ $black: #000;
   border-radius: 5px;
   border-style: solid;
   border-width: 0.2rem;
-  border-color: $secondary;
+  border-color: $newSecondary;
   background-color: $white;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   padding-left: 1rem;
   padding-right: 1rem;
-  color: $secondary;
+  color: $newSecondary;
   font-weight: bold;
   @media screen and (min-width: 360px) {
     top: 93%;
@@ -2575,14 +2580,19 @@ $black: #000;
   }
 }
 .btn-leaderboard:active {
-  background-color: $secondary;
+  background-color: $newSecondary;
   color: $white;
   border-color: $white;
 }
 
 // FEEDBACK FORMATTING
 .feedback-branding {
-  color: $secondary;
+  color: rgb(224, 82, 82);
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 200;
+  font-size: 14px;
+  line-height: 17px;
 }
 
 // BOOTSTRAP 5 BSPREFIXES END
@@ -2764,7 +2774,7 @@ p {
   font-style: normal;
   font-weight: 400;
   font-size: 15px;
-  line-height: 16px;
+  line-height: 19px;
 }
 
 
@@ -2810,6 +2820,103 @@ p {
   font-size: 15px;
   line-height: 16px;  
                        }
+
+
+// For the div that contains: 
+// i)    the div that contains the bonus challenge header <p>
+// ii)   the div that contains the bonus challenge content text <p>
+.bonus-challenge-overall-container{
+width: 95%;
+
+height: fit-content;
+
+border-top: #929191 1px dotted;
+border-bottom: #929191 1px dotted;
+
+padding: 0px;
+
+}
+
+// For the <div> that contains the 
+// <p> that is the bonus challenge
+// header:
+.bonus-challenge-header-container {
+  text-align: left;
+  padding: 5px;
+  margin: 0px;
+                                  }
+
+// For <p> that is the text 
+// of the bonus challenge header:
+.bonus-challenge-header-text{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 25px;
+  line-height: 26px;
+  
+  color: #bab6b6;
+                       }
+
+
+
+// For the <div> that contains the 
+// <p> that is the text that describes
+// the bonus challenge:
+.bonus-challenge-content-container {
+  text-align: left;
+  padding: 5px;
+  margin: 0px;
+  position: relative;
+  top: -20px;
+                                   }
+
+// For <p> that is the text 
+// that describes the challenge:
+.bonus-challenge-content-text{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 200;
+  font-size: 15px;
+  line-height: 16px;  
+  color: #a7a5a5;
+                       }
+
+// The div that contains the
+// <p> for the text of the 
+// error message "Please turn on ..."
+.error-message-container{
+border-top: 2px solid rgb(227, 147, 147);
+height: fit-content;
+width: 95%;
+
+margin: 5px;
+                        }
+
+
+// For the img that contains the 
+// image that goes with the error message:
+.errorIMG{
+width: 20px;
+height:  20px;
+
+margin: 0px;
+        }
+
+// For the <span> that encloses the img
+// that contains the 
+// image that goes with the error message:
+.spanErrorIMG{
+  width: 20px;
+  height:  20px;
+  
+  margin: 0px;
+          }
+  
+
+
+
+
 
 
 
