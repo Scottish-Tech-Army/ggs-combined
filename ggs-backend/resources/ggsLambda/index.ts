@@ -311,10 +311,7 @@ function convertToCollected(collected: string | GGSCollected): GGSCollected {
       collectedAt: ''
     };
   } else {
-    // Collected data now includes the date it was collected
-    return {
-      locationId: collected.locationId,
-      collectedAt: collected.collectedAt
-    };
+    // Nothing to convert. Collected is in the format required already
+    return collected;
   }
 }
