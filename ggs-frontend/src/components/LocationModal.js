@@ -14,9 +14,8 @@ import { authContext } from "../contexts/AuthContext";
 // Images:
 import placeholderPhoto from "../assets/images/noImageYet.svg";
 import xPrimary from "./x-primary.svg";
-import dividerLine from "./divider-line.svg";
-
-
+// import dividerLine from "./divider-line.svg";
+import bullsEye from "../assets/images/bullsEye.svg";
 
 // Change this as needed for coordinate distance from landmark.
 const LOCATION_TOLERANCE_LATITUDE = 0.0002; // Note 0.0002 is approx equal to 22 metres.
@@ -118,7 +117,7 @@ let congratsMessage = (
   useEffect(() => {
     // 1):
     if (!userLatLong) { 
-      setDeviceErrMsg("Please turn on location tracking");
+      setDeviceErrMsg("Please let this app track your movement. Close this window and click ");
       setIsOutOfRange(true);
       // 2):
                       } else {  
@@ -152,14 +151,18 @@ let congratsMessage = (
             alt="no image available"
             rounded
           />
-          <div className="challenge">
-            <h2>Bonus Challenge</h2>
-            <div className="content">
+          <div className="bonus-challenge-overall-container">
+            <div className="bonus-challenge-header-container">
+            <p className="bonus-challenge-header-text">Bonus Challenge</p>
+            </div>
+            <div className="bonus-challenge-content-container">
+              <p className="bonus-challenge-content-text">
               Will you be the first to take a picture of this location? Take a
               photo and send it to us at{" "}
               <a href="mailto:web@girlguiding-scot.org.uk">
                 web@girlguiding-scot.org.uk
               </a>
+              </p>
             </div>
           </div>
         </>
@@ -254,10 +257,11 @@ let congratsMessage = (
         </div>
       </Modal.Body>
       {/*If there's an error show the error message: */}
-      {!!deviceErrMsg && (
-        <div className="container">
-          <img src={dividerLine} style={{ width: "100%" }} alt="" />
-          <p className="feedback-branding">{deviceErrMsg}</p>
+      {!!deviceErrMsg && ( // two !s = make true/false something that's truthy/falsey
+        <div className="error-message-container">
+          {/* OLD CODE: <img src={dividerLine} style={{ width: "100%" }} alt="" />*/}
+              
+          <p className="feedback-branding">{deviceErrMsg} <span className="spanErrorIMG"><img className="errorIMG"  src={bullsEye} /></span></p>
         </div>
       )}
       {/*If there's no error and the user has NOT collected 
