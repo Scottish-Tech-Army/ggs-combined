@@ -5,11 +5,25 @@ import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import { dynamodbClient } from "./aws";
 import { APIGatewayProxyResult, APIGatewayEvent } from "aws-lambda";
 
+/**
+ * Location identifier with the date when the location was collected. This record is 
+ * attached to the unit to give a list of locations that the unit has collected.
+ */
+type GGSCollected = {
+  locationId: string;
+  collectedAt: string;
+};
+
 type GGSUnit = {
   unitId: string;       // Email
   name: string;
   county?: string;      // Older records do not have a county
-  locations: string[];
+  /* Locations can either be just a string with the location id or it can 
+   * be a GGSCollected type with the location id as well as when the location 
+   * was collected. Earlier versions of the app did not record when the location 
+   * was collected it just recorded the location identifier as a string.
+   */
+  locations: Array<string | GGSCollected>;
 };
 
 type GGSLocation = {
@@ -268,10 +282,7 @@ export const handler = async (
     });
 
     // Date location is collected is not yet recorded by the backend
-    const locationsCollected = unit?.locations
-      .map((locationName) => ({
-        location: locationName, collected: '1 June 2023' 
-      }));
+    const locationsCollected = unit?.locations.map(convertToCollected);
 
     const collectedLocations = { 
       totalLocations: locationsInCounty.length, 
@@ -291,3 +302,19 @@ export const handler = async (
     body: JSON.stringify({ message: "Unrecognised request", request: event }),
   };
 };
+
+function convertToCollected(collected: string | GGSCollected): GGSCollected {
+  if (typeof collected === 'string') {
+    // Old style location collected. string is location identifier
+    return {
+      locationId: collected,
+      collectedAt: ''
+    };
+  } else {
+    // Collected data now includes the date it was collected
+    return {
+      locationId: collected.locationId,
+      collectedAt: collected.collectedAt
+    };
+  }
+}
