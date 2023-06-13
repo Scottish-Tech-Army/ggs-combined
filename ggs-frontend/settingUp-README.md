@@ -681,3 +681,56 @@ ii)  builds a table and puts that data in it<br><br><br><br>
 For example `<LogoutModal/>` and `<LoginModal/>`. <br>
 All components representing modals in this app employ React-Bootstrap’s `<Form/>`, `<Modal/>` and `<Button/>` components.<br><br>
 
+
+
+### **Context**<br>
+This app employs two contexts:<br>
+A) One to make this object available to every component in the app:<br>
+  `{`<br>
+    `unit: {email:"example@example.com", name:"someTeamName"}`,<br>
+    `setUnit: setUnit`<br>
+  `}`,<br>
+where unit is an object held in localStorage and in the backend. unit contains the user's email address and unit name.<br>
+setUnit is a state property of component `<AuthProvider/>` that sets unit.<br>
+
+B) One to get xxx to all of the components that represent the so-called pages of the app.<br>
+<br><br>
+In the case of A):<br>
+1) Component `<AuthProvider/>` creates context object `authContext` and passes in to it as props an object that will look like this: <br>
+  `{`<br>
+    `unit: {email:"example@example.com", name:"someTeamName"}`,<br>
+    `setUnit: setUnit`<br>
+  `}`<br>
+
+  This happens in `<AuthProvider/>`'s return statement:<br>
+      `<authContext.Provider value={{ unit, setUnit }}>`<br>
+      `{children}`<br>
+    `</authContext.Provider>`<br>
+So every descendant of `<AuthProvider/>` has access to context object `authContext`.<br>
+
+2) index.js imports `<AuthProvider/>` and `<App/>` and invokes them like this:<br>
+`<AuthProvider>`<br>
+      `<App />`<br>
+`</AuthProvider>`,<br>
+Because `<App />` is the ultimate parent of all of this app's main components, all of this app's main components have access to `authContext`.<br>
+
+3)
+ When the user first registers, a function in `<LoginModal/>` gets from the backend an object of this type:<br>
+ `{email:"example@example.com", name:"someTeamName"}`.<br>
+ The same function calls `<AuthProvider/>`'s setUnit to set unit to that object.<br>
+ 
+ 4) Whenever unit changes, code in `<AuthProvider/>` stores the new version in localStorage.<br>
+ <br><br>
+
+ In the case of B):<br>
+`<Home/>` makes object `iconsObject` available to every component that represents a so-called page. Each of those components takes from `iconsObject` references to the click handlers for its buttons and, in all of those pages except `<LandingPage/>`, references to the imgs for the icons in the plus menu.<br>
+`<Home/>` does this by creating `<MenuContext/>`, calling `<MenuContext/>` in its return statement and wrapping `<MenuContext/>` around all page components like this:<br>
+`<MenuContext.Provider value={iconsObject}>`<br>
+// page components here<br>
+`</MenuContext.Provider>`,<br>
+in this way making `iconsObject` available to all components that represent the so-called pages of the app.
+
+
+
+
+
