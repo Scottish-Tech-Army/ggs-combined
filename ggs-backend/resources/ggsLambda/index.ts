@@ -300,7 +300,7 @@ export const handler = async (
     const locationsCollected = unit?.locations.map(convertToCollected);
 
     const collectedLocations = { 
-      totalLocations: locationsInCounty.length, 
+      totalLocations: locationsInCounty.length, // Will be zero if unit has no county
       locations: locationsCollected 
     };
 
