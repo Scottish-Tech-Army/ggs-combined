@@ -19,9 +19,10 @@ import GGSbuttonOne from "./GGSbuttonOne";
 // Main logo:
 import ggsTextImage from "../assets/images/logoPlusGirlguidingScotland.svg";
 // Main image:
-import digitalSafariMainImage from "../assets/images/digitalSafariMainImage.jpg";
+import digitalSafariMainImage from "../assets/images/landingPageMainImageNew2.jpg";
 // Old stand-in image:
 // import digitalSafariStandInImage from "../assets/images/digitalSafariStandIn.svg";
+
 
 // Images for the icons:
 import challengesIcon from "../assets/images/challengesNearMeIcon.svg";
@@ -464,17 +465,24 @@ false the code below sets showModal to null: */ }
 
   {/* i):
   div (className="landingPageFirstContainer") contains
-        one element:
-         a div (className="landingPageGGSContainer") containing  
+     a) a div (className="landingPageGGSContainer") containing  
         the main image (text "Girlguiding Scotland" and the roundel)
+     b) a div (className = "landingPageWelcomeTextContainerLandscape")
+     containing the <p> for the "welcome" text for when the phone is 
+     in landscape position only. A media query makes this div disappear
+     when the phone is in portrait position.
+        
     */}    
   <div className="landingPageFirstContainer">
+    {/* ib): */}
+    <div className="landingPageWelcomeTextContainerLandscape">
+      <p className="landingPageWelcomeTextLandscape">Welcome</p>
+    </div>
 
-        {/* ia): */}
+    {/* ia): */}
     <div className="landingPageGGSContainer">
       <img className="landingPageTextImage" src ={ggsTextImage}/>
     </div>      
-
   
     </div>{/* end div of className landingPageFirstContainer */}
 
