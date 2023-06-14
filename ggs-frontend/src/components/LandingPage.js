@@ -19,7 +19,9 @@ import GGSbuttonOne from "./GGSbuttonOne";
 // Main logo:
 import ggsTextImage from "../assets/images/logoPlusGirlguidingScotland.svg";
 // Main image:
-import digitalSafariImage from "../assets/images/digitalSafariStandIn.svg";
+import digitalSafariMainImage from "../assets/images/digitalSafariMainImage.jpg";
+// Old stand-in image:
+// import digitalSafariStandInImage from "../assets/images/digitalSafariStandIn.svg";
 
 // Images for the icons:
 import challengesIcon from "../assets/images/challengesNearMeIcon.svg";
@@ -488,22 +490,32 @@ This contains two items:
     
     {/* iia): 
     a div of className="landingPageSecondContainer" that contains 
-      two elements:
-      a) a div of className = "landingPageWelcomeTextContainer" that contains 
-      two elements:
-      1) a <p> for text "Welcome" and 
-      2) a <GGSbuttonOne> for the login/logout button
-      3) a <GGSbuttonOne> for the How to register button
+      three elements:
+      a) a div of className = "landingPageWelcomeTextContainer" that contains:
+      a <p> for text "Welcome"
 
       b) a div (className="landingPageDigitalSafariContainer") that contains
    the image for "Digital Safari"
+     
+      c) a div (className="loginOrRegisterContainer") that contains 
+        i)   a <GGSbuttonOne> for the login/logout button
+        ii)  a <p> for text "or"
+        iii) a <GGSbuttonOne> for the How to register button
+
   */}
     <div className="landingPageSecondContainer">
     
-    {/* iia-a-1): */}
+    {/*   */}
     <div className="landingPageWelcomeTextContainer">
     <p className="welcomeText"> Welcome </p>
+    </div>
 
+ {/* iia-b): */}
+ <div className="landingPageDigitalSafariContainer">
+    <img src={digitalSafariMainImage} alt="Digital safari image" className = "digitalSafariImg"/>
+</div>
+
+{/* iia) -c):  */}
 <div className="loginOrRegisterContainer">
      <GGSbuttonOne
      buttonDivCSSclass = {"largeButton1New"}
@@ -520,22 +532,6 @@ This contains two items:
      clickHandler = {showHowToRegisterScreen}
      pText = {registerButtonText}
      />      
-    </div>
-</div>
-
- {/* iia-b): */}
- <div className="landingPageDigitalSafariContainer">
-    <img src={digitalSafariImage} alt="Digital safari image" className = "digitalSafariImg"/>
-    
-
-{/* Comment out the following button for production. It's only for field testers.
-  It's the big brown button sitting on top of the main image: */}
-    <GGSbuttonOne
-     buttonDivCSSclass = {classesForBrownButton}
-     pTextCSSclass = {"surveyFormButtonP"}
-     clickHandler = {bigIconsObject.p0.takeTesterToFormLinkPage}
-     pText = "When you're ready to do the questionnaire return to this page and TAP HERE"
-     />
 </div>
 
     </div>  {/* end div for landingPageSecondContainer*/}
@@ -564,6 +560,8 @@ This contains two items:
     */}
     
     <div className="landingPageThirdContainer"> 
+
+    <div className="landingPageButtonsContainer">
 
     {/*  i)   */}
     <div className={iconAndButtDivCSSclass}>    
@@ -618,6 +616,7 @@ This contains two items:
       clickHandler  = {bigIconsObject.p0.leaderBoardButtonClickHandler}  
       pText = "Challenges leader board"
     />
+
     </div>
 
 
@@ -656,6 +655,17 @@ This contains two items:
       pText = "User guide"
     />
     </div>
+
+    </div> {/* end  div of className "landingPageButtonsContainer"*/}
+
+        {/* NOw the big brown button. Comment this out 
+        for production. It's only for field testers: */}
+    <GGSbuttonOne
+     buttonDivCSSclass = {classesForBrownButton}
+     pTextCSSclass = {"surveyFormButtonP"}
+     clickHandler = {bigIconsObject.p0.takeTesterToFormLinkPage}
+     pText = "When you're ready to do the questionnaire return to this page and TAP HERE"
+     />
 
 
    </div>     {/* end div of className landingPageThirdContainer */}

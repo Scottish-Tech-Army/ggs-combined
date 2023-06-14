@@ -1258,15 +1258,18 @@ z-index: 10;
 /* -------- styles for the landing page -------------- */ 
 
  .landingPageFirstContainer{
+
+  // We're in portrait media query!!!
+
   height: 17vh;
     width: 100%;
 position: relative;
 
-/*    
+/*
     border-style: dotted;
-    border-width: 2px;
+    border-width: 5px;
      border-color: #f82403;  
-*/
+    */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -1274,25 +1277,54 @@ position: relative;
                           }
 
 
+/* The div that contains the main logo img */
+.landingPageGGSContainer{
+
+  // We're in landscape media query!!!!
+  
+    height: 100%;
+    width: 100%;
+  
+    position: relative;
+      
+    /*
+    border-style: dotted;
+    border-width: 5px;
+    border-color: #54ed17; 
+     */ 
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+
+    padding: 5px;
+    
+                              }
+  
+
 /*
 div containing two other divs:
 className = "landingPageSecondContainer"
 className = "landingPageThirdContainer"
 */
 .landingPageSecondAndThirdContainer{
+  // We're in portrait media query!!!
+  position: relative;
+  
   height: 83vh;
   width: 100vw;
 
-  /*
+/*  
   border-style: dotted;
   border-width: 2px;
-  border-color: #8b3326;
-  */
+  border-color: #f32809;
+*/  
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-align-items: center;
-
+  justify-content: flex-start;
+  align-items: center;
+/**/
 
 
                           }
@@ -1300,15 +1332,22 @@ align-items: center;
 
 
 /*div containing:
-i)  a div containing the Welcome text and the login/out button
-ii) a div containing the main image
+i)    a div containing the Welcome text
+ii)   a div containing the main image
+iii)  a div containing the login/out button, 
+      the How to register button and the "or"
+      text that goes in between those buttons
 */
 .landingPageSecondContainer{
-  height: 45%;
+    // We're in portrait media query!!!
+  
+  position: relative;
+
+    height: 47%;
   width: 100%;
 /*
-  border-style: solid;
-  border-width: 2px;
+  border-style: dotted;
+  border-width: 3px;
   border-color: #26308b;
 */
   display: flex;
@@ -1317,37 +1356,108 @@ ii) a div containing the main image
 align-items: flex-start;
 
 margin-top: 1%;
-margin-bottom: 0px;
+margin-bottom: 20px;
 
                           }
 
 
-/*div containing xxx*/
+// Div containing the "Welcome" text and 
+// the login/out and How to register buttons:
+.landingPageWelcomeTextContainer{
+
+// We're in portrait media query!!!!
+
+    position: absolute;
+    top: 5px;
+    left: 0px;
+    
+    height: 28%;
+    width: 100%;
+/*
+    border-style: solid;
+    border-width: 3px;
+    border-color: #efe30e;  
+*/
+    padding: 0px;
+
+    z-index: 2;
+
+                              }
+
+.welcomeText{
+// We're in portrait media query!!!
+
+  font-size: 52px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 100;
+  line-height: 53px;
+  // color: $girlGuidingDarkBlue;
+  color: white;
+
+  // text-shadow: 2px 4px 4px rgba(46,91,173,0.6);
+  text-shadow: 2px 4px 4px $girlGuidingDarkBlue;
+
+  margin-left: 10px;
+                    }
+
+
+
+
+/*div containing the buttons that take you 
+to the other pages */
 .landingPageThirdContainer{
-  height: 40%;
+      // We're in portrait media query!!!
+  height: 45%;
   width: 100%;
+
+position: relative;
 
   /*
   border-style: solid;
-  border-width: 2px;
-  border-color: #26308b;
+  border-width: 3px;
+  border-color: #438b26;
   */
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-align-items: flex-start;
+  align-items: flex-start;
 
-position: relative;
-
-top: -55px;
+  padding-left: 10px;
 
                           }
+
+// A div that contains the buttons of 
+// the landing page:
+.landingPageButtonsContainer{
+      // We're in portrait media query!!!
+
+  position: absolute;
+  left: 0px;
+  top: 0px;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  padding: 10px;
+                            }
+
+
+
+
 
 
 /* The main logo (an img of text "Guides") */
 .landingPageTextImage{
   
+// We're in portrait media query!!!
+
   position: relative;
   top: 0px;
   right: 0px;  
@@ -1359,15 +1469,30 @@ top: -55px;
   
                      }
 
-.welcomeText{
-  font-size: 38px;
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 700;
-  color: $girlGuidingDarkBlue;
-                    }
 
-
+// Div that contains the login/out button
+// and the login and learn-to-register
+// buttons:
+.loginOrRegisterContainer{
+// We're in portrait media query!!!
+  position: absolute;
+  left: 10px;
+  bottom: 0px;
+  
+  /*        
+        border-style: solid;
+        border-width: 1px;
+        border-color: #a78610;  
+    */
+  width: 70%;
+  height: 20%;      
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+                           } 
+  
 
 
 
@@ -1377,6 +1502,8 @@ top: -55px;
 // There is another style of the same name!!!
 
 .userGuidePageOuterContainer{
+
+  // We're in portrait media query!!!
   position: absolute;
   left: 0px;
   top: 0px;
@@ -1525,6 +1652,8 @@ className = "landingPageThirdContainer"
 */
 
 .landingPageSecondAndThirdContainer{
+  // We're in landscape media query!!!!
+  
   height: 75%;
   width: 100%;
   display: flex;
@@ -1538,6 +1667,9 @@ align-items: flex-start;
 
 /*div containing xxx*/
 .landingPageSecondContainer{
+
+  // We're in landscape media query!!!!
+
   height: 60%;
   width: 45%;
 /*
@@ -1557,6 +1689,9 @@ margin-top: 1%;
 
 /*div containing xxx*/
 .landingPageThirdContainer{
+
+  // We're in landscape media query!!!!
+
   height: 70%;
   width: 53%;
 
@@ -1577,21 +1712,25 @@ margin-top: 1%;
 
 /* The div that contains the main logo img */
 .landingPageGGSContainer{
+
+// We're in landscape media query!!!!
+
   height: 100%;
     width: 100%;
 
     position: relative;
-    /*
-    border-style: solid;
-    border-width: 3px;
-    border-color: #ed2c17; 
-    */
-    /*
+    
+    border-style: dotted;
+    border-width: 5px;
+    border-color: #54ed17; 
+    
+  
     display: flex;
     flex-direction: column;
     justify-content: center;
   align-items: flex-end;
-  */
+  z-index: 2;
+  
                             }
 
 
@@ -1728,23 +1867,20 @@ grid-column-gap: 2%;
 //  ------------- Styles to do with the landing page ------------- ------------- -------------
 
 .landingPageOuterContainer{
-  height: 100vh;
+    height: 100vh;
     width: 100vw;
   
-  position: fixed;
+    position: fixed;
   
-    // background-color: $lightBlue;
     background-color: none;
-  /*
-      border-style: dotted;
-      border-width: 0px;
-       border-color: #dc7f7f;  */
-  
+ 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-  align-items: center;
-  }
+    align-items: center;
+
+    border: 6px solid $rainbowsBlue;
+                          }
   
   
   
@@ -1772,20 +1908,20 @@ grid-column-gap: 2%;
 
 
   .landingPageDigitalSafariContainer{
-    height: 65%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    height: 100%;
       width: 100%;
       position: relative;
-/*
+
       border-style: solid;
       border-width: 2px;
-      border-color: #6c5709;  
-      */     
-      /*   
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    align-items: center;
-    */
+      // border-color: #6c5709;  
+
+      box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.15);
+
                               }
 
 
@@ -1802,42 +1938,27 @@ grid-column-gap: 2%;
 
 
 
-
+/*
   .landingPageWelcomeTextContainer{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    
     height: 35%;
       width: 100%;
-/*
+
       border-style: solid;
       border-width: 3px;
-      border-color: #a78610;  
-*/          
+      border-color: #7e9fe7;  
+         
       display: flex;
       flex-direction: row;
       justify-content: space-between;
     align-items: flex-start;
                               }
+*/
 
-// Div that contains the login/out button
-// and the login and learn-to-register
-// buttons:
-.loginOrRegisterContainer{
 
-position: relative;
-right: 10px;
-
-/*        
-      border-style: solid;
-      border-width: 1px;
-      border-color: #a78610;  
-  */
-width: 137px;
-height: 75px;      
-
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-align-items: flex-end;
-                         } 
 
 // for the text that reads 
 // "or" and that goes between the login and
@@ -1849,10 +1970,14 @@ align-items: flex-end;
   font-style: normal;
   font-weight: 700;
   
-  color: $girlGuidingDarkBlue;
+  // color: $girlGuidingDarkBlue;
+  color: white;
+
 
   padding: 0px;
-  margin: 0px;
+  margin: 5px;
+
+  text-shadow: 2px 4px 4px $girlGuidingDarkBlue;
 
                }
 
@@ -2279,11 +2404,11 @@ hideIconContainer.
 // Dump this after field testing is over:
 .surveyFormButtonLandingPage{
   position: absolute;
-  top: 5px;
-  left: 30px;
+  bottom: 45px;
+  right: 5px;
   margin: 1px;
-  width: 190px;
-  height: 100px;
+  width: 230px;
+  height: 70px;
                             }
                             
 // This is for the button that takes the user 
