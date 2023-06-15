@@ -1246,10 +1246,23 @@ z-index: 10;
                 }
 
 
+
+
+
+
+
+
+
+
 // There are two media queries:
 // 1) @media screen and (orientation: portrait) {// stuff here }
 // 2) @media screen and (orientation: landscape) {// stuff here }
 // Under each are styles for each page in turn.
+
+
+//------------------------------------------------------------------------------------------------------------------------
+// PORTRAIT MEDIA QUERY
+//------------------------------------------------------------------------------------------------------------------------
 
 // When phone is held in portrait position:
 @media screen and (orientation: portrait) {
@@ -1257,21 +1270,80 @@ z-index: 10;
 
 /* -------- styles for the landing page -------------- */ 
 
+.landingPageOuterContainer{
+  height: 100vh;
+  width: 100vw;
+
+  position: fixed;
+
+  background-color: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  border: 8px solid $rainbowsBlue;
+  
+                        }
+
+
  .landingPageFirstContainer{
+
+  // We're in portrait media query!!!
+
   height: 17vh;
     width: 100%;
 position: relative;
 
-/*    
+/*
     border-style: dotted;
-    border-width: 2px;
+    border-width: 5px;
      border-color: #f82403;  
-*/
+    */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   align-items: center;
                           }
+
+
+/* The div that contains the main logo img */
+.landingPageGGSContainer{
+
+  // We're in portrait media query!!!!
+  
+    height: 100%;
+    width: 100%;
+  
+    position: relative;
+      
+    /* 
+    border-style: dashed;
+    border-width: 5px;
+    border-color: #143109; 
+    */ 
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+
+    padding: 5px;
+    
+                              }
+  
+// The div that contains the text "Welcome"
+// when the phone is in the landscape 
+// position. The app must not show this div 
+// when the phone is in the portrait position:
+.landingPageWelcomeTextContainerLandscape{
+
+// We're in portrait media query!!!!
+display: none;
+                                         }
+
+
 
 
 /*
@@ -1280,19 +1352,22 @@ className = "landingPageSecondContainer"
 className = "landingPageThirdContainer"
 */
 .landingPageSecondAndThirdContainer{
+  // We're in portrait media query!!!
+  position: relative;
+  
   height: 83vh;
   width: 100vw;
 
-  /*
+/*  
   border-style: dotted;
   border-width: 2px;
-  border-color: #8b3326;
-  */
+  border-color: #f32809;
+*/  
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-align-items: center;
-
+  justify-content: flex-start;
+  align-items: center;
+/**/
 
 
                           }
@@ -1300,15 +1375,22 @@ align-items: center;
 
 
 /*div containing:
-i)  a div containing the Welcome text and the login/out button
-ii) a div containing the main image
+i)    a div containing the Welcome text
+ii)   a div containing the main image
+iii)  a div containing the login/out button, 
+      the How to register button and the "or"
+      text that goes in between those buttons
 */
 .landingPageSecondContainer{
-  height: 45%;
+    // We're in portrait media query!!!
+  
+  position: relative;
+
+    height: 47%;
   width: 100%;
 /*
-  border-style: solid;
-  border-width: 2px;
+  border-style: dotted;
+  border-width: 3px;
   border-color: #26308b;
 */
   display: flex;
@@ -1317,37 +1399,165 @@ ii) a div containing the main image
 align-items: flex-start;
 
 margin-top: 1%;
-margin-bottom: 0px;
+margin-bottom: 20px;
 
                           }
 
+  .landingPageDigitalSafariContainer{
 
-/*div containing xxx*/
+// We're in portrait media query!!!!
+
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    height: 100%;
+      width: 95%;
+      position: relative;
+
+      border-style: solid;
+      border-width: 2px;
+      // border-color: #6c5709;  
+
+      box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.15);
+
+      margin: auto;
+     
+                              }
+
+
+
+
+// Div containing the "Welcome" text:
+.landingPageWelcomeTextContainer{
+
+// We're in portrait media query!!!!
+
+    position: absolute;
+    top: 5px;
+    left: 0px;
+    
+    height: 28%;
+    width: 95%;
+/*
+    border-style: solid;
+    border-width: 3px;
+    border-color: #efe30e;  
+*/
+    padding: 0px;
+
+    z-index: 2;
+
+    margin-left: 10px;
+
+                              }
+
+.welcomeText{
+// We're in portrait media query!!!
+
+  font-size: 52px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 100;
+  line-height: 53px;
+  // color: $girlGuidingDarkBlue;
+  // color: white;
+  color: #f3ea4c;
+  // color: #CECEC9C94848;
+  text-shadow: 2px 4px 10px rgba(255,255,255,1);
+  // text-shadow: 2px 4px 4px $girlGuidingDarkBlue;
+
+  margin-left: 10px;
+                    }
+
+
+/* The "Digital Safari" logo (an img) */
+.digitalSafariImg{
+
+// We're in portrait media query!!!
+
+  width:  100%;
+  height: 100%;
+  
+                 }
+
+
+
+
+
+/*div containing the buttons that take you 
+to the other pages */
 .landingPageThirdContainer{
-  height: 40%;
+      
+  
+  // We're in portrait media query!!!
+  height: 45%;
   width: 100%;
+
+position: relative;
 
   /*
   border-style: solid;
-  border-width: 2px;
-  border-color: #26308b;
+  border-width: 3px;
+  border-color: #438b26;
   */
 
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-align-items: flex-start;
+  align-items: flex-start;
 
-position: relative;
-
-top: -55px;
+  padding-left: 10px;
 
                           }
+
+// A div that contains the buttons of 
+// the landing page:
+.landingPageButtonsContainer{
+      // We're in portrait media query!!!
+
+  position: absolute;
+  left: 0px;
+  top: 0px;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  padding: 10px;
+                            }
+
+
+// Styles for the button that app testers
+// tap on the landing page to take them to the page where 
+// the link is for the form:
+// This style simply positions the big brown button
+// on the landing page
+// Dump this after field testing is over:
+.surveyFormButtonLandingPage{
+  position: absolute;
+  bottom: 45px;
+  right: 5px;
+  margin: 1px;
+  width: 230px;
+  height: 70px;
+                            }
+
+
+
+
+
 
 
 /* The main logo (an img of text "Guides") */
 .landingPageTextImage{
   
+// We're in portrait media query!!!
+
   position: relative;
   top: 0px;
   right: 0px;  
@@ -1359,15 +1569,32 @@ top: -55px;
   
                      }
 
-.welcomeText{
-  font-size: 38px;
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 700;
-  color: $girlGuidingDarkBlue;
-                    }
 
+// Div that contains the login/out button
+// and the login and learn-to-register
+// buttons:
+.loginOrRegisterContainer{
+// We're in portrait media query!!!
+  position: absolute;
+  left: 10px;
+  bottom: 0px;
+  
+  /*        
+        border-style: solid;
+        border-width: 1px;
+        border-color: #a78610;  
+    */
+  width: 70%;
+  height: 20%;      
+  
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 
+  margin-left: 10px;
+                           } 
+  
 
 
 
@@ -1377,6 +1604,8 @@ top: -55px;
 // There is another style of the same name!!!
 
 .userGuidePageOuterContainer{
+
+  // We're in portrait media query!!!
   position: absolute;
   left: 0px;
   top: 0px;
@@ -1491,15 +1720,38 @@ font-family: 'Poppins';
                         } // end media query for when phone is in portrait orientation
                         
                         
-
-
+//-----------------------------------------------------------------------------------------------------------------------------
+// LANDSCAPE MEDIA QUERY
+//-----------------------------------------------------------------------------------------------------------------------------
 
 // media query or when phone is in landscape orientation:
 @media screen and (orientation: landscape) {
 
 // styles for the landing page:
 
+.landingPageOuterContainer{
+  height: 100vh;
+  width: 100vw;
+
+  position: fixed;
+
+  background-color: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  border: 8px solid $rainbowsBlue;
+  
+                        }
+
+
+
+
  .landingPageFirstContainer{
+
+// We're in the landscape media query!!!  
   height: 25%;
     width: 100%;
 
@@ -1518,6 +1770,97 @@ font-family: 'Poppins';
                           }
 
 
+/* The div that contains the main logo img */
+.landingPageGGSContainer{
+
+  // We're in landscape media query!!!!
+  
+    height: 100%;
+      width: 50%;
+  
+      position: relative;
+      
+      /*
+      border-style: dotted;
+      border-width: 5px;
+      border-color: #54ed17; 
+      */
+    
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    align-items: flex-end;
+    z-index: 2;
+       
+                              }
+  
+  
+  /* The img that is the main logo 
+  ("Girlguiding Scotland") */
+  .landingPageTextImage{
+    
+    // We're in landscape media query!!!!
+    position: absolute;
+    top: 6px;
+    right: 10px;
+  
+    width:  95%;
+    height: 95%;
+  
+    overflow: hidden
+    
+                       }
+
+// This is the div that contains the text "Welcome".
+// If the phone is held in the portrait position
+// a media query gives this style the attribute 
+// display: none   :
+.landingPageWelcomeTextContainerLandscape{
+// We're in the landscape media query!!!!
+position: absolute;
+top: 0px;
+left: 0px;
+
+height: 100%;
+  width: 50%;
+
+  /*
+  border-style: dotted;
+  border-width: 3px;
+  border-color: #0b0e15;  
+*/
+  
+  /*
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+align-items: flex-start;
+*/
+
+
+}
+
+// The <p> that is text "Welcome"
+// when the phone is in the 
+// landscape position:
+.landingPageWelcomeTextLandscape{
+
+// We're in the landscape media query!!!!
+  
+    font-size: 65px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 100;
+    color: $girlGuidingDarkBlue;
+
+    padding-left: 10px;
+
+                                }
+
+
+
+
+
 /*
 div containing two other divs:
 className = "landingPageSecondContainer"
@@ -1525,11 +1868,13 @@ className = "landingPageThirdContainer"
 */
 
 .landingPageSecondAndThirdContainer{
-  height: 75%;
+  // We're in landscape media query!!!!
+  
+  height: 55%;
   width: 100%;
   display: flex;
   flex-direction: row-reverse;
-  justify-content: flex-start;
+  justify-content: space-between;
 align-items: flex-start;
 
                           }
@@ -1538,8 +1883,13 @@ align-items: flex-start;
 
 /*div containing xxx*/
 .landingPageSecondContainer{
-  height: 60%;
-  width: 45%;
+
+  // We're in landscape media query!!!!
+
+position: relative;
+
+  height: 100%;
+  width: 65%;
 /*
   border-style: solid;
   border-width: 2px;
@@ -1555,67 +1905,166 @@ margin-top: 1%;
                           }
 
 
+// the div that contains the main image img:
+  .landingPageDigitalSafariContainer{
+
+// We're in landscape media query!!!!
+
+    position: absolute;
+    left: 0px;
+    top: 0px;
+
+    height: 100%;
+      width: 95%;
+      position: relative;
+
+      border-style: solid;
+      border-width: 2px;
+      // border-color: #6c5709;  
+
+      box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.15);
+
+      margin: auto;
+
+      overflow: hidden;
+
+     
+                              }
+
+/* The "Digital Safari" logo (an img) */
+.digitalSafariImg{
+  position: absolute;
+  left: 0px;
+  top: -40px;
+
+  // We're in landscape media query!!!
+  
+    width:  100%;
+    height: 119%;
+    
+                   }
+
+
+
+
+// Div that contains the login/out button
+// and the login and learn-to-register
+// buttons:
+.loginOrRegisterContainer{
+  // We're in landscape media query!!!
+    position: absolute;
+    left: 10px;
+    bottom: 0px;
+    
+    /*        
+          border-style: solid;
+          border-width: 1px;
+          border-color: #a78610;  
+      */
+    width: 70%;
+    height: 20%;      
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  
+    margin-left: 10px;
+                             } 
+    
+  
+
+
 /*div containing xxx*/
 .landingPageThirdContainer{
-  height: 70%;
-  width: 53%;
 
-  /*
+  // We're in landscape media query!!!!
+
+  position: relative;
+  top: 10px;
+
+  height: 100%;
+  width: 43%;
+
+  /* 
   border-style: solid;
   border-width: 2px;
   border-color: #26308b;
-  */
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-align-items: flex-start;
-
-margin-top: 1%;
+*/
 
                           }
 
-/* The div that contains the main logo img */
-.landingPageGGSContainer{
-  height: 100%;
-    width: 100%;
 
-    position: relative;
-    /*
-    border-style: solid;
-    border-width: 3px;
-    border-color: #ed2c17; 
-    */
-    /*
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  align-items: flex-end;
-  */
+// A div that contains the buttons of 
+// the landing page:
+.landingPageButtonsContainer{
+  // We're in landscape media query!!!
+
+position: absolute;
+left: 0px;
+top: 0px;
+
+width: 100%;
+height: 80%;
+
+display: flex;
+flex-direction: column;
+justify-content: space-around;
+align-items: flex-start;
+
+padding: 10px;
+                        }
+
+
+// Styles for the button that app testers
+// tap on the landing page to take them to the page where 
+// the link is for the form:
+// This style simply positions the big brown button
+// on the landing page
+// Dump this after field testing is over:
+.surveyFormButtonLandingPage{
+
+    // We're in landscape media query!!!
+  position: absolute;
+  bottom: -3px;
+  right: 5px;
+  margin: 1px;
+  width: 95%;
+  height: 57px;
                             }
 
 
-/* The main logo (an img of text "Guides") */
-.landingPageTextImage{
-  
-  position: absolute;
-  top: 0px;
-  right: 0px;
 
-  width:  80%;
-  height: 80%;
 
-  overflow: hidden
-  
-                     }
 
-.welcomeText{
-  font-size: 34px;
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 700;
-  color: $girlGuidingDarkBlue;
-                    }
+
+// This has got to be hidden and must take up no space:                     
+  .landingPageWelcomeTextContainer{
+
+// We're in the landscape media query!!!!
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    
+    height: 35%;
+      width: 100%;
+
+      border-style: solid;
+      border-width: 3px;
+      border-color: #7e9fe7;  
+      
+      
+      display: none;
+      /*
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    align-items: flex-start;
+    */
+                              }
+
+
+
 
 
 //****************************
@@ -1713,10 +2162,10 @@ grid-column-gap: 2%;
                       }         
 
 
-} // end media query for when phone is in landscape orientation
-                        
-
-
+} // end landscape media query for when phone is in  orientation
+//---------------------------------------------------------------------------------------------------------                        
+// END LANDSCAPE MEDIA QUERY
+//---------------------------------------------------------------------------------------------------------
 
 
 
@@ -1726,34 +2175,7 @@ grid-column-gap: 2%;
 
 
 //  ------------- Styles to do with the landing page ------------- ------------- -------------
-
-.landingPageOuterContainer{
-  height: 100vh;
-    width: 100vw;
-  
-  position: fixed;
-  
-    // background-color: $lightBlue;
-    background-color: none;
-  /*
-      border-style: dotted;
-      border-width: 0px;
-       border-color: #dc7f7f;  */
-  
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  align-items: center;
-  }
-  
-  
-  
-
-
-
-
-
-
+//                (not already covered in media queries)
 
   
   .landingPageWelcomeContainer{
@@ -1771,73 +2193,6 @@ grid-column-gap: 2%;
                               }
 
 
-  .landingPageDigitalSafariContainer{
-    height: 65%;
-      width: 100%;
-      position: relative;
-/*
-      border-style: solid;
-      border-width: 2px;
-      border-color: #6c5709;  
-      */     
-      /*   
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    align-items: center;
-    */
-                              }
-
-
-
-/* The "Digital Safari" logo (an img) */
-.digitalSafariImg{
-  width:  100%;
-  height: 100%;
-  
-                 }
-
-
-
-
-
-
-
-  .landingPageWelcomeTextContainer{
-    height: 35%;
-      width: 100%;
-/*
-      border-style: solid;
-      border-width: 3px;
-      border-color: #a78610;  
-*/          
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    align-items: flex-start;
-                              }
-
-// Div that contains the login/out button
-// and the login and learn-to-register
-// buttons:
-.loginOrRegisterContainer{
-
-position: relative;
-right: 10px;
-
-/*        
-      border-style: solid;
-      border-width: 1px;
-      border-color: #a78610;  
-  */
-width: 137px;
-height: 75px;      
-
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-align-items: flex-end;
-                         } 
 
 // for the text that reads 
 // "or" and that goes between the login and
@@ -1849,10 +2204,14 @@ align-items: flex-end;
   font-style: normal;
   font-weight: 700;
   
-  color: $girlGuidingDarkBlue;
+  // color: $girlGuidingDarkBlue;
+  color: white;
+
 
   padding: 0px;
-  margin: 0px;
+  margin: 5px;
+
+  text-shadow: 2px 4px 4px $girlGuidingDarkBlue;
 
                }
 
@@ -2270,21 +2629,6 @@ hideIconContainer.
 // to the survey form for testers
 
 
-// Styles for the button that app testers
-// tap on the landing page to take them to the page where 
-// the link is for the form:
-
-// This style simply positions the big brown button
-// on the landing page
-// Dump this after field testing is over:
-.surveyFormButtonLandingPage{
-  position: absolute;
-  top: 5px;
-  left: 30px;
-  margin: 1px;
-  width: 190px;
-  height: 100px;
-                            }
                             
 // This is for the button that takes the user 
 // back to the home page from the form-link page.
