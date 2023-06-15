@@ -24,7 +24,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/Scottish-Tech-Army/ggs-frontend">
+  <a href="https://github.com/Scottish-Tech-Army/ggs-combined">
     <img src="src/assets/images/gg-logo.png" alt="Logo" width="auto" height="80">
   </a>
 
@@ -33,14 +33,14 @@
   <p align="center">
     This is a mobile web app that allows users to go on a treasure hunt of Scottish landmarks. Girlguide units can compete with other units across the organisation.
     <br />
-    <a href="https://github.com/Scottish-Tech-Army/ggs-frontend"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Scottish-Tech-Army/ggs-combined"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Scottish-Tech-Army/ggs-frontend">View Demo</a>
+    <a href="https://github.com/Scottish-Tech-Army/ggs-combined">View Demo</a>
     ·
-    <a href="https://github.com/Scottish-Tech-Army/ggs-frontend/issues">Report Bug</a>
+    <a href="https://github.com/Scottish-Tech-Army/ggs-combined/issues">Report Bug</a>
     ·
-    <a href="https://github.com/Scottish-Tech-Army/ggs-frontend/issues">Request Feature</a>
+    <a href="https://github.com/Scottish-Tech-Army/ggs-combined/issues">Request Feature</a>
   </p>
 </div>
 
@@ -73,7 +73,7 @@
       <ul>
         <li><a href="#purpose-of-the-app">Purpose of the app</a></li>
         <li><a href="#main-components-of-the-app">Main components of the app</a></li>
-        <li><a href="#heirarchy-of-components">Heirarchy of components</a></li>
+        <li><a href="#hierarchy-of-components">Heirarchy of components</a></li>
         <li><a href="#operation-of-the-navigational-buttons-of-the-app">Operation of the navigational buttons of the app</a></li>
         <li><a href="#conditional-rendering">Conditional rendering</a></li>
         <li><a href="#data-flow">Data flow</a></li>
@@ -143,7 +143,7 @@ To get a local copy up and running follow these steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/Scottish-Tech-Army/ggs-frontend.git
+   git clone https://github.com/Scottish-Tech-Army/ggs-combined.git
    ```
 2. Install NPM packages
    ```sh
@@ -283,7 +283,7 @@ You can only use the app's facilities after you have logged in. <br>
 <br><br>
 
 
-## Heirarchy of components
+## Hierarchy of components
 
 index.js invokes `<App/>`, which actually does nothing except invoke `<Home/>`.
 
@@ -328,7 +328,6 @@ The main components of the app take their places in a heirarchy that looks like 
          - `<NavigationBar/>`<br>
             - `<PlusMenu/>`<br><br>
      - `<FormLinkPage>` (For field testers only. Commented out in production code)<br><br><br>
-
 
 ## Operation of the navigational buttons of the app
 
