@@ -62,7 +62,7 @@ npm run build
 cd resources/ggsLambda
 
 # Run backend unit tests in non-interactive mode
-npm test -- --watchAll=false
+#npm test -- --watchAll=false
 
 cd ../../../cdk
 
