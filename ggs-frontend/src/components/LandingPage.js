@@ -4,9 +4,6 @@ import React, { useEffect, useState, useContext} from "react";
 import LoginModal from "./LoginModal";
 import LogoutModal from "./LogoutModal";
 
-
-
-
 // Context:
 // Get access to the object that contains the stuff to do with making 
 // this app a multi-page app:
@@ -14,28 +11,26 @@ import {MenuContext} from "./Home.js"
 // Get access to <AuthProvider/>'s unit and setUnit():
 import { authContext } from "../contexts/AuthContext";
 
-
-
 // Components:
 import SquareButton from "./SquareButton";
 import GGSbuttonOne from "./GGSbuttonOne";
-
-
 
 // Images:
 // Main logo:
 import ggsTextImage from "../assets/images/logoPlusGirlguidingScotland.svg";
 // Main image:
-import digitalSafariImage from "../assets/images/digitalSafariStandIn.svg";
+import digitalSafariMainImage from "../assets/images/landingPageMainImageNew2.jpg";
+// Old stand-in image:
+// import digitalSafariStandInImage from "../assets/images/digitalSafariStandIn.svg";
+
 
 // Images for the icons:
-import HowToIcon from "../assets/images/howToComplete2.svg";
 import challengesIcon from "../assets/images/challengesNearMeIcon.svg";
 import userGuideIcon from "../assets/images/UserGuideIcon.svg";
 import completedIcon from "../assets/images/completedChallenges.svg";
 import leaderboardIcon from "../assets/images/clipboardIcon3.svg";
-
-
+// NO LONGER USED:
+// import HowToIcon from "../assets/images/howToComplete2.svg";
 
 // styles:
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -99,6 +94,28 @@ const [buttonDivCSSclass, setButtonDivCSSclass] = useState("largeButtonInoperabl
 // "landingPageIconAndButtonContainerFaded" (for when they // are not)
 const [iconAndButtDivCSSclass, setIconAndButtDivCSSclass] = useState("landingPageIconAndButtonContainerFaded");
 
+
+// A state property to hold the CSS class of 
+// the <p> that contains the text for the How to register 
+// button. Value will be either "buttonOperable" or "buttonInoperable"
+const [howToRegButtTextCSSclass, setHowToRegButtTextCSSclass] = useState("buttonOperable");
+
+// A state property to hold the CSS class of the div for 
+// the How to register button. Value will be either 
+// "loginRegisterP" (for when it is visible) or 
+// "loginRegisterPdisappear" (to make the <p> disappear)
+const [orTextCSSclass, setOrTextCSSclass] = useState("loginRegisterP");
+
+// A state property to hold the CSS class of the <p> for 
+// the text "or" that goes between the lgin and How to 
+// register buttons. Value will be either 
+// "largeButton1New" (for when it is working) or 
+// "largeButtonInoperable" (for when it is not)
+const [howToRegButtDivCSSclass, setHowToRegButtDivCSSclass] = useState("largeButton1New");
+
+
+
+
 // A state property that shows whether a user is logged in or not. 
 // Possible values are true or false.
 const [loggedIn, setLoggedIn] = useState();
@@ -138,6 +155,10 @@ const [showLogin, setShowLogin] = useState(false);
 // g) set loggedIn to false
 // h) set loggedInThenLoggedOut to true, which will 
 // Show a modal that reads, "You are now logged out" for a short interval.
+// i) make the How to register button opaque and operable and make
+//    the <p> for text "or" visible
+// j) for field testing only (remove this code for the production version
+// of the app) make the big brown button invisible and inoperable again
 const logout = () => {
   // a):
     localStorage.removeItem(UNIT_KEY);
@@ -155,6 +176,10 @@ const logout = () => {
   setLoggedInThenLoggedOut(true)
   // x?)
     setShowLogin(false)  
+  // i) 
+  changeHowToRegButton(true)  
+  // j):
+  setClassesForBrownButton("surveyFormButtonInoperable surveyFormButtonLandingPage")       
                        } // end fn logout 
   
   
@@ -245,6 +270,31 @@ function showHowToRegisterScreen(){
                                                } // end fn changeButtonsAndIcons 
 
 
+// A function to 
+// 1) make the How to register button either faded 
+// and inoperable or opaque and clickable 
+// 2) make appear or disappear the <p> for text 
+// "or" (which goes between the login/logout 
+// and How to register buttons):
+function changeHowToRegButton(clickable){
+  if (clickable) {
+    // Make How to register button operable, clickable and opaque:
+    setHowToRegButtTextCSSclass("buttonOperable")
+    setHowToRegButtDivCSSclass("largeButton1New")
+    // Make "or" text appear:
+    setOrTextCSSclass("loginRegisterP")
+                   } else {
+    // Make How to register inoperable, unclickable and faded:
+    setHowToRegButtTextCSSclass("buttonInoperable")
+    // setHowToRegButtDivCSSclass("largeButtonInoperable")
+    setHowToRegButtDivCSSclass("largeButtonDisappear")
+    // Make "or" text disappear:
+    setOrTextCSSclass("loginRegisterPdisappear")
+                          }
+                                        }
+
+
+
 
 // A function to get data from child <LoginModal/> to this component, its parent.
 // This fn has to
@@ -329,10 +379,7 @@ changeButtonsAndIcons(false)
   // This function gets passed in as props to <LoginModal/>, in which
   // the close button calls this function
   const handleLoginClose = () => {
-  //  setLoadingText("Logging in"); // Message for signed in users only
-  //  setLoadingTimer(500);
     setShowLogin(false);
-  //  setShowLoading(true);
                                  };
 
 
@@ -381,10 +428,12 @@ renderThis = (
 
 
 
-{ /* If the user has logged in and then 
-at some stage logs out again, for several seconds show the modal that 
-tells the user she has logged out and then 
-make it disappear: */ }
+{ /* If the user has logged in and then at some stage 
+logs out again, for several seconds show the modal that 
+tells the user she has logged out and then make it 
+disappear. If loggedInThenLoggedOut is true the code below sets 
+showModal to jsx that describes the logout modal/ If it's
+false the code below sets showModal to null: */ }
 {showModal}
 
 {loggedInThenLoggedOut ? ( <>
@@ -393,8 +442,8 @@ make it disappear: */ }
     showModal = null
     // Trigger a rerender:
     setLoggedInThenLoggedOut(false)
-          }, 3000)}
-</>
+          }, 5000)}
+                          </>
               ) : showModal = null
 
 }
@@ -416,17 +465,24 @@ make it disappear: */ }
 
   {/* i):
   div (className="landingPageFirstContainer") contains
-        one element:
-         a div (className="landingPageGGSContainer") containing  
+     a) a div (className="landingPageGGSContainer") containing  
         the main image (text "Girlguiding Scotland" and the roundel)
+     b) a div (className = "landingPageWelcomeTextContainerLandscape")
+     containing the <p> for the "welcome" text for when the phone is 
+     in landscape position only. A media query makes this div disappear
+     when the phone is in portrait position.
+        
     */}    
   <div className="landingPageFirstContainer">
+    {/* ib): */}
+    <div className="landingPageWelcomeTextContainerLandscape">
+      <p className="landingPageWelcomeTextLandscape">Welcome</p>
+    </div>
 
-        {/* ia): */}
+    {/* ia): */}
     <div className="landingPageGGSContainer">
       <img className="landingPageTextImage" src ={ggsTextImage}/>
     </div>      
-
   
     </div>{/* end div of className landingPageFirstContainer */}
 
@@ -442,22 +498,32 @@ This contains two items:
     
     {/* iia): 
     a div of className="landingPageSecondContainer" that contains 
-      two elements:
-      a) a div of className = "landingPageWelcomeTextContainer" that contains 
-      two elements:
-      1) a <p> for text "Welcome" and 
-      2) a <GGSbuttonOne> for the login/logout button
-      3) a <GGSbuttonOne> for the register button
+      three elements:
+      a) a div of className = "landingPageWelcomeTextContainer" that contains:
+      a <p> for text "Welcome"
 
       b) a div (className="landingPageDigitalSafariContainer") that contains
    the image for "Digital Safari"
+     
+      c) a div (className="loginOrRegisterContainer") that contains 
+        i)   a <GGSbuttonOne> for the login/logout button
+        ii)  a <p> for text "or"
+        iii) a <GGSbuttonOne> for the How to register button
+
   */}
     <div className="landingPageSecondContainer">
     
-    {/* iia-a-1): */}
+    {/*   */}
     <div className="landingPageWelcomeTextContainer">
     <p className="welcomeText"> Welcome </p>
+    </div>
 
+ {/* iia-b): */}
+ <div className="landingPageDigitalSafariContainer">
+    <img src={digitalSafariMainImage} alt="Digital safari image" className = "digitalSafariImg"/>
+</div>
+
+{/* iia) -c):  */}
 <div className="loginOrRegisterContainer">
      <GGSbuttonOne
      buttonDivCSSclass = {"largeButton1New"}
@@ -465,29 +531,15 @@ This contains two items:
      clickHandler = {logButtonClickHandler}
      pText = {loginButtonText}
      />      
-<p  className="loginRegisterP">or</p>
+<p  className={orTextCSSclass}>or</p>
     <GGSbuttonOne
-     buttonDivCSSclass = {"largeButton1New"}
-     pTextCSSclass = {"buttonOperable"}
+     // buttonDivCSSclass = {"largeButton1New"}
+     buttonDivCSSclass = {howToRegButtDivCSSclass}
+     // pTextCSSclass = {"buttonOperable"}
+     pTextCSSclass = {howToRegButtTextCSSclass}
      clickHandler = {showHowToRegisterScreen}
      pText = {registerButtonText}
      />      
-    </div>
-</div>
-
- {/* iia-b): */}
- <div className="landingPageDigitalSafariContainer">
-    <img src={digitalSafariImage} alt="Digital safari image" className = "digitalSafariImg"/>
-    
-
-{/* Comment out the following button for production. It's only for field testers.
-  It's the big brown button sitting on top of the main image: */}
-    <GGSbuttonOne
-     buttonDivCSSclass = {classesForBrownButton}
-     pTextCSSclass = {"surveyFormButtonP"}
-     clickHandler = {bigIconsObject.p0.takeTesterToFormLinkPage}
-     pText = "When you're ready to do the questionnaire return to this page and TAP HERE"
-     />
 </div>
 
     </div>  {/* end div for landingPageSecondContainer*/}
@@ -516,6 +568,8 @@ This contains two items:
     */}
     
     <div className="landingPageThirdContainer"> 
+
+    <div className="landingPageButtonsContainer">
 
     {/*  i)   */}
     <div className={iconAndButtDivCSSclass}>    
@@ -570,6 +624,7 @@ This contains two items:
       clickHandler  = {bigIconsObject.p0.leaderBoardButtonClickHandler}  
       pText = "Challenges leader board"
     />
+
     </div>
 
 
@@ -609,12 +664,28 @@ This contains two items:
     />
     </div>
 
+    </div> {/* end  div of className "landingPageButtonsContainer"*/}
+
+        {/* NOw the big brown button. Comment this out 
+        for production. It's only for field testers: */}
+    <GGSbuttonOne
+     buttonDivCSSclass = {classesForBrownButton}
+     pTextCSSclass = {"surveyFormButtonP"}
+     clickHandler = {bigIconsObject.p0.takeTesterToFormLinkPage}
+     pText = "When you're ready to do the questionnaire return to this page and TAP HERE"
+     />
+
 
    </div>     {/* end div of className landingPageThirdContainer */}
 
    </div>     {/* end div of className landingPageSecondAndThirdContainer */}
 
-   {showLogin && <LoginModal successOrFailResponse = {onLoginSuccess} handleLoginClose={handleLoginClose} whichModalScreen = {whichModalScreen} />}
+   {showLogin && <LoginModal 
+   successOrFailResponse = {onLoginSuccess} 
+   handleLoginClose={handleLoginClose} 
+   whichModalScreen = {whichModalScreen} 
+   changeHowToRegButton = {changeHowToRegButton}
+                />}
    
    
 </div> {/* end landingPageOuterContainer follows on next line*/}

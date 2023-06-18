@@ -58,11 +58,6 @@ let showRegionsList = useRef(false)
 
 
 /*
-When the search field attracts focus the component
-<RegionsList/> shows. At this stage it shows all 
-the counties.
-
-
 When the user starts typing in the search input field,
 the list of counties appears and gets filtered as 
 the user types. 
@@ -118,7 +113,6 @@ loss of focus on the input makes the dropdown disappear
 // 1) Put the county name into the input
 // 2) Make the dropdown disappear
 function selectCountyFromDropDown(countyName){
-//    console.log(`In div onClick handler. You selected county ${countyName}`)
     // 1&2):
     makeListDisappear(countyName)
                                              }
@@ -153,7 +147,6 @@ showRegionsList.current = false
 // className = "countyInput". This handler must:
 // 1)   Put all the counties into 
 //      stateObj.filteredCounties
-// 2)   Show <RegionsList/>
 function showAllRegionsList(e){
     // 1): 
     showRegionsList.current =true    
@@ -169,7 +162,6 @@ function showAllRegionsList(e){
 // Two state properties to hold 
 // i)  what the user types in
 // ii) the filtered list of counties:
-// const [typedText, setTypedText] = useState()
 const [stateObj, setStateObj] = useState({
     typedText: '',
     filteredCounties: []
@@ -187,10 +179,8 @@ const [stateObj, setStateObj] = useState({
 //       typed-in text is in any member of allCountiesList 
 //       save that member object to array newArray.
 //  3)   set showRegionsList to true.
-//  4)   pass newArray to RegionsList as props.
 //  5)   Change state property typedText to what was typed in
 function displayFilteredRegionsList(e){
-    
     let newArray = []
     // 1):
     let typedInText = e.target.value
@@ -223,7 +213,6 @@ setStateObj({
 // of counties:
 const countiesToDisplay = 
     stateObj.filteredCounties.map((member)=>(
-        
             <li key = {member.key} >
     <div className="regionsListItem" onClick = {()=> selectCountyFromDropDown(member.region) }>
     <p className="regionsListText">

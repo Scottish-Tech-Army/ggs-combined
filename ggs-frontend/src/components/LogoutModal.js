@@ -15,7 +15,7 @@ const LogoutModal = () => {
        
       </Modal.Header>
       <Modal.Body className="mt-n3">
-        <h1>Log out</h1>
+        <h1>You logged out</h1>
         
           <div>
             <p>You are now logged out.</p>

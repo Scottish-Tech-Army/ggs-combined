@@ -7,14 +7,16 @@ const Markers = ({
   setSelectedLocation,
 }) => {
 
-  // 30Mar23: Mukund added the following map function for testing only:
-//  locations.map((location, index) => (
-//    console.log(`Inside <Markers/> and json string of location is: ${JSON.stringify(location)} and index is: ${index}`)
-//  ))
 
   return (
+    // Remember that locations is an array each member of which is an
+    // object that represents a location and has many properties, such as 
+    // latitutde and longitude: 
     locations &&
     locations.map((location, index) => (
+      // Make a <Marker/> for each location, each with the correct 
+      // lat & long, each having an onClick handler that changes 
+      // <ChallengesNearMePage/>'s state property selectedLocation 
       <Marker
         key={index}
         index={index}
@@ -24,7 +26,7 @@ const Markers = ({
         onClick={() => setSelectedLocation(location)}
       >
         <Pin
-          location={location} // dynamically apply colour without triggering rerenders
+          location={location} // dynamically apply colour without triggering rerenders (Mukund: what??)
         />
       </Marker>
     ))

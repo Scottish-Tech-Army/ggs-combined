@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, createContext, useRef } from "react";
+import React, { useState, createContext } from "react";
 
 // import LeaderboardModal from "./LeaderboardModal";
 
@@ -21,9 +21,6 @@ import challengesIcon from "../assets/images/challengesNearMeIcon.svg";
 import userGuideIcon from "../assets/images/UserGuideIcon.svg";
 import completedIcon from "../assets/images/completedChallenges.svg";
 import leaderboardIcon from "../assets/images/clipboardIcon3.svg";
-
-// React-bootstrap stuff
-import Button from "react-bootstrap/Button";
 
 // scss stuff:
 import '../scss/style.scss';
@@ -82,7 +79,10 @@ p0: {
               // console.log(`Inside the bigObject (myObject). Handler takeTesterToFormLinkPage has fired`)
                                      }
     },
-    // p1 is an object that <HowToPage/> will use:
+
+    // p1 is an object that <HowToPage/> will use.
+    // NOTE this page is no longer part of the app, hence
+    // object p1 is never used:
 p1: {
     homeIconClickHandler:  ()=> {setPageIndex(0)},
     icon1src: challengesIcon,
@@ -94,7 +94,8 @@ p1: {
     icon4src: leaderboardIcon,
     icon4ClickHandler:  ()=> {setPageIndex(5)}
     },
-    // p2 is an object that <ChallengesNearMePage/> will use:
+
+    // p2 is an object that <ChallengesNearMePage/> will use
 p2: {
     homeIconClickHandler:  ()=> {setPageIndex(0)},
     icon1src: HowToIcon,
@@ -146,7 +147,7 @@ p5: {
     },
 
     // Comment out the following for production code;
-    // it is only for field testers:
+    // it is for a page that is only for field testers:
     // p6 is an object that <FormLinkPage/> will use:    
     p6: {
       homeIconClickHandler:  ()=> {setPageIndex(0)},

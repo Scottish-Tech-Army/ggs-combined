@@ -24,10 +24,20 @@ Both the `production` and `stage` deployments are made to AWS. The Scottish Tech
 
 Under **no** circumstances must the AWS secrets be added plain text to the source code in this repository.
 
+Please note that the deployment keys used to communicate with AWS are temporary and need periodic updating from the STA AWS account. Ideally this should not be necessary but at this point the solution to creating temporary AWS access keys during Github Actions deployment is unknown.
+
 ## Deployment Flow
 
 Changes to the software should follow the following steps:
 
-1. Develop your feature on a feature branch called something like `feat/some-feature` or perhaps use the name of the issue in jira;
+1. Develop your feature on a feature branch called something like `feat/some-feature` or perhaps use the name of the issue in jira like `feat/gga-116`;
 2. When you are happy that the feature is ready for testing in a production like environment, merge your branch into the `develop` branch. The changes will now be deployed to AWS `stage` for testing;
 3. When you are happy that the new feature works in `stage`, merge the changes into the `main` branch. This will be deployed into the production environment and may be used by end users.
+
+## Backend
+
+The backend is an AWS Lambda serverless RESTful API written in Typescript. For more details, please see [backend README](ggs-backend/README.md).
+
+## Frontend
+
+The frontend is a React web application written in Javascript. For more details, please see [frontend README](ggs-frontend/README.md).

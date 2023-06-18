@@ -25,6 +25,10 @@ jobs:
         with:
           node-version: '18'
 
+      - name: create frontend build directory
+        working-directory: ./ggs-frontend
+        run: mkdir -p build
+  
       - name: install backend dependencies
         working-directory: ./ggs-backend
         run: npm install
@@ -76,7 +80,6 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_DEFAULT_REGION: $AWS_REGION
 
       - name: install frontend dependencies
@@ -109,5 +112,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_DEFAULT_REGION: $AWS_REGION

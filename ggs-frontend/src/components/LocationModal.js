@@ -1,12 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
+
+
+// Bootstrap stuff:
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
+
+// Other stuff:
 import { collectLocation } from "../services/locations";
 import { authContext } from "../contexts/AuthContext";
-import dividerLine from "./divider-line.svg";
+
+
+// Images:
+import placeholderPhoto from "../assets/images/noImageYet.svg";
 import xPrimary from "./x-primary.svg";
-import placeholderPhoto from "./image-coming-soon.png";
+// import dividerLine from "./divider-line.svg";
+import bullsEye from "../assets/images/bullsEye.svg";
 
 // Change this as needed for coordinate distance from landmark.
 const LOCATION_TOLERANCE_LATITUDE = 0.0002; // Note 0.0002 is approx equal to 22 metres.
@@ -30,11 +39,29 @@ const LocationModal = ({
   const [isOutOfRange, setIsOutOfRange] = useState(true);
   const [deviceErrMsg, setDeviceErrMsg] = useState();
 
+
+// A state property that is a boolean. Its value determines
+// whether or not the "Congratulations! ..." message will 
+// appear in this modal. When the user clicks the button
+// that allows her to collect a location the click handler
+// for that button sets this state property to true,
+// causing conditional rendering of the "Congratulations! ..."
+// message:
+  const [showCongrats, setShowCongrats] = useState(false);
+
   const handleCollectLocation = (event) => {
+    // The following function tells the backend that the 
+    // user has collected the location of the given id:
     collectLocation(unit.email, selectedLocation.locationId)
       .then((response) => {
         if (response.ok) {
-          // Update the frontend locations with the collected marker to match the backend status
+          // Update the frontend array locations 
+          // (in <ChallengesNearMePage/>) so that the 
+          // object in it that corresponds to the location
+          // whose <Marker/> the user has clicked on 
+          // gains new property collected with value true.
+          // This makes the frontend locations array match 
+          // the backend data:
           setLocations((locations) => {
             const index = locations.findIndex(
               (i) => i.locationId === selectedLocation.locationId
@@ -43,7 +70,11 @@ const LocationModal = ({
             locationList[index].collected = true;
             return locationList;
           });
-        }
+          // Also set state property showCongrats to true
+          // so that the "Congratulations! ..." message 
+          // shows:
+          setShowCongrats(true)
+                         }
       })
       .catch((error) => {
         console.error(error);
@@ -51,35 +82,68 @@ const LocationModal = ({
     event.preventDefault();
   };
 
-  // Mukund: Set a variable to the object that is in array photos 
-  // of object selectedLocation (location). array photos looks like this:
+// set a variable to the jsx for the "Congratulations! ... " text:
+let congratsMessage = (   
+<>
+<div className="congratsTextContainer"> 
+<p className="congratsTextHeadline">Congratulations!</p>
+<p className="congratsTextSmall">You have collected this location:</p><br></br><br></br>
+</div>
+</>
+                   )
+
+
+
+  // Set a variable to the object that is in array photos, which is a property of 
+  // object selectedLocation. array photos looks like this
+  // (it contains only one object):
   // [{url:  "https://dz1ex1yb0vxyz.cloudfront.net/dunbartonshire-bearsden-thegruffalotrail.jpg"}]
     const photo = selectedLocation.photos[0];
 
-  useEffect(() => {
-    if (!userLatLong) {
-      setDeviceErrMsg("Please turn on location tracking");
-      setIsOutOfRange(true);
-    } else {
-      setIsOutOfRange(!isLocationInRange(selectedLocation, userLatLong));
-    }
-  }, [selectedLocation, userLatLong]);
 
+
+// The following useEffect runs when either 
+// either selectedLocation or userLatLong
+// change. It does one of two things:
+// 1) if location tracking is not on:
+//    sets the error message, 
+//    sets boolean state property isOutOfRange to true
+// 2) if location tracking IS on:
+//    finds out whether the user is in range or out of range
+//    and sets boolean state property isOutOfRange accordingly.
+// The useEffect runs whenever the user moves (which changes 
+// userLatLong) or whenever the user clicks on a new marker
+// (which changes selectedLocation)
+  useEffect(() => {
+    // 1):
+    if (!userLatLong) { 
+      setDeviceErrMsg("Please let this app track your movement. Close this window and click ");
+      setIsOutOfRange(true);
+      // 2):
+                      } else {  
+      setIsOutOfRange(!isLocationInRange(selectedLocation, userLatLong));
+                             }
+                  }, [selectedLocation, userLatLong]);
+
+  
+  
   // Adapt the collecting button depending on user's proximity to the landmark location
-  // and the collection status of the landmark location
+  // and the collection status of the landmark location.
+  // selectedLocation.collected and isOutOfRange are booleans.
   const collectButtonDisabled = selectedLocation.collected || isOutOfRange;
-  const collectButtonText = isOutOfRange
-    ? "Please come closer to this location"
-    : "Tap to reveal challenge";
+  const collectButtonText = isOutOfRange ? "Please come closer to this location" : "Tap to reveal challenge";
 
   const areaName =
     selectedLocation.city && selectedLocation.city !== selectedLocation.county
       ? `${selectedLocation.city}, ${selectedLocation.county}`
       : selectedLocation.county;
 
+
   function getPhoto(photo) {
     if (!photo) {
       return (
+// If there's no photo available shove this into the
+// <Modal.Body/>:
         <>
           <Image
             className="img-location"
@@ -87,20 +151,25 @@ const LocationModal = ({
             alt="no image available"
             rounded
           />
-          <div className="challenge">
-            <h2>Bonus Challenge</h2>
-            <div className="content">
+          <div className="bonus-challenge-overall-container">
+            <div className="bonus-challenge-header-container">
+            <p className="bonus-challenge-header-text">Bonus Challenge</p>
+            </div>
+            <div className="bonus-challenge-content-container">
+              <p className="bonus-challenge-content-text">
               Will you be the first to take a picture of this location? Take a
               photo and send it to us at{" "}
               <a href="mailto:web@girlguiding-scot.org.uk">
                 web@girlguiding-scot.org.uk
               </a>
+              </p>
             </div>
           </div>
         </>
       );
-    }
+                 } // end if there's no photo
 
+// Set creditLine to some jsx that contains info about the photo:
     let creditLine = null;
     if (photo.attribution || photo.copyright) {
       let attributionElement = photo.originalUrl ? (
@@ -117,6 +186,9 @@ const LocationModal = ({
       );
     }
 
+
+    // If there IS a photo available shove this into the
+// <Modal.Body/>:
     return (
       <>
         <Image
@@ -127,8 +199,11 @@ const LocationModal = ({
         />
         {creditLine}
       </>
-    );
-  }
+          );
+                        } // end getPhoto
+
+
+
 
   return (
     <Modal
@@ -138,6 +213,8 @@ const LocationModal = ({
       className="custom-modal location-modal"
     >
       <Modal.Header className="border-0 mb-n4">
+
+        {/*The button the user clicks to close the modal. It has an X image in it: */} 
         <Button
           variant="outline-primary"
           onClick={handleCloseLocation}
@@ -151,31 +228,54 @@ const LocationModal = ({
           />
         </Button>
       </Modal.Header>
+
       <Modal.Body className="mt-n3">
-        <div className="place-name">{selectedLocation.name}</div>
-        <div className="city-name">{areaName}</div>
+        {/*If the user has clicked the button that reads "Tap to reveal challenge"
+        show the "Congratulations! ... " message: */} 
+      {showCongrats ? congratsMessage : null} 
+        <div className="place-name-container">
+          <p className="place-name-text">{selectedLocation.name}</p>
+          </div>
+        <div className="city-name-container">
+          <p className="city-name-text">{areaName}</p>
+          </div>
         <div className="scroll-container">
           <div className="scroll">
             {getPhoto(photo)}
-            <div className="description">{selectedLocation.description}</div>
-            {selectedLocation.collected && (
-              <div className="challenge">
-                <h2>Challenge</h2>
-                <div className="content">{selectedLocation.challenge}</div>
+            <div className="description-container">
+              <p className="description-text">{selectedLocation.description}</p>
               </div>
-            )}
+            {selectedLocation.collected && (
+              <div className="challenge-container">
+              <h2>Challenge</h2>
+                <div className="challenge-content-container">
+                <p className="challenge-content-text">{selectedLocation.challenge}</p>
+                </div>
+              </div>
+                                            )}
           </div>
         </div>
       </Modal.Body>
-      {!!deviceErrMsg && (
-        <div className="container">
-          <img src={dividerLine} style={{ width: "100%" }} alt="" />
-          <p className="feedback-branding">{deviceErrMsg}</p>
+      {/*If there's an error show the error message: */}
+      {!!deviceErrMsg && ( // two !s = make true/false something that's truthy/falsey
+        <div className="error-message-container">
+          {/* OLD CODE: <img src={dividerLine} style={{ width: "100%" }} alt="" />*/}
+              
+          <p className="feedback-branding">{deviceErrMsg} <span className="spanErrorIMG"><img className="errorIMG"  src={bullsEye} /></span></p>
         </div>
       )}
+      {/*If there's no error and the user has NOT collected 
+      the location, show the button that allows the user to 
+      collect the location: */}
       {!selectedLocation.collected && !deviceErrMsg && (
         <Button
           bsPrefix="btn-branding"
+          // The following function tells the backend 
+          // to mark the location in question as
+          // collected. It also gets the object in 
+          // array locations (here in the frontend) 
+          // that corresponds to the location and sets 
+          // its collected property to true:
           onClick={handleCollectLocation}
           disabled={collectButtonDisabled}
           className={

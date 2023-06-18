@@ -28,8 +28,9 @@ export class CdkBackendStack extends Stack {
     const LOCATIONS_TABLE_NAME = resourcePrefix + "-Locations";
     const UNITS_TABLE_NAME = resourcePrefix + "-Units";
 
-    // S3 bucket for location photos
-    /* Do not specify the bucket name in the bucket props. Let AWS 
+    /* S3 bucket for location photos
+     *
+     * Do not specify the bucket name in the bucket props. Let AWS 
      * assign a name. Specifying a bucket name in the props causes 
      * the "bucket name already exists" errors on deployment.
      * See: https://github.com/aws/aws-cdk/issues/16686

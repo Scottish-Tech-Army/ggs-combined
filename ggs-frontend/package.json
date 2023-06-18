@@ -6,6 +6,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "bootstrap": "^5.1.0",
+    "config": "^3.3.9",
     "dotenv": "^10.0.0",
     "mapbox-gl": "^1.13.2",
     "node-sass": "^8.0.0",

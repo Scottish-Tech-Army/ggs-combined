@@ -2,6 +2,8 @@ import React, { useRef, useState, useContext, useEffect } from "react";
 
 // context:
 import { authContext } from "../contexts/AuthContext";
+// import { login, newRegister } from "../services/auth"; // use this line instead of the one below 
+// when Jack has made the appropriate change in the backend 
 import { login, newRegister } from "../services/auth";
 
 // components:
@@ -19,15 +21,50 @@ const LOGIN = "login";
 const REGISTER = "register";
 
 
-const LoginModal = ({ handleLoginClose, successOrFailResponse, whichModalScreen }) => {
+const LoginModal = (
+  { handleLoginClose, 
+    successOrFailResponse, 
+    whichModalScreen,
+    changeHowToRegButton 
+  }) => {
+  
+  // Get access to the setUnit function of 
+  // context provider <AuthProvider/>, which has 
+  // state property unit, which contains the unit 
+  // object (eg {email: "test@test, name: "Testy Tester"}):
   const { setUnit } = useContext(authContext);
 
+  //--------------------------------
+
+  // STATE PROPERTIES
+
+  // A state property for user email input
+  // (in the case o the login and resitration forms):
   const [email, setEmail] = useState("");
+
+  // State properties for unit name and
+  // county inputs of registration form: 
   const [name, setName] = useState("");
   const [county, setCounty] = useState("");
+
+
+// Two state properties to do with the registration screen:
+// i)  to hold what the user types into the county input
+// ii) to hold the filtered list of counties:
+const [stateObj, setStateObj] = useState({
+  typedText: '',
+  filteredCounties: []
+                                       })
+
+
+
   const [error, setError] = useState("");
+  
   // const [state, setState] = useState(LOGIN);
   const [state, setState] = useState(whichModalScreen);
+
+  //--------------------------------
+
 
   useEffect(() => {
     setError("");
@@ -39,19 +76,12 @@ const LoginModal = ({ handleLoginClose, successOrFailResponse, whichModalScreen 
 
 //--------------------------------------
 
-// Now a group of functions, etc to do with the dropdown menu:
 
-// Two state properties to hold 
-// i)  what the user types in
-// ii) the filtered list of counties:
-const [stateObj, setStateObj] = useState({
-  typedText: '',
-  filteredCounties: []
-                                       })
+// Stuff to do with the county dropdown menu:
 
 
-
-// An array containing all of the counties of Scotland:
+// An array containing all of the counties of Scotland
+// according to GGS:
 let allCountiesList = [
   {region: "Aberdeen and Shetland", key: "1"},
   {region: "Angus", key: "2"},
@@ -82,12 +112,9 @@ let allCountiesList = [
                 ]
 
 
-
-
 // A ref to hold a boolean that code in the 
-// return statement reads 
-// to determine whether to show the dropdown 
-// menu or not:
+// return statement reads to determine 
+// whether to show the dropdown menu or not:
 let showRegionsList = useRef(false)
 
 
@@ -112,9 +139,11 @@ const countiesToDisplay =
                                  )
 
 
-// The onClick handler of the divs that
-// contain the county names in the 
-// dropdown list.
+// The onClick handler of the divs 
+// of className="regionsListItem"
+// see code immediately above. 
+// These divs contain <p>s for the 
+// county names in the dropdown list.
 // This fn must:
 // 1) Put the county name into the input
 // 2) Make the dropdown disappear
@@ -153,7 +182,7 @@ function makeListDisappear(countyName){
   
 
 
-// The onChange handler for the input.
+// The onChange handler for the county input.
 // This function constantly creates and updates 
 // an array of all of the counties that contain the 
 // letters that the user is typing in and puts that
@@ -197,6 +226,8 @@ setCounty(typedInText)
                            } // end displayFilteredRegionsList
 
 
+
+
 // The onFocus handler for the search field (the input of 
 // className = "countyInput". This handler must:
 // 1)   Put all the counties into 
@@ -213,6 +244,8 @@ function showAllRegionsList(e){
                             } // end showAllRegionsList
 
 //--------------------------------------
+
+// STUFF TO DO WITH THE LOGIN AND REGISTRATION FORMS:
 
 /*
 // NOTE: I couldn't get the validation error messages to show if 
@@ -238,7 +271,7 @@ const [errorObj, setErrorObj] = useState(initStateErrorObject)
 // Wed31May23 NOTE: I couldn't get the Register form validation error messages to
 // show using an object in state to hold the show/hide error 
 // flags and the error messages so I hard coded the error messages 
-// and used these simple vars for the flags:
+// and used these three simple vars for the flags:
 const [showRegisterEmailErrMess, setShowRegisterEmailErrMess] = useState(false)
 const [showRegisterUnitNameErrMess, setShowRegisterUnitNameErrMess] = useState(false)
 const [showRegisterCountyErrMess, setShowRegisterCountyErrMess] = useState(false)
@@ -246,88 +279,101 @@ const [showRegisterCountyErrMess, setShowRegisterCountyErrMess] = useState(false
 // The same deal but for the Login form:
 const [showLoginEmailErrMess, setShowLoginEmailErrMess] = useState(false)
 
-//--------------------------------------
+
 
 // Form input validation functions. One for the login form and
 // one for the Registration form:
 
-// A function to validate the single email input in
+// A function to validate the single (email) input in
 // the login form. This fn returns true when the 
 // user has typed a valid email address and false when not:
-
 function validateLoginInput(){
-  let loginEmailIsValid = false  
-  // Validate the email 
-let validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-if (email.match(validEmailRegex)) {
-  console.log(`Log-in email is valid`)
-  loginEmailIsValid = true;
-  setShowLoginEmailErrMess(false)
-                                  } else {
-  console.log(`Log-in email is NOT valid`)
-  setShowLoginEmailErrMess(true)
-                                         }
-return loginEmailIsValid
+  return validateEmailInput()
                              }
 
 
-// A function to validate the user inputs for registration:
+// A function to validate the user inputs for 
+// registration. This fn 
+// 1) Calls functions to validate the three 
+//    user inputs
+// 2) if all inputs are valid 
+//    i) logs xxxx
+// 3) returns true when the 
+// user has typed valid text for all inputs and
+// returns false when one input or more is not
+// valid:
 function validateRegistrationInputs (){
-  
-let emailIsValid = false  
-let unitNameIsValid = false  
-let countyIsValid = false 
+// 1):  
+let isEmailValid = validateEmailInput()  
+let isUnitNameValid = validateUnitNameInput()  
+let isCountyValid = validateCountyInput() 
 
-// Validate the email 
+if (isEmailValid && isUnitNameValid && isCountyValid) {
+    return true // all inputs passed validation
+                                                      }
+    return false // validation failed in one input or more 
+                                      } // end validateRegistrationInputs
+
+
+// A function to Validate the email input of 
+// the registration screen or the login screen.
+// This simply tests whether the email typed by the
+// user takes the form preceding@succeeding, where
+// 'preceeding' and 'succeeding' can be any text
+// at all: 
+function validateEmailInput(){
 let validEmailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 if (email.match(validEmailRegex)) {
   // console.log(`email is valid`)
-  emailIsValid = true;
   setShowRegisterEmailErrMess(false)
+  return true
                                   } else {
   // console.log(`email is NOT valid`)
   setShowRegisterEmailErrMess(true)
+  return false
                                          }
+                             }
 
 
-// Validate the unit name:
+// A function to Validate the unit-name
+// input of the registration screen:
+function validateUnitNameInput(){
 if (name.trim().length === 0 || name === "") {
   setShowRegisterUnitNameErrMess(true)
+  return false
                                              } else {
-  unitNameIsValid = true
   setShowRegisterUnitNameErrMess(false)
+  return true
                                                     }
+                                }
 
 
-// Validate the county name
+// A function to validate the county-name
+// input of the registration screen:
+function validateCountyInput(){
 for (const memberObj of allCountiesList){
   if (memberObj.region === county) {
-    countyIsValid = true
-    break
+    setShowRegisterCountyErrMess(false)
+    return true
                                    }
                                         } // end for
-if (!countyIsValid) {
-  setShowRegisterCountyErrMess(true)
-                    } else {
-    setShowRegisterCountyErrMess(false)
-                           }
-
-
-if (emailIsValid && unitNameIsValid && countyIsValid) {
-    return true // all fields passed validation
-                                                      } else {
-    return false // validation failed somewhere
-                                                             }
-                                } // end validateRegistrationInputs
+setShowRegisterCountyErrMess(true)
+return false
+                              }
 
 
 
-//--------------------------------------
 // The functions that handle login and registration:
 
   const handleLogin = (event) => {
     event.preventDefault(); // This line stops the modal window from
                             // vanishing even when the email address is invalid.
+    // The following line is necessary to clear a 
+    // previous error message that showed after a 404 type error:
+    setError(false)
+    // The following line is necessary to ensure that a 
+    // previously showing invalid email error message is removed:      
+    setShowLoginEmailErrMess(false)
     // Only send the form data (an email address) to the back end 
     // if it passes validation:
     if (validateLoginInput()) {
@@ -338,17 +384,21 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
         // which is a js object that looks like this:
         // {email: "mukund.pandit@virginmedia.com",
         // name: "TeamMukund"}
-
         setUnit(unit);
         handleLoginClose();
         // Call parent <LandingPage/>'s function that makes the app's
         // buttons operable and opaque (before login they are faded and 
-        // inoperable).:
+        // inoperable):
         successOrFailResponse(true)
+        // Call parent <LandingPage/>'s function that makes the
+        // How to register button faded and inoperable
+        changeHowToRegButton(false)
       })
       .catch((error) => {
         // The function that tells parent <LandingPage/>
-        // what to do on failure to log in:
+        // what to do on failure to log in (ie simply don't
+        // make the buttons on the lanfing page opaque
+        // and operable):
         successOrFailResponse(false)
         // console.error(error);
         if (error.status === 404) {
@@ -360,7 +410,10 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
         }
       });
     event.preventDefault();
-                          } // end if
+                          } else { // if the email input was not valid
+// make the error message appear:
+setShowLoginEmailErrMess(true)
+                          }// end if
                             }; // end handleLogin()
 
 
@@ -371,11 +424,48 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
     // Validate user input:
     if (validateRegistrationInputs()) {
 // console.log(`All inputs passed validation!`)
-/*  NEW CODE FOLLOWS      
-    newRegister(email, name, county)
+newRegister(email, name, county)
       .then((unit) => {
         setUnit(unit);
-        handleLoginClose();
+        // Log in:
+    login(email)   // email here is a JS object like this: {email: "xxx.yyy@zzz.com”}
+    .then((unit) => {
+      // login() returns a promise that resolves to unit,
+      // which is a js object that looks like this:
+      // {email: "mukund.pandit@virginmedia.com",
+      // name: "TeamMukund"}
+      // Call parent <LandingPage/>'s function that makes the app's
+      // buttons operable and opaque (before login they are faded and 
+      // inoperable):
+      successOrFailResponse(true)
+      // Call parent <LandingPage/>'s function that makes the
+        // How to register button faded and inoperable
+        changeHowToRegButton(false)
+      // For several seconds show a modal screen that displays the message
+        // "You have registered successfully and are logged in":
+        setState("registrationSuccessful")
+        setTimeout(()=>{ 
+          // Close the modal:
+          handleLoginClose();
+                       }, 5000)
+                  })
+    .catch((error) => {
+      // The function that tells parent <LandingPage/>
+      // what to do on failure to log in (ie simply don't
+      // make the buttons on the lanfing page opaque
+      // and operable):
+      successOrFailResponse(false)
+      // console.error(error);
+      if (error.status === 404) {
+        setError(
+          "Email address not found. If this is your first visit, please register first."
+        );
+      } else {
+        setError("There was a problem in the log-in process. Please try again.");
+      }
+    });
+        
+
       })
       .catch((error) => {
         console.error(error);
@@ -384,26 +474,9 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
         } else {
           setError("Problem registering. Please try again.");
         }
-      });
-                                } // end if
-*/                                
-
-    /* OLD CODE FOLLOWS
-    register(email, name)
-      .then((unit) => {
-        setUnit(unit);
-        handleLoginClose();
-      })
-      .catch((error) => {
-        console.error(error);
-        if (error.status === 409) {
-          setError("Email address already registered. Please log in instead.");
-        } else {
-          setError("Problem registering. Please try again.");
-        }
 
       });
-    */
+   
                                 } // end if
     event.preventDefault();
   };
@@ -418,23 +491,23 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
     >
       <Modal.Header className="border-0 mb-n3"></Modal.Header>
       <Modal.Body className="mt-n3">
+        {/* jsx follows for th elogin screen. If the user tapped the Login button, state property state
+         has value "login", so show the login screen only: */}
         {state === LOGIN && (
           <>
             <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Ready to explore?</h1>
-            {/*  tues30May23: The following few lines were 
-              the original text, which seemed unnecessary to me, so I have removed them. Mukund
-            <p className="text-left mb-3">
-              Visit and collect all of the sights in your region or explore
-              others
-            </p>
-            */}
-            {error && <p className="error-text text-center mt-n3">{error}</p>} {/* The messsage that shows when there's a login error */}
+            {/* The messsage that shows when there's a login error: */}
+            {error && <p style={{position: "relative", top: "-30px", color: "red", fontStyle: "italic"}} className="error-text text-center mt-n3">{error}</p>} 
+             {/* if user typed an invalid email (eg "xxxxx@"), the following error message shows: */}
+             {showLoginEmailErrMess &&  
+              <p style={{position: "relative", top: "-30px", color: "red", fontStyle: "italic"}} className="registerErrorMessage">Please type a valid email address</p>
+              }
             <Form noValidate className="m-2 mt-n2" onSubmit={handleLogin}>
               <Form.Group controlId="formBasicCode">
-                {/* if user typed an invalid email, the following error message shows: */}
+                {/* if user typed an invalid email, the following error message shows: 
               {showLoginEmailErrMess &&  
               <p style={{color: "red", fontStyle: "italic"}} className="registerErrorMessage">Please type a valid email address</p>
-              }
+              } */}
                 <Form.Control
                   value={email}
                   type="email"
@@ -469,6 +542,9 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
             </p>
           </>
         )}
+        {/* if the user tapped the Learn how to register button, 
+            state property state has value "register", so show 
+            the registration screen only: */}
         {state === REGISTER && (
           <>
             <h1 style={{ textAlign: "center" }}>How To Register</h1>
@@ -476,8 +552,8 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
             <div className="numberCircle numbCircleDark"><p className="numberCircleText">1</p></div>
             <div>
             <p className="mb-3">
-              First type an email address, preferably your unit's shared address.
-              We'll hold the address according to our {" "}
+              First type an email address – your unit's shared one is best.
+              We'll hold it according to our {" "}
               <a
                 href="https://www.girlguidingscotland.org.uk/privacy/"
                 target="_blank"
@@ -506,7 +582,7 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
             <div className="numberCircle numbCircleDark"><p className="numberCircleText">4</p></div> 
             <div>
             <p className="mb-3">
-              Then click Register or Cancel.
+              Then tap Register or Cancel.
               </p>
             </div>
            
@@ -539,7 +615,7 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
                 <div className="numberCircle numbCircleLight"><p className="numberCircleText">2</p></div>
                 {/* if user typed invalid unit name, this error message shows */}
                 {showRegisterUnitNameErrMess && 
-              <p style={{color: "red", fontStyle: "italic"}} className="registerErrorMessage">Please type a unit name below</p>
+              <p style={{color: "red", fontStyle: "italic"}} className="registerErrorMessage">Please type a unit name</p>
               }
                 <Form.Control
                   value={name}
@@ -551,7 +627,7 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
                 <div className="numberCircle numbCircleLight"><p className="numberCircleText">3</p></div>
                 {/* if user typed invalid county name, this error message shows */}
                 {showRegisterCountyErrMess && 
-              <p style={{color: "red", fontStyle: "italic"}} className="registerErrorMessage">Please start typing a county name then select an option from the dropdown menu that appears</p>
+              <p style={{color: "red", fontStyle: "italic"}} className="registerErrorMessage">Please start typing a county name, then <br></br>pick from the list that appears</p>
                 }
                 <Form.Control
                   value={stateObj.typedText} // use of value makes this what React calls a controlled input
@@ -560,7 +636,7 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
                   // onChange={(e) => setCounty(e.target.value)} // previous code
                   onFocus = {showAllRegionsList} // user clicks in input and all counties show in the dropdown list
                   label="county name"
-                  placeholder="Type county name then select from dropdown menu"
+                  placeholder="Type county name, select from dropdown"
                   className="w-100 my-2 mx-auto formInputs"  /* NOTE: I added class formInputs -- mukund*/
                 />
               </Form.Group>
@@ -605,6 +681,23 @@ if (emailIsValid && unitNameIsValid && countyIsValid) {
             
           </>
         )}
+            {/* if the user has registed successfully, 
+            state property state has value "registrationSuccessful", 
+            so for a few seconds show the screen that tells the 
+            user she has registered successfully and is logged in: */}
+            {state === "registrationSuccessful" && (
+              <>
+              <h1>Registration successful</h1>
+              <div>
+              <p>
+              You are now logged in, so start exploring!
+              </p>
+              </div>
+              </>
+            )}
+
+
+
         </Modal.Body>
     </Modal>
   );

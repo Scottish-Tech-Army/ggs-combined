@@ -5,10 +5,6 @@ import goldStar from "../assets/images/goldStar.svg";
 import silverStar from "../assets/images/silverStar.svg";
 import bronzeStar from "../assets/images/bronzeStar.svg";
 
-
-// context
-
-
 // scss stuff:
 import '../scss/style.scss';
 

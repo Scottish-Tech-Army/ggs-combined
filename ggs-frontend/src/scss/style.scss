@@ -266,22 +266,18 @@ code {
   transition: opacity 1000ms;
   
 }
+
 .logo-transition-enter-active {
   opacity: 0.9;
   transition: opacity 1000ms;
 }
+
 .logo-transition-exit {
   opacity: 0.9;
 }
+
 .logo-transition-exit-active {
   opacity: 0;
   transition: opacity 1000ms;
   
 }
-
-
-
-
-
-
-
