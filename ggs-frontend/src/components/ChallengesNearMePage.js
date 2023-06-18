@@ -233,7 +233,16 @@ useEffect(() => {
 
     // State property locations is an array 
     // that contains 486 objects, each 
-    // representing a location: 
+    // representing a location. 
+    // getLocations(unit.email) uses fetch(), 
+    // which returns a Promise.
+    // More accurately this is what occurs:
+    // 1) getLocations uses fetch(), which 
+    //    returns a Response object (called 
+    //    data in our code),
+    // 2) this function acts on data: 
+    //    .then((data) => data.json())
+    // 3) the .json() function returns a Promise:
     getLocations(unit.email).then(setLocations);
     
     // let locationsData = JSON.stringify(locations)
