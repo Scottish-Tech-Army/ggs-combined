@@ -2,8 +2,11 @@ import { readConfig } from '../configReader.js';
 
 const BASE_URL = readConfig('GGSclientAPIendpoint');
 
+
+// Component <ChallengesNearMe/> imports 
+// the following function. 
 // This function demands from the backend 
-// an array containint 486 objects, each 
+// an array containing 486 objects, each 
 // representing a location: 
 export function getLocations(email) {
   return fetch(BASE_URL + "locations", {
@@ -18,6 +21,14 @@ export function getLocations(email) {
     });
 }
 
+
+
+
+
+
+
+// Component <LocationModal/> imports the following 
+// function.
 // This function tells the backend to mark a
 // location as having been collected.
 // The argument id in this function is the 
