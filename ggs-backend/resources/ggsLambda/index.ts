@@ -252,25 +252,52 @@ export const handler = async (
       return errorResponse(404, "location not found: " + locationId);
     }
     
-    if (unit.locations && isLocationPresent(unit.locations, locationId)) {
-      console.warn(
-        `Unit ${unitName} has already collected location ${locationId}`
-      );
-    } else {
-      console.log(`Updating unit ${unitName}`);
+  if (!unit.locations) {
+    unit.locations = Array<string | GGSCollected>();
+  }
 
-      if (!unit.locations) {
-        unit.locations = Array<string | GGSCollected>();
+  const dateAsIso8601 = formatDateAsIso8601(new Date());
+
+  console.log(`Updating unit ${unitName}`);
+
+  if (isLocationPresent(unit.locations, locationId)) {
+      // Update an existing location collected
+      const existingCollected = getLocationFromCollected(unit.locations, locationId);
+      switch (typeof existingCollected) {
+        case "string":
+          const existingCollectedAsLocationId: string = existingCollected;
+          // Existing collected is a string containing the location id of the collected location
+          // Remove the string record, before inserting a new collected record
+          const index = unit.locations.indexOf(existingCollectedAsLocationId, 0);
+          unit.locations.splice(index, 1);
+          const newCollected: GGSCollected = {
+            locationId: existingCollectedAsLocationId,
+            collectedAt: dateAsIso8601
+          };
+          unit.locations.push(newCollected);
+          break;
+
+        case "object":
+          const existingCollectedAsRecord: GGSCollected = existingCollected;
+          // Update time location was collected
+          existingCollectedAsRecord.collectedAt = dateAsIso8601;
+          break;
+
+        case "undefined":
+          console.error("Location is present in unit locations but is undefined: " + existingCollected);
+          break;
       }
-      const dateAsIso8601 = formatDateAsIso8601(new Date());
-      const collected: GGSCollected = {
+    } else {
+      // This location has not been collected before, create a new location collected record
+      const newCollected: GGSCollected = {
         locationId: locationId,
         collectedAt: dateAsIso8601
       };
-      unit.locations.push(collected);
-      await updateUnit(unit);
-      console.log(`Unit ${unitName} has collected location ${locationId}`);
+      unit.locations.push(newCollected);
     }
+
+    await updateUnit(unit);
+    console.log(`Unit ${unitName} has collected location ${locationId}`);
 
     return { headers, statusCode: 200, body: "" };
   }
@@ -362,4 +389,17 @@ function isLocationPresent(allCollected: Array<string | GGSCollected>, locationI
         return x.locationId === locationId;
       }
   }) != undefined;
+}
+
+function getLocationFromCollected(allCollected: Array<string | GGSCollected>, locationId: string): string | GGSCollected | undefined {
+  return allCollected.find((collected) => {
+    if (typeof collected === 'string') {
+      // Collected records were just recorded as the location identifier
+      return collected === locationId;
+    } else {
+      // Now a GGSCollected type is recorded with the location identifier as well as recorded date
+      const x: GGSCollected = collected;
+      return x.locationId === locationId;
+    }
+  });
 }
