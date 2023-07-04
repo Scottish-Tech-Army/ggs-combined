@@ -1,5 +1,6 @@
 **/node_modules
 cdk.out
+**/.DS_Store
 
 ./ggs-frontend/env.local
 ./ggs-frontend/src/components/roughWorkings.js
